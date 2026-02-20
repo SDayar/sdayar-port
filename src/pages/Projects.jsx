@@ -8,13 +8,13 @@ import project4 from '../assets/images/project4.png'
 const projects = [
   {
     title: 'Main robotique INMOOV',
-    description: 'Main robotique contrôlée par Arduino avec servomoteurs et capteurs de flexion.',
+    description: 'Main robotique contrôlée par une carte Arduino avec servomoteurs et un logiciel dédié.',
     details: "Projet de robotique open-source : impression 3D de la main, intégration de 5 servomoteurs pour les doigts, capteurs de flexion pour le contrôle gestuel. Programmation en C++ sur Arduino Mega avec gestion PWM et calibration des capteurs.",
     tags: ['Arduino', 'C++', 'Robotique', 'PWM', 'Capteurs'],
     image: project1,
     id: 1,
     code: 'https://github.com/SDayar/Defense-project-InMoov-Animate-body-parts',
-    mcu: 'Arduino Mega'
+    mcu: 'Arduino Uno'
   },
   {
     title: 'Calculateur assembleur 68000',
@@ -38,13 +38,13 @@ const projects = [
   },
   {
     title: 'FaceScan',
-    description: 'Système de reconnaissance faciale sur Raspberry Pi.',
-    details: "Portage d'un algorithme de reconnaissance faciale sur Raspberry Pi 4 avec caméra. Utilisation d'OpenCV optimisé pour ARM, base de données locale SQLite pour stocker les visages.",
-    tags: ['Raspberry Pi', 'Python', 'OpenCV', 'ARM'],
+    description: 'Système de reconnaissance faciale.',
+    details: "Portage d'un algorithme de reconnaissance faciale multiplateforme avec caméra. Utilisation d'OpenCV optimisé pour ARM, base de données locale SQLite pour stocker les visages.",
+    tags: ['Python', 'OpenCV', 'ARM'],
     image: project4,
     id: 4,
     code: 'https://github.com/SDayar/FaceScan',
-    mcu: 'Raspberry Pi 4'
+    mcu: 'Face-recongnition'
   }
 ]
 
