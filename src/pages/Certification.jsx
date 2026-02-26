@@ -68,7 +68,14 @@ export default function Certification() {
 
   return (
     <div className="certification-section">
-      <h1 className="cert-title" ref={addToRefs}>Certifications</h1>
+       {/* En-tête */}
+      <div className="interests-header">
+        <h2 className="interests-title">
+          <span className="title-prompt">$</span>
+          <span className="title-command">more certifications.md</span>
+        </h2>
+        <div className="header-line"></div>
+      </div>
 
       
 
@@ -126,10 +133,6 @@ export default function Certification() {
               <span className="id-label">ID du certificat:</span>
               <span className="id-value">{selectedCert.id}</span>
             </div>
-
-            <p className="modal-note">
-              Ce certificat est visible sur mon profil Alison
-            </p>
           </div>
         </div>
       )}

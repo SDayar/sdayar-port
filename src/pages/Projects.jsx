@@ -5,7 +5,8 @@ import project2 from '../assets/images/project2.png'
 import project3 from '../assets/images/project3.png'
 import project4 from '../assets/images/project4.png'
 
-const projects = [
+
+const projects = [ //Description des projets
   {
     title: 'Main robotique INMOOV',
     description: 'Main robotique contrôlée par une carte Arduino avec servomoteurs et un logiciel dédié.',
@@ -54,12 +55,14 @@ function Projects() {
   return (
     <div className="projects-container">
       {/* En-tête simple */}
-      <div className="projects-header">
-        <h2>Projets systèmes embarqués</h2>
-        <p className="projects-subtitle">
-          Une sélection de projets hardware et software bas niveau
-        </p>
+      <div className="interests-header">
+        <h2 className="interests-title">
+          <span className="title-prompt">$</span>
+          <span className="title-command">ls Projects|more README.md</span>
+        </h2>
       </div>
+       
+    
 
       {/* Grille des projets */}
       <div className="projects-grid">
@@ -91,7 +94,7 @@ function Projects() {
               <div className="modal-info">
                 <h3>{selectedProject.title}</h3>
                 
-                {/* Microcontrôleur (petite touche embarquée) */}
+                {/* Microcontrôleur*/}
                 <div className="modal-mcu">
                   <span className="mcu-label">MCU</span>
                   <span className="mcu-value">{selectedProject.mcu}</span>

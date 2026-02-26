@@ -51,7 +51,7 @@ function Contact() {
     setCaptchaError(false)
     setCaptchaValid(true)
 
-    // Vérifier que tous les champs sont remplis
+    // Vérifie si tous les champs sont remplies
     if (!formData.from_name || !formData.from_email || !formData.message) {
       alert("Veuillez remplir tous les champs")
       return
@@ -85,7 +85,7 @@ function Contact() {
     <div className="section contact">
       <h2>Contact</h2>
       <p className="section-subtitle">
-        N'hésitez pas à me contacter pour une alternance ou un projet.
+        N'hésitez pas à me contacter pour une formation ou une offre en apprentissage.
       </p>
 
       <div className="contact-wrapper">
@@ -164,7 +164,7 @@ function Contact() {
             }}
             className={captchaError ? "captcha-error" : ""}
           />
-
+          {/* Les vérifications du captcha*/ }
           {captchaError && (
             <p className="captcha-error-text">
               ✖ Code incorrect. Veuillez réessayer.

@@ -31,9 +31,13 @@ export default function Education() {
 
   return (
     <div className="education-page">
-      <h1 className="edu-title" ref={addToRefs}>
-        Formations
-      </h1>
+      {/* En-tête */}
+      <div className="interests-header">
+        <h2 className="interests-title">
+          <span className="title-prompt">$</span>
+          <span className="title-command">cat formations.txt</span>
+        </h2>
+      </div>
       <div className="edu-timeline">
       <div className="edu-line"></div>
 

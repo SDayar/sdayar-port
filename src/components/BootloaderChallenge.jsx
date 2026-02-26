@@ -10,7 +10,7 @@ export default function BootloaderChallenge() {
   const [combo, setCombo] = useState(0)
   const [highScore, setHighScore] = useState(0)
 
-  // Messages plus variés et réalistes pour un bootloader
+  // Messages  pour un bootloader
   const bootMessages = [
     { text: "[OK] Flash memory check", type: "success" },
     { text: "[OK] Clock calibration", type: "success" },

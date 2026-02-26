@@ -23,10 +23,11 @@ function Navbar() {
       {/* Desktop links */}
       <nav className="navbar-links">
         <a href="#home">Home</a>
-        <a href="#about">About</a>
-        <a href="#education">Education</a>
-        <a href="#projects">Projects</a>
-        <a href="#certification">Certification</a>
+        <a href="#about">A propos</a>
+        <a href="#education">Formations</a>
+        <a href="#projects">Projets en SE</a>
+        <a href="#certification">Certifications</a>
+        <a href="#references">Références</a>
         <a href="#contact">Contact</a>
       </nav>
 
@@ -43,10 +44,11 @@ function Navbar() {
       {/* Mobile menu */}
       <nav className={`mobile-menu ${menuOpen ? "open" : ""}`}>
         <a onClick={toggleMenu} href="#home">Home</a>
-        <a onClick={toggleMenu} href="#about">About</a>
-        <a onClick={toggleMenu} href="#education">Education</a>
-        <a onClick={toggleMenu} href="#projects">Projects</a>
-        <a onClick={toggleMenu} href="#certification">Certification</a>
+        <a onClick={toggleMenu} href="#about">A propos</a>
+        <a onClick={toggleMenu} href="#education">Formations</a>
+        <a onClick={toggleMenu} href="#projects">Projets</a>
+        <a onClick={toggleMenu} href="#certification">Certifications</a>
+        <a onClick={toggleMenu} href="#references">Références</a>
         <a onClick={toggleMenu} href="#contact">Contact</a>
       </nav>
     </header>

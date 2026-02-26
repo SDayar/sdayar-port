@@ -2,7 +2,7 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, Text, Html, Cylinder, Box, Sphere, Torus } from '@react-three/drei'
 import { useRef, useState } from 'react'
 
-// Composant pour une carte de développement réaliste
+// Composant pour une carte de développement
 function DevBoard() {
   const boardRef = useRef()
   const [hovered, setHovered] = useState(false)
@@ -11,7 +11,7 @@ function DevBoard() {
 
   useFrame((state) => {
     if (boardRef.current) {
-      // Rotation plus naturelle et fluide
+      // Rotation
       boardRef.current.rotation.y += 0.002
       boardRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.3) * 0.1
       boardRef.current.position.y = Math.sin(state.clock.elapsedTime * 1.5) * 0.1
@@ -26,7 +26,7 @@ function DevBoard() {
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
     >
-      {/* Carte principale (PCB) plus grande et détaillée */}
+      {/* Carte principale (PCB)*/}
       <mesh position={[0, 0, 0]} receiveShadow castShadow>
         <boxGeometry args={[4.5, 0.15, 3]} />
         <meshStandardMaterial 
@@ -43,7 +43,7 @@ function DevBoard() {
         <meshStandardMaterial color="#B8860B" emissive="#5A3E0A" metalness={0.9} roughness={0.1} transparent opacity={0.3} />
       </mesh>
 
-      {/* Pistes de cuivre détaillées (plus réalistes) */}
+      {/* Pistes de cuivre */}
       {[...Array(12)].map((_, i) => {
         const x = -2 + i * 0.4
         return (
@@ -64,7 +64,7 @@ function DevBoard() {
         )
       })}
 
-      {/* Microcontrôleur principal (grand) */}
+      {/* Microcontrôleur principal */}
       <group position={[1, 0.2, 0.5]}>
         {/* Boîtier */}
         <mesh castShadow receiveShadow>
@@ -86,7 +86,7 @@ function DevBoard() {
           </div>
         </Html>
 
-        {/* Pins du microcontrôleur (côtés) */}
+        {/* Pins du microcontrôleur */}
         {[...Array(20)].map((_, i) => {
           const x = -0.6 + (i % 10) * 0.13
           const z = i < 10 ? -0.55 : 0.55
@@ -248,7 +248,7 @@ function Hero3D() {
         }}
         shadows
       >
-        {/* Éclairage réaliste */}
+        {/* Éclairage */}
         <ambientLight intensity={0.3} />
         <directionalLight 
           position={[5, 5, 5]} 

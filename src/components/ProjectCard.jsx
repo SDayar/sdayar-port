@@ -3,7 +3,7 @@ function ProjectCard({ project, onClick }) {
     <div className="project-card" onClick={onClick}>
       <div className="card-image">
         <img src={project.image} alt={project.title} />
-        {/* Petit badge microcontrôleur discret */}
+        
         <div className="card-badge">
           {project.mcu}
         </div>

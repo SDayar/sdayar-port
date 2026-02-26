@@ -10,7 +10,7 @@ function Home() {
       <div className="home-text">
         <h1>Dayar SAIFIDINE</h1>
         <p>
-          Étudiant en informatique, passionné par les systèmes embarqués et le développement moderne.
+          Étudiant en licence de mathématique et informatique, passionné par les systèmes embarqués et le développement moderne.
         </p>
         <div className="home-buttons">
           <div className="home-button-left">

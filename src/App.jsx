@@ -6,6 +6,8 @@ import About from './pages/About'
 import Contact from './pages/Contact'
 import Education from './pages/Education'
 import Certification from './pages/Certification'
+import References from './pages/References'
+import Interests from './pages/Interests'
 function App() {
   return (
     <div className="app">
@@ -25,6 +27,12 @@ function App() {
         </section>
         <section id="certification">
           <Certification />
+        </section>
+        <section id="references">
+          <References/>
+        </section>
+        <section id="interests">
+          <Interests/>
         </section>
         <section id="contact">
           <Contact />
