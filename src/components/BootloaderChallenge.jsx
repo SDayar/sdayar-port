@@ -10,7 +10,6 @@ export default function BootloaderChallenge() {
   const [combo, setCombo] = useState(0)
   const [highScore, setHighScore] = useState(0)
 
-  // Messages  pour un bootloader
   const bootMessages = [
     { text: "[OK] Flash memory check", type: "success" },
     { text: "[OK] Clock calibration", type: "success" },
@@ -31,7 +30,6 @@ export default function BootloaderChallenge() {
     { text: "[ERR] Flash write protected", type: "error" },
   ]
 
-  // Vitesse d'apparition des messages (diminue avec le niveau)
   const getIntervalTime = useCallback(() => {
     return Math.max(300, 700 - level * 50)
   }, [level])
@@ -51,7 +49,6 @@ export default function BootloaderChallenge() {
     if (gameOver) return
 
     if (line.type === "error") {
-      // Bonus basé sur le combo
       const pointsEarned = 10 + (combo * 5)
       setScore((s) => {
         const newScore = s + pointsEarned
@@ -61,17 +58,14 @@ export default function BootloaderChallenge() {
       setCombo((c) => c + 1)
       setStatus("success")
 
-      // Augmentation du niveau tous les 100 points
       if (score > 0 && score % 100 === 0) {
         setLevel((l) => Math.min(l + 1, 10))
       }
     } else if (line.type === "warning") {
-      // Les warnings font perdre des points mais pas de vie
       setScore((s) => Math.max(0, s - 5))
       setCombo(0)
       setStatus("warning")
     } else {
-      // Mauvaise clique sur un OK
       setLives((l) => {
         const newLives = l - 1
         if (newLives <= 0) {
@@ -97,18 +91,21 @@ export default function BootloaderChallenge() {
     setStatus("idle")
   }
 
-  // Calcul de la barre de progression
   const nextLevelScore = Math.ceil((Math.floor(score / 100) + 1) * 100)
   const progress = (score % 100) / 100 * 100
 
   return (
     <div className="boot-box">
       <div className="boot-header">
-        <h3>🔧 Bootloader Challenge</h3>
+        <h3>BOOTLOADER CHALLENGE</h3>
         <div className="boot-badge">v{level}.0</div>
+        <div className="boot-leds">
+          <span className="led red"></span>
+          <span className="led yellow"></span>
+          <span className="led green"></span>
+        </div>
       </div>
 
-      {/* Interface de score */}
       <div className="boot-stats">
         <div className="boot-stat">
           <span className="stat-label">SCORE</span>
@@ -122,25 +119,25 @@ export default function BootloaderChallenge() {
           <span className="stat-label">LIVES</span>
           <div className="boot-lives">
             {[...Array(3)].map((_, i) => (
-              <span key={i} className={`boot-heart ${i < lives ? 'active' : 'lost'}`}>❤️</span>
+              <span key={i} className={`boot-heart ${i < lives ? 'active' : 'lost'}`}>
+                {i < lives ? '◉' : '○'}
+              </span>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Barre de progression niveau */}
       <div className="boot-progress">
         <div className="progress-bar">
           <div className="progress-fill" style={{ width: `${progress}%` }}></div>
         </div>
-        <span className="progress-text">Niveau {level} • Prochain niveau: {nextLevelScore - score} pts</span>
+        <span className="progress-text">NIVEAU {level} • PROCHAIN: {nextLevelScore - score} PTS</span>
       </div>
 
-      {/* Écran du bootloader */}
       <div className="boot-screen">
         {lines.length === 0 ? (
           <div className="boot-placeholder">
-            <span className="blink">▌ Initialisation du système... ▌</span>
+            <span className="blink">SYSTEM BOOT • INITIALIZATION • _</span>
           </div>
         ) : (
           lines.map((line, i) => (
@@ -151,51 +148,51 @@ export default function BootloaderChallenge() {
             >
               <span className="boot-timestamp">[{String(Date.now()).slice(-6)}]</span>
               <span className="boot-message">{line.text}</span>
-              <span className="boot-indicator">{line.type === 'error' ? '⚠️' : '✓'}</span>
+              <span className="boot-indicator">
+                {line.type === 'error' ? '⚡' : 
+                 line.type === 'warning' ? '⚠' : '✓'}
+              </span>
             </div>
           ))
         )}
       </div>
 
-      {/* Zone de statut */}
       <div className="boot-status-area">
         <div className={`boot-status ${status}`}>
           <div className={`status-led ${status}`}></div>
-          {status === "idle" && <span>En attente d'une erreur système...</span>}
-          {status === "success" && <span>✅ Erreur corrigée ! +{10 + (combo * 5)} pts</span>}
-          {status === "warning" && <span>⚠️ Attention ! -5 pts</span>}
-          {status === "fail" && <span>❌ Mauvaise manipulation ! -1 vie</span>}
-          {status === "gameover" && <span>💥 SYSTÈME HORS SERVICE</span>}
+          {status === "idle" && <span>EN ATTENTE D'ERREUR...</span>}
+          {status === "success" && <span>✓ ERREUR CORRIGÉE +{10 + (combo * 5)} PTS</span>}
+          {status === "warning" && <span>⚠ WARNING -5 PTS</span>}
+          {status === "fail" && <span>✗ ERREUR -1 VIE</span>}
+          {status === "gameover" && <span>💀 SYSTEM HALTED</span>}
         </div>
       </div>
 
-      {/* Game Over */}
       {gameOver && (
         <div className="boot-gameover">
           <div className="gameover-message">
-            <span>⚡ BOOT FAILURE ⚡</span>
-            <span className="final-score">Score final: {score}</span>
-            <span className="high-score">Record: {highScore}</span>
+            <span>💀 BOOT FAILURE</span>
+            <span className="final-score">SCORE: {score}</span>
+            <span className="high-score">RECORD: {highScore}</span>
           </div>
           <button className="boot-restart" onClick={resetGame}>
-            🔄 RÉINITIALISER LE SYSTÈME
+            ↻ SYSTEM RESET
           </button>
         </div>
       )}
 
-      {/* Instructions */}
       <div className="boot-instructions">
         <div className="instruction-item">
           <span className="instruction-dot error"></span>
-          <span>Cliquer sur les erreurs</span>
+          <span>CLICK: ERRORS</span>
         </div>
         <div className="instruction-item">
           <span className="instruction-dot warning"></span>
-          <span>Éviter les warnings (-5 pts)</span>
+          <span>AVOID: WARN</span>
         </div>
         <div className="instruction-item">
           <span className="instruction-dot success"></span>
-          <span>Ignorer les OK (perte de vie)</span>
+          <span>IGNORE: OK</span>
         </div>
       </div>
     </div>

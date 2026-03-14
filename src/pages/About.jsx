@@ -25,21 +25,7 @@ function About() {
   return (
     <div className="about-section" ref={sectionRef}>
       {/* En-tête style oscillo */}
-      <div className="about-header">
-        <div className="header-badge">
-          <span className="badge-led"></span>
-          <span className="badge-text">SYSTEM INFORMATION</span>
-        </div>
-        {/* En-tête */}
-      <div className="interests-header">
-        <h2 className="interests-title">
-          <span className="title-prompt">$</span>
-          <span className="title-command">whoami</span>
-        </h2>
-       
-      </div>
-        <div className="header-scanline"></div>
-      </div>
+     
 
       <div className="about-grid" ref={contentRef}>
         {/* Colonne gauche - Avatar / Carte d'identité électronique */}

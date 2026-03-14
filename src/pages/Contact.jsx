@@ -11,7 +11,7 @@ function Contact() {
     message: ""
   })
 
-  // Générer un code CAPTCHA aléatoire (6 caractères alphanumériques)
+  // code CAPTCHA aléatoire (6 caractères alphanumériques)
   const generateCaptcha = () => {
     const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
     let result = ""
@@ -83,7 +83,12 @@ function Contact() {
 
   return (
     <div className="section contact">
-      <h2>Contact</h2>
+     <div className="section-header">
+        <div className="terminal-command">
+          <span className="terminal-prompt">$</span>
+          <span className="terminal-command-text">more contacts.md</span>
+        </div>
+      </div>
       <p className="section-subtitle">
         N'hésitez pas à me contacter pour une formation ou une offre en apprentissage.
       </p>
@@ -126,7 +131,7 @@ function Contact() {
           </label>
 
           <button type="submit" className="primary-button">
-            Envoyer le message
+             <span className="dollar">$ </span><span className="command">mailto</span>
           </button>
 
           {sent && (
@@ -137,7 +142,7 @@ function Contact() {
           )}
         </form>
 
-        {/* CAPTCHA amélioré */}
+        {/* CAPTCHA*/}
         <div className="captcha-box">
           <h4>Vérification anti-robot</h4>
           

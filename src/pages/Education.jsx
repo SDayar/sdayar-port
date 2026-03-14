@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react"
 
-
 export default function Education() {
   const sectionsRef = useRef([])
 
@@ -31,40 +30,50 @@ export default function Education() {
 
   return (
     <div className="education-page">
-      {/* En-tête */}
-      <div className="interests-header">
-        <h2 className="interests-title">
-          <span className="title-prompt">$</span>
-          <span className="title-command">cat formations.txt</span>
-        </h2>
+      <div className="section-header">
+        <div className="terminal-command">
+          <span className="terminal-prompt">$</span>
+          <span className="terminal-command-text">cat /var/log/education</span>
+          <span className="terminal-cursor"></span>
+        </div>
       </div>
+
       <div className="edu-timeline">
-      <div className="edu-line"></div>
+        <div className="edu-line"></div>
 
- 
+        <div className="edu-item" ref={addToRefs}>
+          <div className="edu-dot">
+            <span className="dot-led"></span>
+          </div>
+          <div className="edu-content">
+            <div className="edu-header">
+              <h2>Licence Informatique et Applications</h2>
+              <span className="edu-year">2023 – Présent</span>
+            </div>
+            <div className="edu-details">
+              <p>Programmation avancée, Architecture des ordinateurs, Mathématiques et Calculs, Systèmes d'exploitation, C, Assembleur, Algorithmique avancée, Electronique, Réseaux, Programmation Unix, Projets de programmation et Génie logiciel.</p>
+            </div>
+          </div>
+        </div>
 
-  <div className="edu-item" ref={addToRefs}>
-    <div className="edu-dot"></div>
-    <div className="edu-content">
-      <h2>Licence Mathématiques & Informatique</h2>
-      <p className="edu-year">2023 – Présent</p>
-      <p>Informatique théorique, mathématiques et applications, systèmes d'exploitation, C, Assembleur (Motorola 68000), structures de données, algorithmie, électronique et systèmes embarqués.</p>
-    </div>
-  </div>
-
-    <div className="edu-item" ref={addToRefs}>
-    <div className="edu-dot"></div>
-    <div className="edu-content">
-      <h2>Baccalauréat scientifique</h2>
-      <p className="edu-year">2021 – 2022</p>
-      <p>Bac scientifique, mathématiques et calcul et science appliquée.</p>
-    </div>
-  </div>
-
-</div>
-
-      
+        <div className="edu-item" ref={addToRefs}>
+          <div className="edu-dot">
+            <span className="dot-led"></span>
+          </div>
+          <div className="edu-content">
+            <div className="edu-header">
+              <h2>Baccalauréat scientifique</h2>
+              <span className="edu-year">2021 – 2022</span>
+            </div>
+            <div className="edu-details">
+              <p>Bac scientifique, spécialité mathématiques et sciences appliquées.</p>
+              <div className="edu-stats">
+                <span className="stat">Mention: Très Bien</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
-

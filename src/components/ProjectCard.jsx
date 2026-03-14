@@ -3,9 +3,14 @@ function ProjectCard({ project, onClick }) {
     <div className="project-card" onClick={onClick}>
       <div className="card-image">
         <img src={project.image} alt={project.title} />
-        
         <div className="card-badge">
+          <span className="badge-led"></span>
           {project.mcu}
+        </div>
+        <div className="card-status-leds">
+          <span className={`led ${project.status === 'running' ? 'green' : 'red'}`}></span>
+          <span className="led yellow"></span>
+          <span className="led green"></span>
         </div>
       </div>
       
@@ -18,6 +23,7 @@ function ProjectCard({ project, onClick }) {
             <span key={tag} className="tag">{tag}</span>
           ))}
         </div>
+        
       </div>
     </div>
   )

@@ -1,34 +1,31 @@
 import { useState } from "react"
 import Hero3D from "../components/Hero3D"
-import BootloaderChallenge from "../components/BootloaderChallenge"
+//import BootloaderChallenge from "../components/BootloaderChallenge"
+import RetroGame from '../components/JetFight'
+
 
 function Home() {
-  const [openGame, setOpenGame] = useState(false)
+  const [showGame, setShowGame] = useState(false)
 
   return (
     <div className="home">
       <div className="home-text">
         <h1>Dayar SAIFIDINE</h1>
         <p>
-          Étudiant en licence de mathématique et informatique, passionné par les systèmes embarqués et le développement moderne.
+          Étudiant en licence Informatique et Applications, passionné par les systèmes embarqués.
         </p>
         <div className="home-buttons">
           <div className="home-button-left">
-            <a href="#projects" className="primary-button">
-            Voir mes projets
+            <a href="fichiers/CV - MonMaster.pdf" className="primary-button" target="_blank">
+            <span className="dollar">$ </span><span className="command">wget CV_RESUME</span> 
             </a>
           </div>
+
           <div className="home-button-right">
-            <button className="play-button" onClick={() => setOpenGame(true)}>
-            Jouer à un jeu
+            <button className="play-button" onClick={() => setShowGame(true)}>
+           <span className="dollar">$ </span><span className="command">./Game.sh</span> 
             </button>  
-            <div className="boot-preview">
-              [OK] Flash memory check  
-              <br />
-              [ERR]<div style={{color:'red'}}>UART sync lost</div>  
-              <br />
-              [OK] GPIO init
-            </div>
+          
           </div>
         </div>
       </div>
@@ -37,17 +34,7 @@ function Home() {
       </div>
 
       {/* POP-UP */}
-      {openGame && (
-        <div className="game-modal">
-          <div className="game-content">
-            <button className="close-btn" onClick={() => setOpenGame(false)}>
-              ✖
-            </button>
-
-            <BootloaderChallenge />
-          </div>
-        </div>
-      )}
+      {showGame && <RetroGame onClose={() => setShowGame(false)} />}
     </div>
   )
 }

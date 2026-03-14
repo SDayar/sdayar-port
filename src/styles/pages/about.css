@@ -1,0 +1,296 @@
+.about-section {
+  padding: 80px 0;
+  max-width: 1400px;
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease;
+}
+
+.about-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* Carte identité */
+.about-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 25px;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.about-card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 15px 40px rgba(99, 102, 241, 0.15);
+}
+
+.card-chip {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(99, 102, 241, 0.1);
+  border-radius: 20px;
+  padding: 4px 10px;
+}
+
+.chip-lines {
+  width: 20px;
+  height: 12px;
+  background: repeating-linear-gradient(90deg, var(--primary), var(--primary) 3px, transparent 3px, transparent 6px);
+}
+
+.chip-id {
+  color: var(--primary);
+  font-size: 0.7rem;
+  font-family: monospace;
+}
+
+.avatar-container {
+  display: flex;
+  justify-content: center;
+  margin: 30px 0 20px;
+}
+
+.avatar-circle {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.5rem;
+  font-weight: 700;
+  box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+}
+
+.card-pins {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 20px 0;
+}
+
+.pin {
+  width: 6px;
+  height: 15px;
+  background: #ffd700;
+  border-radius: 2px;
+  opacity: 0.6;
+}
+
+.card-specs {
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 12px;
+  padding: 15px;
+}
+
+.spec-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--border);
+}
+
+.spec-row:last-child {
+  border-bottom: none;
+}
+
+.spec-label {
+  color: #888;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.spec-value {
+  color: var(--text);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.spec-value.status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent);
+}
+
+.status-led {
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent);
+  animation: pulse 1.5s infinite;
+}
+
+/* Terminal */
+.terminal-window {
+  background: var(--terminal-bg);
+  border: 2px solid #2a2a2a;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 25px;
+}
+
+.terminal-header {
+  background: #1a1a1a;
+  padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #333;
+}
+
+.terminal-title {
+  color: #888;
+  font-size: 0.8rem;
+  font-family: monospace;
+}
+
+.terminal-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.control {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ff5f56;
+}
+
+.control:nth-child(2) {
+  background: #ffbd2e;
+}
+
+.control:nth-child(3) {
+  background: #27c93f;
+}
+
+.terminal-content {
+  padding: 20px;
+  font-family: 'Courier New', monospace;
+}
+
+.terminal-line {
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--terminal-text);
+}
+
+.prompt {
+  color: var(--terminal-text);
+  font-weight: bold;
+}
+
+.command {
+  color: var(--primary);
+}
+
+.terminal-output {
+  color: #888;
+  margin: 0 0 20px 20px;
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+.terminal-output.highlight {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.cursor {
+  animation: blink 1s infinite;
+  margin-left: 2px;
+}
+
+.terminal-footer {
+  background: #1a1a1a;
+  padding: 8px 15px;
+  display: flex;
+  justify-content: space-between;
+  color: #888;
+  font-size: 0.7rem;
+  font-family: monospace;
+  border-top: 1px solid #333;
+}
+
+/* Compétences */
+.skills-section {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.skills-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.skills-led {
+  width: 8px;
+  height: 8px;
+  background: var(--primary);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--primary);
+}
+
+.skills-title {
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.skill-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid var(--primary);
+  border-radius: 20px;
+  padding: 6px 12px;
+  color: var(--primary);
+  font-size: 0.8rem;
+  transition: 0.2s;
+}
+
+.skill-chip:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}

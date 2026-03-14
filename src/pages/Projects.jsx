@@ -11,7 +11,7 @@ const projects = [ //Description des projets
     title: 'Main robotique INMOOV',
     description: 'Main robotique contrôlée par une carte Arduino avec servomoteurs et un logiciel dédié.',
     details: "Projet de robotique open-source : impression 3D de la main, intégration de 5 servomoteurs pour les doigts, capteurs de flexion pour le contrôle gestuel. Programmation en C++ sur Arduino Mega avec gestion PWM et calibration des capteurs.",
-    tags: ['Arduino', 'C++', 'Robotique', 'PWM', 'Capteurs'],
+    tags: ['Arduino', 'C++','C', 'Robotique', 'PWM', 'Servomotor','ATMega328P'],
     image: project1,
     id: 1,
     code: 'https://github.com/SDayar/Defense-project-InMoov-Animate-body-parts',
@@ -54,12 +54,11 @@ function Projects() {
 
   return (
     <div className="projects-container">
-      {/* En-tête simple */}
-      <div className="interests-header">
-        <h2 className="interests-title">
-          <span className="title-prompt">$</span>
-          <span className="title-command">ls Projects|more README.md</span>
-        </h2>
+      <div className="section-header">
+        <div className="terminal-command">
+          <span className="terminal-prompt">$</span>
+          <span className="terminal-command-text">more projets.md</span>
+        </div>
       </div>
        
     
@@ -93,12 +92,7 @@ function Projects() {
               {/* Infos */}
               <div className="modal-info">
                 <h3>{selectedProject.title}</h3>
-                
-                {/* Microcontrôleur*/}
-                <div className="modal-mcu">
-                  <span className="mcu-label">MCU</span>
-                  <span className="mcu-value">{selectedProject.mcu}</span>
-                </div>
+              
 
                 <p className="modal-description">{selectedProject.details}</p>
 
@@ -116,7 +110,8 @@ function Projects() {
                   rel="noopener noreferrer"
                   className="modal-link"
                 >
-                  Voir le code source →
+                  <span className="dollar">$ </span><span className="command">xdg-open voir_code_source.com</span> 
+            
                 </a>
               </div>
             </div>

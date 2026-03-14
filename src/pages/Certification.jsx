@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react"
-
 import certElectronics from "../assets/certificats/electronics.png"
 import certC from "../assets/certificats/c-programming.png"
 import certJava from "../assets/certificats/java.png"
@@ -12,33 +11,36 @@ export default function Certification() {
   const certificates = [
     {
       title: "Introduction to Basic Electronics",
-      date: "Janvier 2025",
+      date: "2025-01-15",
       platform: "Alison",
       image: certElectronics,
-      id: "2228 - 38508148"
+      id: "CERT-2228-38508148",
+      hash: "a3f5c8d2e1b4"
     },
     {
       title: "Diploma in C Programming",
-      date: "Janvier 2025",
+      date: "2025-01-20",
       platform: "Alison",
       image: certC,
-      id: "1258 - 38508148"
+      id: "CERT-1258-38508148",
+      hash: "b7e2d9f4a1c6"
     },
     {
       title: "Diploma in Python Programming",
-      date: "Juillet 2024",
+      date: "2024-07-10",
       platform: "Alison",
       image: certPython,
-      id: "1535 - 38508148"
+      id: "CERT-1535-38508148",
+      hash: "f9c3a7b2e5d8"
     },
     {
-      title: "Understanding Java for Oracle Certification",
-      date: "Janvier 2026",
+      title: "Understanding Java",
+      date: "2026-01-05",
       platform: "Alison",
       image: certJava,
-      id: "4150 - 38508148"
+      id: "CERT-4150-38508148",
+      hash: "d4e1f8a3c2b7"
     }
-    
   ]
 
   useEffect(() => {
@@ -68,16 +70,13 @@ export default function Certification() {
 
   return (
     <div className="certification-section">
-       {/* En-tête */}
-      <div className="interests-header">
-        <h2 className="interests-title">
-          <span className="title-prompt">$</span>
-          <span className="title-command">more certifications.md</span>
-        </h2>
-        <div className="header-line"></div>
+      <div className="section-header">
+        <div className="terminal-command">
+          <span className="terminal-prompt">$</span>
+          <span className="terminal-command-text">openssl verify certificates/*.crt</span>
+          <span className="terminal-cursor"></span>
+        </div>
       </div>
-
-      
 
       <div className="cert-scroll">
         {certificates.map((cert, index) => (
@@ -87,41 +86,39 @@ export default function Certification() {
             key={index}
             onClick={() => setSelectedCert(cert)}
           >
-            <div className="cert-led"></div>
+           
             
-            {/* Image du diplôme */}
             <div className="cert-image-container">
               <img 
                 src={cert.image} 
                 alt={cert.title}
                 className="cert-image"
               />
-              <div className="cert-image-overlay">
-                <span>Cliquer pour agrandir</span>
-              </div>
             </div>
 
             <h3>{cert.title}</h3>
-            <p>{cert.platform} — {cert.date}</p>
+            <p className="cert-date">{cert.date}</p>
             
-            <div className="cert-id">
-              <span className="id-label">ID:</span>
-              <span className="id-value">{cert.id}</span>
-            </div>
           </div>
         ))}
       </div>
 
-      {/* Modal d'agrandissement */}
       {selectedCert && (
         <div className="cert-modal" onClick={() => setSelectedCert(null)}>
           <div className="cert-modal-content" onClick={e => e.stopPropagation()}>
             <button className="modal-close" onClick={() => setSelectedCert(null)}>✕</button>
             
-            <h3>{selectedCert.title}</h3>
+            <div className="modal-cert-header">
+              <h3>{selectedCert.title}</h3>
+              <div className="modal-cert-leds">
+                <span className="led red"></span>
+                <span className="led yellow"></span>
+                <span className="led green"></span>
+              </div>
+            </div>
+            
             <p className="modal-platform">{selectedCert.platform} — {selectedCert.date}</p>
             
-            {/* Image agrandie du diplôme */}
             <div className="cert-modal-image">
               <img 
                 src={selectedCert.image} 
@@ -129,9 +126,18 @@ export default function Certification() {
               />
             </div>
 
-            <div className="cert-id large">
-              <span className="id-label">ID du certificat:</span>
-              <span className="id-value">{selectedCert.id}</span>
+            <div className="modal-cert-footer">
+              <div className="cert-id">
+                <span className="id-label">Certificate ID:</span>
+                <span className="id-value">{selectedCert.id}</span>
+              </div>
+              <div className="cert_link">
+                <a href="fichier/Certifications et Learning Record Alison.pdf" target="blank_h" className="modal-link">
+                <span className="dollar">$</span>
+                <span className="command"> wget LEARNING_RECORD
+                </span>
+                </a>
+              </div>
             </div>
           </div>
         </div>

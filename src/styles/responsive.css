@@ -1,0 +1,164 @@
+/* Large Desktop */
+@media (max-width: 1400px) {
+  main {
+    padding: 80px 80px 40px;
+  }
+}
+
+/* Desktop */
+@media (max-width: 1200px) {
+  main {
+    padding: 80px 60px 40px;
+  }
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  main {
+    padding: 70px 40px 40px;
+  }
+
+  .navbar-links {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .home {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+
+  .home-text p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .home-buttons {
+    justify-content: center;
+  }
+
+  .home-3d {
+    height: 400px;
+    order: -1;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .about-card {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .contact-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .captcha-box {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .boot-box {
+    min-width: auto;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  main {
+    padding: 70px 20px 40px;
+  }
+
+  .navbar {
+    padding: 0 20px;
+  }
+
+  .mobile-menu {
+    width: 100%;
+    padding: 30px 20px;
+  }
+
+  .home-text h1 {
+    font-size: 2.2rem;
+  }
+
+  .home-3d {
+    height: 300px;
+  }
+
+  .projects-grid,
+  .cert-scroll,
+  .interests-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .edu-timeline {
+    margin-left: 10px;
+  }
+
+  .edu-item {
+    gap: 15px;
+  }
+
+  .exp-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .exp-company {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .modal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-image {
+    height: 200px;
+  }
+
+  .footer {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .footer-links {
+    justify-content: center;
+  }
+
+  .boot-instructions {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+}
+
+/* Petit mobile */
+@media (max-width: 380px) {
+  .home-text h1 {
+    font-size: 1.8rem;
+  }
+
+  .captcha-container {
+    flex-direction: column;
+  }
+
+  .captcha-refresh {
+    width: 100%;
+  }
+
+  .interests-legend {
+    flex-direction: column;
+    align-items: center;
+  }
+}

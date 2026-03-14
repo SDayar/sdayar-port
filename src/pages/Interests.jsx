@@ -22,127 +22,87 @@ export default function Interests() {
     return () => observer.disconnect()
   }, [])
 
+  const interests = [
+    {
+      category: "programming",
+      icon: "</>",
+      title: "Programmation",
+      description: "Développement bas niveau, systèmes embarqués, découverte de nouveaux langages et architectures.",
+      tags: ["C/C++", "Python", "Assembleur"],
+      type: "professional"
+    },
+    {
+      category: "electronics",
+      icon: "⚡",
+      title: "Électronique",
+      description: "Conception de circuits, programmation de microcontrôleurs, soudure et prototypage.",
+      tags: ["Arduino", "STM32", "KiCad"],
+      type: "professional"
+    },
+    {
+      category: "tech",
+      icon: "📡",
+      title: "Veille techno",
+      description: "Suivi des nouvelles technologies, processeurs, actualités embedded et IoT.",
+      tags: ["IoT", "RISC-V", "Edge AI"],
+      type: "professional"
+    },
+    {
+      category: "manga",
+      icon: "📚",
+      title: "Mangas & Comics",
+      description: "Passionné de mangas (Naruto, Jujutsu Kaisen) et de comics (Batman).",
+      tags: ["Naruto", "Batman", "JJK"],
+      type: "hobby"
+    },
+    {
+      category: "cycling",
+      icon: "🚲",
+      title: "Cyclisme",
+      description: "Balades à vélo, découverte de nouveaux paysages et mécanique.",
+      tags: ["VTT", "Route", "Mécanique"],
+      type: "hobby"
+    },
+    {
+      category: "gaming",
+      icon: "🎮",
+      title: "Jeux vidéo",
+      description: "Fan de la licence Batman: Arkham et des jeux à univers immersif.",
+      tags: ["Arkham", "RPG", "Indie"],
+      type: "hobby"
+    }
+  ]
+
   return (
     <div className="interests-section" ref={sectionRef}>
-      {/* En-tête */}
-      <div className="interests-header">
-        <h2 className="interests-title">
-          <span className="title-prompt">$</span>
-          <span className="title-command">cat interests.log</span>
-        </h2>
-        <div className="header-line"></div>
+      <div className="section-header">
+        <div className="terminal-command">
+          <span className="terminal-prompt">$</span>
+          <span className="terminal-command-text">top -u dayar</span>
+          <span className="terminal-cursor"></span>
+        </div>
       </div>
 
-      {/* Grille des intérêts */}
       <div className="interests-grid">
-        {/* Carte - Programmation */}
-        <div className="interest-card">
-          <div className="card-led"></div>
-          <div className="card-header">
-            <span className="card-icon">{'</>'}</span>
-            <h3>Programmation</h3>
+        {interests.map((interest, index) => (
+          <div key={index} className={`interest-card ${interest.type}`}>
+            <div className="card-leds">
+              <span className="led red"></span>
+              <span className="led yellow"></span>
+              <span className="led green"></span>
+            </div>
+            <div className="card-header">
+              <span className="card-icon">{interest.icon}</span>
+              <h3>{interest.title}</h3>
+            </div>
+            <p className="card-description">{interest.description}</p>
+            <div className="card-tags">
+              {interest.tags.map((tag, i) => (
+                <span key={i} className={`tag ${interest.type}`}>{tag}</span>
+              ))}
+            </div>
           </div>
-          <p className="card-description">
-            Développement bas niveau, systèmes embarqués, découverte de nouveaux langages et architectures.
-          </p>
-          <div className="card-tags">
-            <span className="tag">C/C++</span>
-            <span className="tag">Python</span>
-            <span className="tag">Assembleur</span>
-          </div>
-        </div>
-
-        {/* Carte - Électronique */}
-        <div className="interest-card">
-          <div className="card-led"></div>
-          <div className="card-header">
-            <span className="card-icon">⚡</span>
-            <h3>Electronique</h3>
-          </div>
-          <p className="card-description">
-            Conception de circuits basiques, 
-          </p>
-          <div className="card-tags">
-            <span className="tag">Arduino</span>
-            <span className="tag">STM32</span>
-            <span className="tag">BreadBoard</span>
-          </div>
-        </div>
-
-        {/* Carte - Veille techno */}
-        <div className="interest-card">
-          <div className="card-led"></div>
-          <div className="card-header">
-            <span className="card-icon">📡</span>
-            <h3>Veille techno</h3>
-          </div>
-          <p className="card-description">
-            Suivi des nouvelles technologies, processeurs, actualités embedded et innovation hardware.
-          </p>
-          <div className="card-tags">
-            <span className="tag">IoT</span>
-            <span className="tag">Edge AI</span>
-          </div>
-        </div>
-
-        {/* Carte - Mangas & Comics */}
-        <div className="interest-card hobby">
-          <div className="card-led hobby"></div>
-          <div className="card-header">
-            <span className="card-icon">📚</span>
-            <h3>Mangas & Comics</h3>
-          </div>
-          <p className="card-description">
-            Passionné de mangas (Naruto et Jujutsu Kaisen) et de comics(Batman : Year One et Superman legacy).
-          </p>
-          <div className="card-tags">
-            <span className="tag hobby">Batman : Year One</span>
-            <span className="tag hobby">Naruto</span>
-          </div>
-        </div>
-
-        {/* Carte - Vélo */}
-        <div className="interest-card hobby">
-          <div className="card-led hobby"></div>
-          <div className="card-header">
-            <span className="card-icon">🚲</span>
-            <h3>Cyclisme</h3>
-          </div>
-          <p className="card-description">
-            Balades à vélo, découverte de nouveaux paysages et entretien mécanique.
-          </p>
-          <div className="card-tags">
-            <span className="tag hobby">Balade</span>
-            <span className="tag hobby">Évasion</span>
-          </div>
-        </div>
-
-        {/* Carte - Jeux vidéo */}
-        <div className="interest-card hobby">
-          <div className="card-led hobby"></div>
-          <div className="card-header">
-            <span className="card-icon">🎮</span>
-            <h3>Jeux vidéo</h3>
-          </div>
-          <p className="card-description">
-            Fan de la licence Batman: Arkham, immersion dans l'univers du chevalier noir.
-          </p>
-          <div className="card-tags">
-            <span className="tag hobby">Arkham Batman</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Légende discrète */}
-      <div className="interests-legend">
-        <div className="legend-item">
-          <span className="legend-led"></span>
-          <span className="legend-text">Intérêts professionnels</span>
-        </div>
-        <div className="legend-item">
-          <span className="legend-led hobby"></span>
-          <span className="legend-text">Loisirs personnels</span>
-        </div>
+        ))}
       </div>
     </div>
   )

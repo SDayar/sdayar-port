@@ -1,0 +1,157 @@
+.interests-section {
+  padding: 80px 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease;
+}
+
+.interests-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.interests-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+.interest-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 25px 20px;
+  position: relative;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.interest-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.1);
+}
+
+.interest-card.hobby:hover {
+  border-color: var(--accent);
+  box-shadow: 0 10px 30px rgba(0, 255, 136, 0.1);
+}
+
+.card-led {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 10px var(--primary);
+  animation: pulse 2s infinite;
+}
+
+.card-led.hobby {
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.card-icon {
+  font-size: 1.8rem;
+  background: rgba(99, 102, 241, 0.1);
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+}
+
+.interest-card.hobby .card-icon {
+  background: rgba(0, 255, 136, 0.1);
+  color: var(--accent);
+}
+
+.card-header h3 {
+  font-size: 1.2rem;
+  color: var(--text);
+  margin: 0;
+}
+
+.card-description {
+  color: #888;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  min-height: 60px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.interest-card .tag {
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--primary);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  border: 1px solid transparent;
+  transition: 0.2s;
+}
+
+.interest-card .tag.hobby {
+  background: rgba(0, 255, 136, 0.1);
+  color: var(--accent);
+}
+
+.interest-card .tag:hover {
+  border-color: currentColor;
+  transform: scale(1.05);
+}
+
+.interests-legend {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 40px;
+  border: 1px solid var(--border);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-led {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 8px var(--primary);
+}
+
+.legend-led.hobby {
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+}
+
+.legend-text {
+  color: #888;
+  font-size: 0.8rem;
+}

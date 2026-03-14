@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 
 function Navbar() {
-  const [theme, setTheme] = useState("light")
+  const [theme, setTheme] = useState("dark")
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
@@ -9,52 +9,58 @@ function Navbar() {
   }, [theme])
 
   const toggleTheme = () => {
-    setTheme(prev => (prev === "light" ? "dark" : "light"))
-  }
-
-  const toggleMenu = () => {
-    setMenuOpen(prev => !prev)
+    setTheme(prev => (prev === "dark" ? "light" : "dark"))
   }
 
   return (
     <header className="navbar">
-      <div className="navbar-logo">Dayar</div>
+      <div className="navbar-logo">
+        <span className="logo-led"></span>
+        DAYAR@OS:~$
+      </div>
 
-      {/* Desktop links */}
       <nav className="navbar-links">
-        <a href="#home">Home</a>
-        <a href="#about">A propos</a>
-        <a href="#education">Formations</a>
-        <a href="#projects">Projets en SE</a>
-        <a href="#certification">Certifications</a>
-        <a href="#references">Références</a>
-        <a href="#contact">Contact</a>
+        <a href="#home">~/home</a>
+        <a href="#about">~/about</a>
+        <a href="#education">~/education</a>
+        <a href="#experiences">~/experiences</a>
+        <a href="#projects">~/projects</a>
+        <a href="#certification">~/certs</a>
+        <a href="#references">~/references</a>
+        <a href="#contact">~/contact</a>
       </nav>
 
-      {/* Theme toggle */}
-      <button className="theme-toggle" onClick={toggleTheme}>
-        {theme === "light" ? "🌙" : "☀️"}
+      <button className="theme-switch" onClick={toggleTheme} data-theme={theme}>
+        <div className="theme-switch-track">
+          <div className="theme-switch-thumb"></div>
+          <div className="theme-switch-labels">
+            <span>Off</span>
+            <span>On</span>
+          </div>
+        </div>
+        <div className="theme-switch-leds">
+          <span className="led red"></span>
+          <span className="led yellow"></span>
+          <span className="led green"></span>
+        </div>
       </button>
 
-      {/* Hamburger icon */}
-      <button className="menu-toggle" onClick={toggleMenu}>
-        {menuOpen ? "✖" : "☰"}
+      <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+        {menuOpen ? "✕" : "☰"}
       </button>
 
-      {/* Mobile menu */}
       <nav className={`mobile-menu ${menuOpen ? "open" : ""}`}>
-        <a onClick={toggleMenu} href="#home">Home</a>
-        <a onClick={toggleMenu} href="#about">A propos</a>
-        <a onClick={toggleMenu} href="#education">Formations</a>
-        <a onClick={toggleMenu} href="#projects">Projets</a>
-        <a onClick={toggleMenu} href="#certification">Certifications</a>
-        <a onClick={toggleMenu} href="#references">Références</a>
-        <a onClick={toggleMenu} href="#contact">Contact</a>
+        <a onClick={() => setMenuOpen(false)} href="#home">~/home</a>
+        <a onClick={() => setMenuOpen(false)} href="#about">~/about</a>
+        <a onClick={() => setMenuOpen(false)} href="#education">~/education</a>
+        <a onClick={() => setMenuOpen(false)} href="#experiences">~/experiences</a>
+        <a onClick={() => setMenuOpen(false)} href="#projects">~/projects</a>
+        <a onClick={() => setMenuOpen(false)} href="#certification">~/certs</a>
+        <a onClick={() => setMenuOpen(false)} href="#references">~/references</a>
+        <a onClick={() => setMenuOpen(false)} href="#contact">~/contact</a>
       </nav>
     </header>
   )
 }
 
 export default Navbar
-
-

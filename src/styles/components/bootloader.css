@@ -1,0 +1,224 @@
+.boot-box {
+  font-family: 'Courier New', monospace;
+  background: #0a0a0a;
+  border: 2px solid var(--accent);
+  border-radius: 12px;
+  padding: 20px;
+  color: var(--accent);
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
+  min-width: 500px;
+}
+
+.boot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--accent);
+}
+
+.boot-header h3 {
+  margin: 0;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.boot-badge {
+  background: var(--accent);
+  color: #0a0a0a;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.boot-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  background: #111;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--accent);
+}
+
+.boot-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  opacity: 0.7;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--accent);
+  text-shadow: 0 0 10px var(--accent);
+}
+
+.boot-lives {
+  display: flex;
+  gap: 5px;
+  margin-top: 4px;
+}
+
+.boot-heart {
+  font-size: 1.2rem;
+  opacity: 0.3;
+  transition: 0.3s;
+}
+
+.boot-heart.active {
+  opacity: 1;
+  filter: drop-shadow(0 0 5px #ff4444);
+}
+
+.boot-progress {
+  margin-bottom: 15px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #222;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--primary));
+  transition: width 0.3s ease;
+  box-shadow: 0 0 10px var(--accent);
+}
+
+.boot-screen {
+  background: #111;
+  padding: 15px;
+  border-radius: 8px;
+  height: 200px;
+  overflow: hidden;
+  margin-bottom: 15px;
+  border: 1px solid var(--accent);
+  font-size: 0.9rem;
+}
+
+.boot-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 8px;
+  margin: 2px 0;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: 0.2s;
+  border-left: 3px solid transparent;
+}
+
+.boot-line:hover {
+  background: rgba(0, 255, 136, 0.1);
+}
+
+.boot-line.error {
+  border-left-color: var(--error);
+  color: var(--error);
+}
+
+.boot-line.warning {
+  border-left-color: var(--warning);
+  color: var(--warning);
+}
+
+.boot-timestamp {
+  font-size: 0.7rem;
+  opacity: 0.5;
+  margin-right: 10px;
+}
+
+.boot-status-area {
+  margin-bottom: 15px;
+}
+
+.boot-status {
+  padding: 10px;
+  border-radius: 6px;
+  background: #111;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  transition: 0.3s;
+  border: 1px solid var(--accent);
+}
+
+.status-led {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.status-led.idle { background: #888; }
+.status-led.success { background: var(--accent); }
+.status-led.warning { background: var(--warning); }
+.status-led.fail { background: var(--error); }
+.status-led.gameover { background: var(--error); }
+
+.boot-gameover {
+  text-align: center;
+  padding: 20px;
+  background: #1a1a1a;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  border: 2px solid var(--error);
+}
+
+.boot-restart {
+  background: transparent;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  padding: 10px 20px;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 6px;
+}
+
+.boot-restart:hover {
+  background: var(--accent);
+  color: #0a0a0a;
+  box-shadow: 0 0 20px var(--accent);
+}
+
+.boot-instructions {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background: #111;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.instruction-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.instruction-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.instruction-dot.error { background: var(--error); }
+.instruction-dot.warning { background: var(--warning); }
+.instruction-dot.success { background: var(--accent); }
