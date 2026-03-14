@@ -3,7 +3,17 @@ import { useState, useEffect } from "react"
 function Navbar() {
   const [theme, setTheme] = useState("dark")
   const [menuOpen, setMenuOpen] = useState(false)
+  const [glitchActive, setGlitchActive] = useState(false)
 
+  useEffect(() => {
+    const glitchInterval = setInterval(() => {
+      setGlitchActive(true)
+      setTimeout(() => setGlitchActive(false), 200)
+    }, 3000)
+    
+    return () => clearInterval(glitchInterval)
+  }, [])
+  
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme)
   }, [theme])
@@ -15,8 +25,8 @@ function Navbar() {
   return (
     <header className="navbar">
       <div className="navbar-logo">
-        <span className="logo-led"></span>
-        DAYAR@OS:~$
+        <span className="logo-dayar">DAYAR</span>
+        <span className="logo-os">OS</span>
       </div>
 
       <nav className="navbar-links">

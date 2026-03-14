@@ -13,15 +13,39 @@
   z-index: 1000;
   border-bottom: 1px solid var(--border);
 }
-
 .navbar-logo {
-  font-weight: 700;
-  font-size: 24px;
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: 28px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 2px;
 }
 
+.logo-dayar {
+  color: var(--text);
+}
+
+.logo-os {
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.logo-os::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent);
+  animation: dotPulse 2s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
 .navbar-links {
   display: flex;
   gap: 32px;
