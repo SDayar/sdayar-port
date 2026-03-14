@@ -10,7 +10,7 @@ import Certification from './pages/Certification'
 import References from './pages/References'
 import Interests from './pages/Interests'
 import Experiences from './pages/Experiences'
-import Loader from './components/loader'
+import Loader from './components/Loader'
 
 
 
