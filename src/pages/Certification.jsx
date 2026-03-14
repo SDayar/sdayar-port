@@ -132,7 +132,7 @@ export default function Certification() {
                 <span className="id-value">{selectedCert.id}</span>
               </div>
               <div className="cert_link">
-                <a href="fichier/Certifications et Learning Record Alison.pdf" target="blank_h" className="modal-link">
+                <a href="fichier/Certifications et Learning Record Alison.pdf" target="_blank" className="modal-link">
                 <span className="dollar">$</span>
                 <span className="command"> wget LEARNING_RECORD
                 </span>
