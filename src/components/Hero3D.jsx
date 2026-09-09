@@ -82,7 +82,7 @@ function DevBoard() {
             textShadow: '0 0 5px #FFD700',
             transform: 'rotate(180deg)'
           }}>
-            STM32F4
+            4F23MTS
           </div>
         </Html>
 
