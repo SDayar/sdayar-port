@@ -79,10 +79,9 @@ function DevBoard() {
             fontSize: '12px', 
             fontFamily: 'monospace',
             fontWeight: 'bold',
-            textShadow: '0 0 5px #FFD700',
-            transform: 'rotate(180deg)'
+            textShadow: '0 0 5px #FFD700'
           }}>
-            4F23MTS
+            STM32F4
           </div>
         </Html>
 
