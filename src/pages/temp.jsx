@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import html2pdf from 'html2pdf.js'
+import before from '../assets/images/before.jpeg'
+import after from '../assets/images/after.jpeg'
 
 export default function App() {
   // --- ÉTATS COMPTE À REBOURS ANIMÉ & ANECDOTES ---
@@ -70,8 +72,8 @@ export default function App() {
 
   // Photos
   const [photos, setPhotos] = useState({
-    before: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80',
-    after: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80'
+    before: before,
+    after: after
   })
 
   // --- 1. ARRIÈRE-PLAN DYNAMIQUE GÉNÉRAL ---
