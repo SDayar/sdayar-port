@@ -258,7 +258,7 @@ export default function App() {
 
   // --- DONNÉES DU QUIZ ---
   const quizQuestions = [
-    { q: "Quelle est notre destination de rêve ?", options: ["Les Comores 🇰🇲", "Le Japon 🗾", "Les Maldives 🏝️"], correct: 0 },
+    { q: "Quelle est notre destination de rêve ?", options: ["Les Comores 🇰🇲", "Le Japon 🗾", "Costa RicOOOOOOOO"], correct: 2 },
     { q: "Quel est ton fruit préféré ?", options: ["La Mangue 🥭", "La Fraise 🍓", "La Ananas 🍍"], correct: 0 },
     { q: "Quelle est ta plus grande réussite cette année ?", options: ["Avoir ton Master 1 🎓", "M'avoir supporté 😂", "Les deux ! 🏆"], correct: 2 }
   ]
@@ -280,8 +280,7 @@ export default function App() {
   const capList = [
     "M'envoyer ton plus beau selfie grimace immédiatement !",
     "Me faire un câlin de 10 secondes sans lâcher !",
-    "Cuisiner un plat ensemble ce week-end !",
-    "Mimer une mangue joyeuse pendant 5 secondes !"
+    "Mimer une mangue joyeuse pendant 5 secondes en m'envoyer le résultat !"
   ]
 
   const wheelAttentions = [
@@ -314,8 +313,7 @@ export default function App() {
     "Sac à Dos 🎒",
     "Lève tôt 🎓",
     "Couche tôt (sauf aujourd'hui apparemment) 🦦",
-    "Princesse des mangues 🥭",
-    "Diplômée d'Amour 🏅"
+    "Princesse des mangues 🥭"
   ]
   const generateNickname = () => setGeneratedNickname(nicknames[Math.floor(Math.random() * nicknames.length)])
 
@@ -513,11 +511,8 @@ export default function App() {
         <div className="temp-hero-card">
           <span className="temp-pill">Accès réservé • Code 270825 Validé</span>
           <h1 className="temp-main-title" onClick={triggerHearts}>
-            Félicitations, <span className="temp-highlight">Swafwata</span> 🎓
+            Joyeux anniversaire, <span className="temp-highlight">Swafwata</span> 🎓
           </h1>
-          <p className="temp-body-text" style={{ marginBottom: '20px' }}>
-            Bravo pour la validation de ton <strong>Master 1</strong> ! Une étape majeure franchie avec succès, qui prouve toute ta détermination.
-          </p>
           <p className="temp-body-text">
             Tu as déverrouillé ton espace secret. Fais tes choix sur la page, tes décisions généreront ta "Facture officielle du bonheur" à la fin !
           </p>
@@ -591,7 +586,7 @@ export default function App() {
         <div className="temp-grid-2">
           {/* Quiz */}
           <div style={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0' }}>
-            <h3 style={{ marginTop: 0, color: '#e11d48' }}>Quiz spécial Swafi 🎯</h3>
+            <h3 style={{ marginTop: 0, color: '#e11d48' }}>Quiz spécial</h3>
             {!quizFinished ? (
               quizQuestions.map((q, qIdx) => (
                 <div key={qIdx} style={{ marginBottom: '16px', textAlign: 'left' }}>
