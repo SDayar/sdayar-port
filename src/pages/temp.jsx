@@ -1,10 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react'
 
 export default function Temp() {
-  // --- ÉTATS ANIMATIONS ET JEUX ---
+  // --- ÉTATS COMPTE À REBOURS ANIMÉ & ANECDOTES ---
   const [phase, setPhase] = useState('countdown')
-  const [count, setCount] = useState(3)
+  const [count, setCount] = useState(10)
+  const [isPaused, setIsPaused] = useState(false)
   const [hearts, setHearts] = useState([])
+
+  // Anecdotes douces et romantiques sur les animaux
+  const animalFacts = [
+    { text: "Les loutres de mer se tiennent la patte en dormant pour ne pas se perdre à la dérive, exactement comme je veux rester près de toi. 🦦💖", emoji: "🦦" },
+    { text: "Les pingouins offrent un galet parfait à leur partenaire pour la vie. Si j'étais un pingouin, je t'offrirais le plus beau galet du monde. 🐧💎", emoji: "🐧" },
+    { text: "Les hippocampes nagent en se tenant par la queue et dansent ensemble chaque matin au réveil. 🦄🌊", emoji: "🐴" },
+    { text: "Les cygnes forment un cœur parfait avec leurs coux lorsqu'ils se regardent. C'est l'un des rares animaux fidèles toute leur vie. 🦢✨", emoji: "🦢" },
+    { text: "Les loups hurlent à la lune pour retrouver l'élu(e) de leur cœur lorsqu'ils sont séparés. 🐺🌕", emoji: "🐺" },
+    { text: "Les albatros parcourent des milliers de kilomètres mais reviennent toujours retrouver la même personne toute leur vie. 🕊️🌍", emoji: "🕊️" },
+    { text: "Les éléphants s'enlacent avec leurs trompes pour se saluer et se réconforter en cas de chagrin. 🐘🤍", emoji: "🐘" },
+    { text: "Les perroquets se donnent des petits noms doux avec des gazouillements uniques réservés uniquement à leur partenaire. 🦜💬", emoji: "🦜" },
+    { text: "Les girafes se frottent doucement le cou pendant des heures pour se montrer leur tendresse. 🦒🌿", emoji: "🦒" },
+    { text: "Et moi, je t'aime encore plus fort que tous ces animaux réunis ! Prête pour ta surprise ? ❤️", emoji: "🎁" }
+  ]
+
+  // --- ÉTATS ANIMATIONS ET JEUX ---
   const [backpackSecret, setBackpackSecret] = useState(false)
   const [candlesBlown, setCandlesBlown] = useState(false)
 
@@ -12,7 +29,7 @@ export default function Temp() {
   const [selectedMeals, setSelectedMeals] = useState([])
   const [selectedMovies, setSelectedMovies] = useState([])
 
-  // Quiz mis à jour
+  // Quiz
   const [quizAnswers, setQuizAnswers] = useState({})
   const [quizScore, setQuizScore] = useState(null)
 
@@ -25,14 +42,14 @@ export default function Temp() {
   const canvasRef = useRef(null)
   const [isScratched, setIsScratched] = useState(false)
 
-  // NOUVEAU : Cap ou pas cap
+  // Cap ou pas cap
   const [currentDare, setCurrentDare] = useState(null)
 
-  // NOUVEAU : Boîte à vœu secret
+  // Boîte à vœu secret
   const [secretWish, setSecretWish] = useState('')
   const [wishSaved, setWishSaved] = useState(false)
 
-  // NOUVEAU : Compteur de bisous
+  // Compteur de bisous
   const [kissCount, setKissCount] = useState(0)
 
   // Photos téléversables
@@ -43,20 +60,23 @@ export default function Temp() {
     couple: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800&q=80'
   })
 
-  // --- DÉCOMPTE INITIAL ---
+  // --- LOGIQUE DÉCOMPTE 10s ---
   useEffect(() => {
-    if (phase === 'countdown') {
-      if (count > 0) {
-        const timer = setTimeout(() => setCount(count - 1), 750)
+    if (phase === 'countdown' && !isPaused) {
+      if (count > 1) {
+        const timer = setTimeout(() => setCount(count - 1), 1200)
+        return () => clearTimeout(timer)
+      } else if (count === 1) {
+        const timer = setTimeout(() => setCount(0), 1200)
         return () => clearTimeout(timer)
       } else {
         setPhase('surprise')
       }
     } else if (phase === 'surprise') {
-      const timer = setTimeout(() => setPhase('main'), 1400)
+      const timer = setTimeout(() => setPhase('main'), 1500)
       return () => clearTimeout(timer)
     }
-  }, [count, phase])
+  }, [count, phase, isPaused])
 
   // --- CARTE À GRATTER (BOISSON SURPRISE) ---
   useEffect(() => {
@@ -157,7 +177,7 @@ export default function Temp() {
     }, 1200)
   }
 
-  // QUESTIONS DU QUIZ (Mises à jour selon tes demandes)
+  // QUESTIONS DU QUIZ
   const questions = [
     {
       id: 1,
@@ -272,19 +292,357 @@ export default function Temp() {
     }
   }
 
-  // ÉCRANS D'INTRO
+  // --- ANIMATIONS CSS INJECTÉES DANS LE FICHIER ---
+  const customStyles = `
+    .temp-page {
+      background-color: #fbfbfd;
+      color: #1d1d1f;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      width: 100%;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      overflow-x: hidden;
+    }
+
+    /* COMPTE À REBOURS ANIMÉ */
+    .temp-intro-wrapper {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #fafafa 0%, #fff1f2 100%);
+    }
+
+    .temp-intro-content {
+      text-align: center;
+      max-width: 600px;
+      padding: 20px;
+    }
+
+    .temp-timer-circle {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 10px 30px rgba(225, 29, 72, 0.1);
+      border: 2px solid #fecdd3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 30px auto;
+      animation: tempSoftPulse 1.2s infinite ease-in-out;
+    }
+
+    .temp-countdown-value {
+      font-size: 4.5rem;
+      font-weight: 800;
+      color: #e11d48;
+      animation: tempNumberPop 0.4s ease-out;
+    }
+
+    .temp-fact-card {
+      background-color: #ffffff;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.03);
+      border: 1px solid #ffe4e6;
+      animation: tempFadeUp 0.5s ease-out;
+    }
+
+    .temp-fact-text {
+      font-size: 1.15rem;
+      color: #334155;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .temp-controls {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .temp-btn-subtle {
+      background-color: #f1f5f9;
+      color: #64748b;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .temp-btn-subtle:hover { background-color: #e2e8f0; }
+
+    /* SECTIONS */
+    .temp-section {
+      min-height: 85vh;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 60px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .temp-hero-card { text-align: center; max-width: 750px; margin: 0 auto; }
+    .temp-pill {
+      display: inline-block;
+      padding: 6px 16px;
+      background-color: #ffe4e6;
+      color: #e11d48;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .temp-main-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+
+    .temp-highlight {
+      color: #e11d48;
+      border-bottom: 3px solid #fecdd3;
+    }
+
+    .temp-body-text { font-size: 1.2rem; line-height: 1.7; color: #48484a; }
+    .temp-hint { font-size: 0.85rem; color: #a1a1a6; margin-top: 16px; cursor: pointer; display: block; }
+
+    .temp-section-header { text-align: center; margin-bottom: 40px; }
+    .temp-section-title { font-size: 2.3rem; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 10px; }
+    .temp-section-sub { font-size: 1.1rem; color: #6e6e73; max-width: 600px; margin: 0 auto; }
+
+    /* GRIDS */
+    .temp-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .temp-photo-card {
+      background-color: #ffffff;
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+      border: 1px solid #f1f5f9;
+    }
+
+    .temp-photo-frame {
+      width: 100%;
+      height: 320px;
+      border-radius: 14px;
+      overflow: hidden;
+      background-color: #f8fafc;
+    }
+
+    .temp-photo-img { width: 100%; height: 100%; object-fit: cover; }
+    .temp-photo-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      padding: 0 4px;
+    }
+    .temp-photo-label { font-weight: 600; font-size: 1rem; color: #1e293b; }
+    .temp-upload-btn { font-size: 0.8rem; color: #6366f1; font-weight: 500; cursor: pointer; }
+
+    .temp-banner {
+      background-color: #ffffff;
+      border-top: 1px solid #f1f5f9;
+      border-bottom: 1px solid #f1f5f9;
+      padding: 70px 20px;
+      text-align: center;
+    }
+    .temp-banner-inner { max-width: 700px; margin: 0 auto; }
+    .temp-badge-purple { color: #9333ea; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+
+    .temp-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .temp-card-item {
+      background-color: #ffffff;
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid #e2e8f0;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .temp-card-item:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.04); }
+    .temp-card-title { font-size: 1.1rem; font-weight: 700; margin: 0 0 6px 0; color: #1e293b; }
+    .temp-card-desc { font-size: 0.9rem; color: #64748b; margin: 0; line-height: 1.4; }
+
+    .temp-tag-selected {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 4px 10px;
+      background-color: #e11d48;
+      color: #fff;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    /* CARTE À GRATTER */
+    .temp-scratch-box {
+      background-color: #ffffff;
+      border-radius: 24px;
+      padding: 40px 20px;
+      text-align: center;
+      border: 1px solid #f1f5f9;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.03);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .temp-scratch-container {
+      position: relative;
+      width: 340px;
+      height: 140px;
+      margin: 20px auto;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    }
+    .temp-scratch-reveal {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #fff1f2, #ffe4e6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .temp-scratch-canvas { position: absolute; inset: 0; cursor: pointer; touch-action: none; }
+
+    /* QUIZ */
+    .temp-quiz-card {
+      background-color: #ffffff;
+      border-radius: 20px;
+      padding: 24px;
+      border: 1px solid #e2e8f0;
+      margin-bottom: 20px;
+    }
+    .temp-quiz-option {
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      margin-top: 10px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .temp-quiz-btn {
+      background-color: #1e293b;
+      color: #fff;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 25px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 1rem;
+      display: block;
+      margin: 20px auto 0 auto;
+    }
+
+    /* ROUE */
+    .temp-wheel-container { text-align: center; max-width: 450px; margin: 0 auto; }
+    .temp-wheel-wrapper { position: relative; width: 280px; height: 280px; margin: 20px auto; }
+    .temp-wheel {
+      width: 100%; height: 100%; border-radius: 50%; border: 6px solid #ffffff;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      transition: transform 3.5s cubic-bezier(0.15, 0.99, 0.18, 0.99);
+      background: conic-gradient(
+        #fecdd3 0deg 60deg, #e0e7ff 60deg 120deg, #fef08a 120deg 180deg,
+        #dcfce7 180deg 240deg, #f3e8ff 240deg 300deg, #ffe4e6 300deg 360deg
+      );
+    }
+    .temp-wheel-pointer { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); font-size: 1.8rem; z-index: 10; }
+
+    /* SAC À DOS */
+    .temp-backpack-box {
+      background-color: #ffffff; border-radius: 28px; border: 2px dashed #f43f5e;
+      padding: 50px 20px; text-align: center; cursor: pointer; max-width: 500px; margin: 0 auto;
+    }
+    .temp-backpack-title { font-size: 3rem; font-weight: 900; letter-spacing: 4px; color: #f43f5e; margin: 0; }
+
+    /* BOUGIES */
+    .temp-cake-box { text-align: center; max-width: 500px; margin: 0 auto; }
+    .temp-btn-pink {
+      background-color: #e11d48; color: #ffffff; border: none; padding: 16px 36px;
+      border-radius: 30px; font-size: 1.1rem; font-weight: 700; cursor: pointer;
+    }
+
+    .temp-heart-anim {
+      position: fixed; font-size: 1.5rem; pointer-events: none;
+      animation: tempFloatUp 1.2s forwards; z-index: 9999;
+    }
+
+    @keyframes tempSoftPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 10px 30px rgba(225, 29, 72, 0.1); }
+      50% { transform: scale(1.04); box-shadow: 0 15px 35px rgba(225, 29, 72, 0.2); }
+    }
+
+    @keyframes tempNumberPop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes tempFadeUp {
+      0% { transform: translateY(10px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes tempFloatUp {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-80px) scale(1.3); opacity: 0; }
+    }
+  `
+
+  // ÉCRAN DU COMPTE À REBOURS
   if (phase !== 'main') {
+    const currentFactIndex = 10 - count
+    const currentFact = animalFacts[Math.min(Math.max(0, currentFactIndex), animalFacts.length - 1)]
+
     return (
       <div className="temp-intro-wrapper">
+        <style>{customStyles}</style>
         {phase === 'countdown' ? (
           <div className="temp-intro-content">
-            <span className="temp-countdown-value">{count}</span>
-            <p className="temp-intro-caption">Préparation de ton coin secret...</p>
+            <div className="temp-timer-circle">
+              <span key={count} className="temp-countdown-value">{count}</span>
+            </div>
+
+            <div key={currentFactIndex} className="temp-fact-card">
+              <span style={{ fontSize: '2rem', display: 'block', marginBottom: '8px' }}>{currentFact.emoji}</span>
+              <p className="temp-fact-text">{currentFact.text}</p>
+            </div>
+
+            <div className="temp-controls">
+              <button className="temp-btn-subtle" onClick={() => setIsPaused(!isPaused)}>
+                {isPaused ? '▶️ Reprendre' : '⏸️ Pause'}
+              </button>
+              <button className="temp-btn-subtle" onClick={() => setCount(10)}>
+                🔄 Réinitialiser
+              </button>
+            </div>
           </div>
         ) : (
           <div className="temp-intro-content">
-            <h1 className="temp-surprise-heading">Joyeux Anniversaire Swafi ! ❤️</h1>
-            <p className="temp-intro-caption">Déverrouillage de ton espace dédié...</p>
+            <h1 style={{ fontSize: '3rem', fontWeight: '800', color: '#e11d48', margin: '0 0 10px 0' }}>Joyeux Anniversaire Swafi ! ❤️</h1>
+            <p className="temp-body-text">Ouverture de ton espace personnalisé...</p>
           </div>
         )}
       </div>
@@ -293,307 +651,12 @@ export default function Temp() {
 
   return (
     <div className="temp-page">
+      <style>{customStyles}</style>
 
       {/* Cœurs volants au clic */}
       {hearts.map(h => (
         <span key={h.id} className="temp-heart-anim" style={{ left: h.x, top: h.y }}>❤️</span>
       ))}
-
-      {/* INJECTION DU CSS */}
-      <style>{`
-        .temp-page {
-          background-color: #fbfbfd;
-          color: #1d1d1f;
-          font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-          width: 100%;
-          min-height: 100vh;
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-          overflow-x: hidden;
-        }
-
-        .temp-intro-wrapper {
-          width: 100vw;
-          height: 100vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background-color: #ffffff;
-        }
-
-        .temp-intro-content { text-align: center; }
-        .temp-countdown-value { font-size: 7rem; font-weight: 800; color: #e11d48; }
-        .temp-surprise-heading { font-size: 3rem; font-weight: 700; color: #1d1d1f; }
-        .temp-intro-caption { font-size: 1.1rem; color: #86868b; margin-top: 10px; }
-
-        .temp-section {
-          min-height: 85vh;
-          max-width: 1000px;
-          margin: 0 auto;
-          padding: 60px 20px;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-        }
-
-        .temp-hero-card { text-align: center; max-width: 750px; margin: 0 auto; }
-        .temp-pill {
-          display: inline-block;
-          padding: 6px 16px;
-          background-color: #ffe4e6;
-          color: #e11d48;
-          border-radius: 20px;
-          font-size: 0.85rem;
-          font-weight: 600;
-          margin-bottom: 20px;
-        }
-
-        .temp-main-title {
-          font-size: 3.5rem;
-          font-weight: 800;
-          letter-spacing: -1px;
-          margin-bottom: 20px;
-          cursor: pointer;
-        }
-
-        .temp-highlight {
-          color: #e11d48;
-          border-bottom: 3px solid #fecdd3;
-        }
-
-        .temp-body-text {
-          font-size: 1.2rem;
-          line-height: 1.7;
-          color: #48484a;
-        }
-
-        .temp-hint { font-size: 0.85rem; color: #a1a1a6; margin-top: 16px; cursor: pointer; display: block; }
-
-        .temp-section-header { text-align: center; margin-bottom: 40px; }
-        .temp-section-title { font-size: 2.3rem; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 10px; }
-        .temp-section-sub { font-size: 1.1rem; color: #6e6e73; max-width: 600px; margin: 0 auto; }
-
-        /* GRID PHOTOS */
-        .temp-grid-2 {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-          gap: 24px;
-        }
-
-        .temp-photo-card {
-          background-color: #ffffff;
-          border-radius: 20px;
-          padding: 16px;
-          box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-          border: 1px solid #f1f5f9;
-        }
-
-        .temp-photo-frame {
-          width: 100%;
-          height: 320px;
-          border-radius: 14px;
-          overflow: hidden;
-          background-color: #f8fafc;
-        }
-
-        .temp-photo-img { width: 100%; height: 100%; object-fit: cover; }
-        .temp-photo-footer {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-top: 12px;
-          padding: 0 4px;
-        }
-        .temp-photo-label { font-weight: 600; font-size: 1rem; color: #1e293b; }
-        .temp-upload-btn { font-size: 0.8rem; color: #6366f1; font-weight: 500; cursor: pointer; }
-
-        /* BANNIÈRE MASTER */
-        .temp-banner {
-          background-color: #ffffff;
-          border-top: 1px solid #f1f5f9;
-          border-bottom: 1px solid #f1f5f9;
-          padding: 70px 20px;
-          text-align: center;
-        }
-        .temp-banner-inner { max-width: 700px; margin: 0 auto; }
-        .temp-badge-purple { color: #9333ea; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
-
-        /* GRIDS INTERACTIFS (JEUX, MEALS, MOVIES) */
-        .temp-grid-3 {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-          gap: 16px;
-        }
-
-        .temp-card-item {
-          background-color: #ffffff;
-          border-radius: 16px;
-          padding: 20px;
-          border: 1px solid #e2e8f0;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          position: relative;
-        }
-        .temp-card-item:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.04); }
-        .temp-card-title { font-size: 1.1rem; font-weight: 700; margin: 0 0 6px 0; color: #1e293b; }
-        .temp-card-desc { font-size: 0.9rem; color: #64748b; margin: 0; line-height: 1.4; }
-
-        .temp-tag-selected {
-          display: inline-block;
-          margin-top: 10px;
-          padding: 4px 10px;
-          background-color: #e11d48;
-          color: #fff;
-          border-radius: 10px;
-          font-size: 0.75rem;
-          font-weight: 600;
-        }
-
-        /* BOISSON SURPRISE (GRATTER) */
-        .temp-scratch-box {
-          background-color: #ffffff;
-          border-radius: 24px;
-          padding: 40px 20px;
-          text-align: center;
-          border: 1px solid #f1f5f9;
-          box-shadow: 0 15px 35px rgba(0,0,0,0.03);
-          max-width: 500px;
-          margin: 0 auto;
-        }
-        .temp-scratch-container {
-          position: relative;
-          width: 340px;
-          height: 140px;
-          margin: 20px auto;
-          border-radius: 16px;
-          overflow: hidden;
-          box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-        }
-        .temp-scratch-reveal {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(135deg, #fff1f2, #ffe4e6);
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          padding: 16px;
-        }
-        .temp-scratch-canvas {
-          position: absolute;
-          inset: 0;
-          cursor: pointer;
-          touch-action: none;
-        }
-
-        /* QUIZ */
-        .temp-quiz-card {
-          background-color: #ffffff;
-          border-radius: 20px;
-          padding: 24px;
-          border: 1px solid #e2e8f0;
-          margin-bottom: 20px;
-        }
-        .temp-quiz-option {
-          padding: 12px 16px;
-          border-radius: 12px;
-          border: 1px solid #cbd5e1;
-          margin-top: 10px;
-          cursor: pointer;
-          font-weight: 500;
-          transition: all 0.2s;
-        }
-        .temp-quiz-btn {
-          background-color: #1e293b;
-          color: #fff;
-          border: none;
-          padding: 14px 28px;
-          border-radius: 25px;
-          font-weight: 700;
-          cursor: pointer;
-          font-size: 1rem;
-          display: block;
-          margin: 20px auto 0 auto;
-        }
-
-        /* ROUE DES ATTENTIONS */
-        .temp-wheel-container {
-          text-align: center;
-          max-width: 450px;
-          margin: 0 auto;
-        }
-        .temp-wheel-wrapper {
-          position: relative;
-          width: 280px;
-          height: 280px;
-          margin: 20px auto;
-        }
-        .temp-wheel {
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-          border: 6px solid #ffffff;
-          box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-          transition: transform 3.5s cubic-bezier(0.15, 0.99, 0.18, 0.99);
-          background: conic-gradient(
-            #fecdd3 0deg 60deg,
-            #e0e7ff 60deg 120deg,
-            #fef08a 120deg 180deg,
-            #dcfce7 180deg 240deg,
-            #f3e8ff 240deg 300deg,
-            #ffe4e6 300deg 360deg
-          );
-        }
-        .temp-wheel-pointer {
-          position: absolute;
-          top: -12px;
-          left: 50%;
-          transform: translateX(-50%);
-          font-size: 1.8rem;
-          z-index: 10;
-        }
-
-        /* SAC À DOS */
-        .temp-backpack-box {
-          background-color: #ffffff;
-          border-radius: 28px;
-          border: 2px dashed #f43f5e;
-          padding: 50px 20px;
-          text-align: center;
-          cursor: pointer;
-          max-width: 500px;
-          margin: 0 auto;
-        }
-        .temp-backpack-title { font-size: 3rem; font-weight: 900; letter-spacing: 4px; color: #f43f5e; margin: 0; }
-
-        /* BOUGIES ET BOUTONS */
-        .temp-cake-box { text-align: center; max-width: 500px; margin: 0 auto; }
-        .temp-btn-pink {
-          background-color: #e11d48;
-          color: #ffffff;
-          border: none;
-          padding: 16px 36px;
-          border-radius: 30px;
-          font-size: 1.1rem;
-          font-weight: 700;
-          cursor: pointer;
-          transition: transform 0.2s;
-        }
-
-        .temp-heart-anim {
-          position: fixed;
-          font-size: 1.5rem;
-          pointer-events: none;
-          animation: tempFloatUp 1.2s forwards;
-          z-index: 9999;
-        }
-
-        @keyframes tempFloatUp {
-          0% { transform: translateY(0) scale(1); opacity: 1; }
-          100% { transform: translateY(-80px) scale(1.3); opacity: 0; }
-        }
-      `}</style>
 
       {/* --- HERO / ACCUEIL --- */}
       <section className="temp-section">
