@@ -9,16 +9,16 @@ export default function Temp() {
   const [hearts, setHearts] = useState([])
 
   const animalFacts = [
-    { text: "Les loutres de mer se tiennent la patte en dormant pour ne pas se perdre à la dérive, exactement comme je veux rester près de toi. 🦦💖", emoji: "🦦" },
-    { text: "Les pingouins offrent un galet parfait à leur partenaire pour la vie. Si j'étais un pingouin, je t'offrirais le plus beau galet du monde. 🐧💎", emoji: "🐧" },
-    { text: "Les hippocampes nagent en se tenant par la queue et dansent ensemble chaque matin au réveil. 🐴🌊", emoji: "🐴" },
-    { text: "Les cygnes forment un cœur parfait avec leurs coux lorsqu'ils se regardent. C'est l'un des rares animaux fidèles toute leur vie. 🦢✨", emoji: "🦢" },
-    { text: "Les loups hurlent à la lune pour retrouver l'élu(e) de leur cœur lorsqu'ils sont séparés. 🐺🌕", emoji: "🐺" },
-    { text: "Les albatros parcourent des kilomètres mais reviennent toujours retrouver la même personne toute leur vie. 🕊️🌍", emoji: "🕊️" },
-    { text: "Les éléphants s'enlacent avec leurs trompes pour se saluer et se réconforter en cas de chagrin. 🐘🤍", emoji: "🐘" },
-    { text: "Les perroquets se donnent des petits noms doux avec des gazouillements uniques réservés uniquement à leur partenaire. 🦜💬", emoji: "🦜" },
-    { text: "Les girafes se frottent doucement le cou pendant des heures pour se montrer leur tendresse. 🦒🌿", emoji: "🦒" },
-    { text: "Et moi, je t'aime encore plus fort que tous ces animaux réunis ! Prête pour ta surprise ? ❤️", emoji: "🎁" }
+    { text: "Les loutres de mer se tiennent la patte en dormant pour ne pas se perdre à la dérive, exactement comme je veux rester près de toi. ", emoji: "🦦" },
+    { text: "Les pingouins offrent un galet parfait à leur partenaire pour la vie. Si j'étais un pingouin, je t'offrirais le plus beau galet du monde. ", emoji: "🐧" },
+    { text: "Les hippocampes nagent en se tenant par la queue et dansent ensemble chaque matin au réveil. ", emoji: "🐴" },
+    { text: "Les cygnes forment un cœur parfait avec leurs coux lorsqu'ils se regardent. C'est l'un des rares animaux fidèles toute leur vie.", emoji: "🦢" },
+    { text: "Les loups hurlent à la lune pour retrouver l'élu(e) de leur cœur lorsqu'ils sont séparés. ", emoji: "🐺" },
+    { text: "Les albatros parcourent des kilomètres mais reviennent toujours retrouver la même personne toute leur vie. ", emoji: "🕊️" },
+    { text: "Les éléphants s'enlacent avec leurs trompes pour se saluer et se réconforter en cas de chagrin.", emoji: "🐘" },
+    { text: "Les perroquets se donnent des petits noms doux avec des gazouillements uniques réservés uniquement à leur partenaire. ", emoji: "🦜" },
+    { text: "Les girafes se frottent doucement le cou pendant des heures pour se montrer leur tendresse.", emoji: "🦒" },
+    { text: "Et moi, je t'aime encore plus fort que tous ces animaux réunis ! Prête pour ta surprise ? ", emoji: "🎁" }
   ]
 
   // --- ÉTATS ANIMATIONS, JEUX ET CHOIX ENREGISTRÉS ---
@@ -155,12 +155,12 @@ export default function Temp() {
   }
 
   const wheelAttentions = [
-    "Un petit-déjeuner surprise au lit 🥐",
-    "Un massage des épaules 💆‍♀️",
-    "Ton dessert préféré commandé 🍰",
-    "Une soirée cinéma avec ton choix de film 🍿",
-    "Une promenade romantique à deux 🌹",
-    "Un câlin géant réconfortant ✨"
+    "Un dessert trompe oeil.",
+    "Une balade le soir en hiver.",
+    "Une mangue avec des épices.",
+    "Une journée cinéma avec ton choix de film.",
+    "Une promenade romantique à deux.",
+    "Un câlin géant réconfortant."
   ]
 
   const spinWheel = () => {
@@ -180,28 +180,28 @@ export default function Temp() {
   }
 
   const nicknames = [
-    "Mon Petit Nuage de Douceur ☁️",
-    "La Reine du Sac à Dos 🎒",
-    "Ma Star du Master 🎓",
-    "Loutre d'Amour 🦦",
-    "Princesse des Mangues 🥭"
+    "Coco☁️",
+    "Sac à Dos 🎒",
+    "Lève tôt🎓",
+    "Couche tôt (sauf aujourd'hui apparemment) 🦦",
+    "Princesse des mangues 🥭"
   ]
   const generateNickname = () => setGeneratedNickname(nicknames[Math.floor(Math.random() * nicknames.length)])
 
   const mealsList = [
-    { id: 1, name: 'Sushis préparés minute', desc: 'Frais, légers et gourmands' },
-    { id: 2, name: 'Pizza au feu de bois', desc: 'Croûte alvéolée & burrata' },
+    { id: 1, name: 'Sushis', desc: 'Frais, légers et gourmands' },
+    { id: 2, name: 'Pizza', desc: 'Croûte alvéolée & burrata' },
     { id: 3, name: 'Tacos street-food', desc: 'Épicés juste comme tu aimes' },
-    { id: 4, name: 'Burger artisan gourmet', desc: 'Pain brioché & frites maison' },
+    { id: 4, name: 'Burgers', desc: 'Pain brioché & frites maison' },
     { id: 5, name: 'Brunch sucré-salé', desc: 'Pancakes, avocado toast et jus' },
     { id: 6, name: 'Ramen traditionnel', desc: 'Bouillon mijoté et réconfortant' },
-    { id: 7, name: 'Grillades au feu', desc: 'Saveurs fumées et conviviales' },
-    { id: 8, name: 'Cuisine du monde', desc: 'Une nouvelle saveur à découvrir' },
-    { id: 9, name: 'Dîner gastronomique', desc: 'Table tamisée et chandelles' },
+    { id: 7, name: 'Grillades (en privée)', desc: 'Saveurs fumées et conviviales' },
+    { id: 8, name: 'Resto comorien', desc: 'Retour au Comores' },
+    { id: 9, name: 'Resto indien', desc: 'Epicé' },
   ]
 
   const moviesList = [
-    { id: 1, title: 'Superman (2025)', detail: 'Le grand retour épique' },
+    { id: 1, title: 'Kal el', detail: 'Le grand retour épique' },
     { id: 2, title: 'Clayface', detail: 'Le thriller horrifique DC' },
     { id: 3, title: 'Klara et le soleil', detail: 'Adaptation poétique' },
     { id: 4, title: 'The Social Reckoning', detail: 'Le drame captivant' },
@@ -375,7 +375,7 @@ export default function Temp() {
             Félicitations, <span className="temp-highlight">Swafwata</span>
           </h1>
           <p className="temp-body-text">
-            Tu as déverrouillé ton espace secret. Fais tes choix sur la page, tes décisions généreront ta Facture Officielle du Bonheur à la fin !
+            Tu as déverrouillé ton espace secret. Fais tes choix sur la page, tes décisions généreront ta "Facture officielle du bonheur à la fin" !
           </p>
         </div>
       </section>
@@ -459,21 +459,21 @@ export default function Temp() {
 
           {/* Bisous */}
           <div style={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-            <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem' }}>Envoyer des Bisous 💋</h3>
+            <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem' }}>Envoyer des bisous 💋</h3>
             <button onClick={(e) => { setKissCount(kissCount + 1); triggerHearts(e); }} style={{ fontSize: '2.2rem', background: 'none', border: 'none', cursor: 'pointer' }}>💋</button>
             <p style={{ marginTop: '6px', fontWeight: '700', color: '#e11d48' }}>{kissCount} bisous comptabilisés !</p>
           </div>
 
           {/* Roue */}
           <div style={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-            <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem' }}>Roue des Attentions 🎡</h3>
+            <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem' }}>Roue des attentions 🎡</h3>
             <button className="temp-quiz-btn" onClick={spinWheel} disabled={isSpinning}>{isSpinning ? '...' : 'Tourner'}</button>
             {wheelResult && <p style={{ marginTop: '12px', color: '#9f1239', fontWeight: '700', fontSize: '0.95rem' }}>{wheelResult}</p>}
           </div>
 
           {/* Vœu */}
           <div style={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-            <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem' }}>Boîte à Vœu Secret 💌</h3>
+            <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem' }}>Boîte à vœu secret 💌</h3>
             {!wishSaved ? (
               <>
                 <input type="text" value={secretWish} onChange={(e) => setSecretWish(e.target.value)} placeholder="Ton vœu..." style={{ width: '100%', padding: '10px', borderRadius: '10px', border: '1px solid #cbd5e1', boxSizing: 'border-box' }} />
@@ -502,7 +502,7 @@ export default function Temp() {
       <section className="temp-section">
         <div className="temp-section-header">
           <span className="temp-pill">Récapitulatif</span>
-          <h2 className="temp-section-title">Ta Facture Officielle du Bonheur 🧾</h2>
+          <h2 className="temp-section-title">Ta Facture officielle du bonheur 🧾</h2>
           <p className="temp-section-sub">Voici le résumé de tous tes choix enregistrés aujourd'hui.</p>
         </div>
 
@@ -511,7 +511,7 @@ export default function Temp() {
             <div className="temp-pdf-header">
               <div>
                 <h2 style={{ margin: 0, color: '#e11d48', fontSize: '1.2rem' }}>FACTURE DU BONHEUR #270825</h2>
-                <span style={{ fontSize: '0.8rem', color: '#64748b' }}>Émise pour : Swafwata • Client Privilégié</span>
+                <span style={{ fontSize: '0.8rem', color: '#64748b' }}>Émise pour : Swafwata • Cliente Privilégiée</span>
               </div>
               <div style={{ textAlign: 'right' }}>
                 <span style={{ fontSize: '0.8rem', color: '#64748b' }}>Date : {new Date().toLocaleDateString('fr-FR')}</span>
