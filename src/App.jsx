@@ -155,7 +155,7 @@ function App() {
             backgroundColor: '#1e1e1e',
             color: '#00ff66',
             fontFamily: 'monospace',
-            padding: '8px 16px',
+            /*padding: '8px 16px',*/
             borderBottom: '1px solid #333',
             display: 'flex',
             alignItems: 'center',
@@ -163,7 +163,7 @@ function App() {
             flexWrap: 'wrap',
             gap: '10px',
             zIndex: 1000,
-            position: 'absolute'
+            position: 'relative'
           }}
         >
           <form 
