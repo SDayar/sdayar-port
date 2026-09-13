@@ -260,7 +260,7 @@ export default function App() {
   const quizQuestions = [
     { q: "Quelle est notre destination de rêve ?", options: ["Les Comores 🇰🇲", "Le Japon 🗾", "Les Maldives 🏝️"], correct: 0 },
     { q: "Quel est ton fruit préféré ?", options: ["La Mangue 🥭", "La Fraise 🍓", "La Ananas 🍍"], correct: 0 },
-    { q: "Quelle est ta plus grande réussite cette année ?", options: ["Avoir ton Master 🎓", "M'avoir supporté 😂", "Les deux ! 🏆"], correct: 2 }
+    { q: "Quelle est ta plus grande réussite cette année ?", options: ["Avoir ton Master 1 🎓", "M'avoir supporté 😂", "Les deux ! 🏆"], correct: 2 }
   ]
 
   const handleQuizAnswer = (qIdx, oIdx) => {
@@ -435,7 +435,6 @@ export default function App() {
 
     .temp-btn-pink { background-color: #e11d48; color: #ffffff; border: none; padding: 14px 28px; border-radius: 25px; font-size: 1rem; font-weight: 700; cursor: pointer; width: 100%; max-width: 320px; display: block; margin: 20px auto 0 auto; text-align: center; box-shadow: 0 8px 20px rgba(225, 29, 72, 0.2); }
 
-    /* FACTURE PDF CONTAINER RESPONSIVE */
     .temp-pdf-wrapper { width: 100%; overflow-x: auto; padding-bottom: 10px; }
     .temp-pdf-container { background-color: #ffffff; border-radius: 20px; padding: 24px; border: 1.5px solid #fecdd3; min-width: 280px; max-width: 700px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.02); box-sizing: border-box; position: relative; }
     .temp-pdf-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px dashed #ffe4e6; padding-bottom: 16px; margin-bottom: 16px; gap: 10px; }
@@ -445,7 +444,6 @@ export default function App() {
 
     .temp-heart-anim { position: fixed; font-size: 1.3rem; pointer-events: none; animation: tempFloatUp 1.2s forwards; z-index: 9999; }
 
-    /* Tampon facture */
     .invoice-stamp { position: absolute; bottom: 40px; right: 40px; border: 3px solid #16a34a; color: #16a34a; font-weight: 900; padding: 8px 16px; border-radius: 8px; transform: rotate(-12deg); font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; animation: stampAnim 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
     @keyframes stampAnim { 0% { transform: scale(3) rotate(0deg); opacity: 0; } 100% { transform: scale(1) rotate(-12deg); opacity: 1; } }
@@ -510,7 +508,7 @@ export default function App() {
         <span key={h.id} className="temp-heart-anim" style={{ left: h.x, top: h.y }}>{h.symbol}</span>
       ))}
 
-      {/* --- PARTIE 1 : HERO & CÉLÉBRATION MASTER --- */}
+      {/* --- PARTIE 1 : HERO & CÉLÉBRATION MASTER 1 --- */}
       <section className="temp-section">
         <div className="temp-hero-card">
           <span className="temp-pill">Accès réservé • Code 270825 Validé</span>
@@ -518,10 +516,23 @@ export default function App() {
             Félicitations, <span className="temp-highlight">Swafwata</span> 🎓
           </h1>
           <p className="temp-body-text" style={{ marginBottom: '20px' }}>
-            Bravo pour l'obtention de ton <strong>Master</strong> ! Une réussite immense qui mérite une célébration à la hauteur de tes efforts.
+            Bravo pour la validation de ton <strong>Master 1</strong> ! Une étape majeure franchie avec succès, qui prouve toute ta détermination.
           </p>
           <p className="temp-body-text">
-            Tu as déverrouillé ton espace secret. Fais tes choix sur la page, tes décisions généreront ta "Facture officielle du bonheur à la fin" !
+            Tu as déverrouillé ton espace secret. Fais tes choix sur la page, tes décisions généreront ta "Facture officielle du bonheur" à la fin !
+          </p>
+        </div>
+      </section>
+
+      {/* --- SECTION NOTRE PREMIÈRE RENCONTRE --- */}
+      <section className="temp-section">
+        <div style={{ backgroundColor: '#ffffff', padding: '30px', borderRadius: '24px', border: '1px solid #ffe4e6', boxShadow: '0 10px 30px rgba(225, 29, 72, 0.04)', position: 'relative', z-index: 1 }}>
+          <div className="temp-section-header" style={{ marginBottom: '20px' }}>
+            <span className="temp-pill" style={{ backgroundColor: '#fff1f2' }}>Souvenir gravé 💫</span>
+            <h2 className="temp-section-title" style={{ color: '#e11d48' }}>Notre toute première rencontre 👩‍❤️‍👨</h2>
+          </div>
+          <p className="temp-body-text" style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto', color: '#334155' }}>
+            Se souvenir du tout premier regard, du premier sourire et de ce moment précis où tout a commencé. Un instant simple en apparence, mais qui restera pour toujours le début de notre belle histoire.
           </p>
         </div>
       </section>
@@ -529,7 +540,7 @@ export default function App() {
       {/* --- AVANT / APRÈS --- */}
       <section className="temp-section">
         <div className="temp-section-header">
-          <h2 className="temp-section-title">Le temps passe, les mémoires restent</h2>
+          <h2 className="temp-section-title">Le temps passe, les mémoires restent 📸</h2>
         </div>
         <div className="temp-grid-2">
           <div className="temp-photo-card">
@@ -661,7 +672,7 @@ export default function App() {
               {backpackOpen ? 'Fermer le sac' : 'Fouiller le sac 🔍'}
             </button>
             {backpackOpen && (
-              <div style={{ marginTop: '12px', fontSize: '0.85rem', color: '#334155', textAvert: 'left', backgroundColor: '#f8fafc', padding: '12px', borderRadius: '10px' }}>
+              <div style={{ marginTop: '12px', fontSize: '0.85rem', color: '#334155', textAlign: 'left', backgroundColor: '#f8fafc', padding: '12px', borderRadius: '10px' }}>
                 <p style={{ margin: '4px 0' }}>🎒 <strong>Contenu du sac :</strong></p>
                 <ul style={{ paddingLeft: '20px', margin: '4px 0' }}>
                   <li>Une boîte de chocolats ultra secrets</li>
@@ -882,22 +893,6 @@ export default function App() {
           <button className="temp-btn-pink" onClick={downloadPDF} style={{ margin: 0 }}>
             Télécharger la Facture en PDF 📄
           </button>
-        </div>
-      </section>
-
-      {/* --- EXPLICATIONS DU CODE ET FONCTIONNEMENT --- */}
-      <section className="temp-section">
-        <div style={{ backgroundColor: '#ffffff', padding: '24px', borderRadius: '20px', border: '1px solid #e2e8f0' }}>
-          <h3 style={{ marginTop: 0, color: '#1e293b' }}>🛠️ Structure & Explications Techniques</h3>
-          <p style={{ fontSize: '0.9rem', color: '#475569', lineHeight: '1.6' }}>
-            Ce composant React rassemble toutes les fonctionnalités dynamiques demandées :
-          </p>
-          <ul style={{ fontSize: '0.85rem', color: '#475569', paddingLeft: '20px', lineHeight: '1.6' }}>
-            <li><strong>Animation Canvas Arrière-plan :</strong> Rendu fluide et performant via <code style={{ color: '#e11d48' }}>requestAnimationFrame</code> ne perturbant pas le défilement mobile.</li>
-            <li><strong>Pluie de mangues (Partie 2) & Vol de pigeons (Partie 4) :</strong> Gestion par Canvas dédiés aux sections respectives.</li>
-            <li><strong>Jeux de la facture :</strong> Curseur dynamique du pourboire, validation de code promo avec mise à jour du récapitulatif, et tampon animé CSS.</li>
-            <li><strong>Exportation PDF (html2pdf.js) :</strong> Adaptation forcée du conteneur pendant le rendu pour éviter les troncatures sur petit écran.</li>
-          </ul>
         </div>
       </section>
     </div>
