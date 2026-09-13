@@ -1,1069 +1,896 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Heart, 
-  Sparkles, 
-  Camera, 
-  Check, 
-  Film, 
-  Utensils, 
-  GraduationCap, 
-  Calendar, 
-  Flame, 
-  Wind,
-  Gift,
-  Key,
-  ChevronDown,
-  Volume2,
-  VolumeX,
-  HelpCircle,
-  RotateCw,
-  Trophy,
-  Award,
-  Eraser,
-  RefreshCw,
-  Smile
-} from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react'
 
-const ParticleCanvas = ({ active, type = 'heart', triggerPos }) => {
-  const canvasRef = useRef(null);
-
-  useEffect(() => {
-    if (!active && !triggerPos) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    
-    let animationFrameId;
-    let particles = [];
-
-    const width = (canvas.width = window.innerWidth);
-    const height = (canvas.height = window.innerHeight);
-
-    const startX = triggerPos ? triggerPos.x : width / 2;
-    const startY = triggerPos ? triggerPos.y : height / 2;
-
-    const count = type === 'confetti' ? 90 : type === 'sparks' ? 60 : 35;
-
-    for (let i = 0; i < count; i++) {
-      particles.push({
-        x: startX,
-        y: startY,
-        vx: (Math.random() - 0.5) * (type === 'confetti' ? 14 : 9),
-        vy: (Math.random() - 0.7) * (type === 'confetti' ? 16 : 11),
-        size: Math.random() * (type === 'confetti' ? 9 : 5) + 2,
-        color: type === 'heart' 
-          ? `hsl(${Math.random() * 20 + 340}, 90%, 65%)`
-          : type === 'sparks' 
-          ? `hsl(${Math.random() * 40 + 35}, 100%, 65%)`
-          : `hsl(${Math.random() * 360}, 80%, 65%)`,
-        alpha: 1,
-        decay: Math.random() * 0.015 + 0.008,
-        rotation: Math.random() * Math.PI * 2,
-        rotSpeed: (Math.random() - 0.5) * 0.2
-      });
-    }
-
-    const render = () => {
-      ctx.clearRect(0, 0, width, height);
-
-      particles.forEach((p, index) => {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.vy += 0.25;
-        p.alpha -= p.decay;
-        p.rotation += p.rotSpeed;
-
-        ctx.save();
-        ctx.globalAlpha = Math.max(p.alpha, 0);
-        ctx.fillStyle = p.color;
-        ctx.translate(p.x, p.y);
-        ctx.rotate(p.rotation);
-
-        if (type === 'heart') {
-          ctx.beginPath();
-          const topCurveHeight = p.size * 0.3;
-          ctx.moveTo(0, topCurveHeight);
-          ctx.bezierCurveTo(0, 0, -p.size / 2, 0, -p.size / 2, topCurveHeight);
-          ctx.bezierCurveTo(-p.size / 2, (p.size + topCurveHeight) / 2, 0, p.size, 0, p.size);
-          ctx.bezierCurveTo(0, p.size, p.size / 2, (p.size + topCurveHeight) / 2, p.size / 2, topCurveHeight);
-          ctx.bezierCurveTo(p.size / 2, 0, 0, 0, 0, topCurveHeight);
-          ctx.fill();
-        } else if (type === 'confetti') {
-          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 1.5);
-        } else {
-          ctx.beginPath();
-          ctx.arc(0, 0, p.size, 0, Math.PI * 2);
-          ctx.fill();
-        }
-
-        ctx.restore();
-
-        if (p.alpha <= 0) {
-          particles.splice(index, 1);
-        }
-      });
-
-      if (particles.length > 0) {
-        animationFrameId = requestAnimationFrame(render);
-      }
-    };
-
-    render();
-
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, [active, triggerPos, type]);
-
-  return (
-    <canvas 
-      ref={canvasRef} 
-      className="fixed inset-0 pointer-events-none z-50 w-full h-full"
-    />
-  );
-};
-
-const ScratchCard = ({ onScratchComplete }) => {
-  const canvasRef = useRef(null);
-  const [isScratching, setIsScratching] = useState(false);
-  const [scratchedPercent, setScratchedPercent] = useState(0);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    const width = canvas.width = canvas.parentElement.offsetWidth;
-    const height = canvas.height = canvas.parentElement.offsetHeight;
-
-    // Draw luxury metallic rose gold coating
-    const grad = ctx.createLinearGradient(0, 0, width, height);
-    grad.addColorStop(0, '#f43f5e');
-    grad.addColorStop(0.5, '#fda4af');
-    grad.addColorStop(1, '#e11d48');
-    
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, width, height);
-
-    // Decorative pattern/text
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
-    ctx.font = '500 16px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('✨ Gratte doucement ici avec ton doigt ou curseur ✨', width / 2, height / 2);
-  }, []);
-
-  const scratch = (x, y) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    const rect = canvas.getBoundingClientRect();
-    const clientX = x - rect.left;
-    const clientY = y - rect.top;
-
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.beginPath();
-    ctx.arc(clientX, clientY, 24, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Check scratch ratio
-    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    let transparentPixels = 0;
-    for (let i = 3; i < imgData.data.length; i += 16) {
-      if (imgData.data[i] === 0) transparentPixels++;
-    }
-    const percent = Math.round((transparentPixels / (imgData.data.length / 16)) * 100);
-    setScratchedPercent(percent);
-    if (percent > 45 && onScratchComplete) {
-      onScratchComplete();
-    }
-  };
-
-  const handleMouseDown = (e) => {
-    setIsScratching(true);
-    scratch(e.clientX, e.clientY);
-  };
-
-  const handleMouseMove = (e) => {
-    if (!isScratching) return;
-    scratch(e.clientX, e.clientY);
-  };
-
-  const handleMouseUp = () => setIsScratching(false);
-
-  const handleTouchMove = (e) => {
-    if (e.touches && e.touches[0]) {
-      scratch(e.touches[0].clientX, e.touches[0].clientY);
-    }
-  };
-
-  return (
-    <div className="relative w-full h-48 sm:h-56 rounded-2xl overflow-hidden shadow-inner cursor-pointer select-none border border-black/5">
-      <canvas
-        ref={canvasRef}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onTouchMove={handleTouchMove}
-        className="absolute inset-0 z-20 touch-none transition-opacity duration-500"
-        style={{ opacity: scratchedPercent > 70 ? 0 : 1, pointerEvents: scratchedPercent > 70 ? 'none' : 'auto' }}
-      />
-      {/* Revealed Secret Gift Coupon Behind Coating */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-br from-amber-50 via-rose-50 to-white flex flex-col items-center justify-center p-6 text-center border-2 border-dashed border-rose-200 rounded-2xl">
-        <span className="text-xs uppercase font-mono tracking-widest text-rose-500 font-semibold mb-1">
-          🎟️ Pass Anniversaire VIP
-        </span>
-        <h4 className="text-xl sm:text-2xl font-serif text-slate-900 font-semibold mb-2">
-          Invitation Privée & Gastronomie
-        </h4>
-        <p className="text-xs sm:text-sm text-slate-600 font-light max-w-sm">
-          Bon valable pour : 1 Soirée Restaurant Gastronomique au choix + Séance Cinéma privée Octobre 2026.
-        </p>
-        <span className="mt-3 text-[11px] bg-rose-100 text-rose-700 px-3 py-1 rounded-full font-medium">
-          Code Valide : 270125-SWAFI
-        </span>
-      </div>
-    </div>
-  );
-};
-
-const WheelOfFortune = ({ onWin }) => {
-  const [spinning, setSpinning] = useState(false);
-  const [rotation, setRotation] = useState(0);
-  const [winner, setWinner] = useState(null);
-
-  const prizes = [
-    { label: "Massage Relaxant 💆‍♀️", color: "bg-rose-100 text-rose-900" },
-    { label: "Plat Préféré Maison 🍳", color: "bg-amber-100 text-amber-900" },
-    { label: "Soirée Plateau Ciné 🎬", color: "bg-slate-100 text-slate-900" },
-    { label: "Week-end Surprise 🧳", color: "bg-rose-200 text-rose-950" },
-    { label: "Dessert Gourmand 🍓", color: "bg-amber-200 text-amber-950" },
-    { label: "Journée 100% Cocooning ☕", color: "bg-slate-200 text-slate-950" },
-  ];
-
-  const spin = () => {
-    if (spinning) return;
-    setSpinning(true);
-    setWinner(null);
-
-    const extraSpins = 5 + Math.floor(Math.random() * 5);
-    const randomSegment = Math.floor(Math.random() * prizes.length);
-    const degreesPerSegment = 360 / prizes.length;
-    const targetDegree = rotation + (extraSpins * 360) + (randomSegment * degreesPerSegment) + degreesPerSegment / 2;
-
-    setRotation(targetDegree);
-
-    setTimeout(() => {
-      setSpinning(false);
-      const actualWinnerIndex = prizes.length - 1 - (randomSegment % prizes.length);
-      const winResult = prizes[actualWinnerIndex].label;
-      setWinner(winResult);
-      if (onWin) onWin(winResult);
-    }, 4000);
-  };
-
-  return (
-    <div className="flex flex-col items-center justify-center space-y-6">
-      <div className="relative w-64 h-64 sm:w-80 sm:h-80 flex items-center justify-center">
-        {/* Wheel Indicator Pointer */}
-        <div className="absolute -top-3 z-30 w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[20px] border-t-rose-500 drop-shadow-md" />
-
-        {/* Rotating SVG Wheel */}
-        <div 
-          className="w-full h-full rounded-full border-4 border-white shadow-xl overflow-hidden transition-transform duration-[4000ms] ease-[cubic-bezier(0.15,0.9,0.2,1)] relative"
-          style={{ transform: `rotate(${rotation}deg)` }}
-        >
-          {prizes.map((p, idx) => {
-            const angle = (360 / prizes.length) * idx;
-            return (
-              <div
-                key={idx}
-                className="absolute w-1/2 h-1/2 top-0 right-0 origin-bottom-left flex items-center justify-center pt-4"
-                style={{
-                  transform: `rotate(${angle}deg)`,
-                  clipPath: 'polygon(0 0, 100% 0, 0 100%)',
-                  backgroundColor: idx % 2 === 0 ? '#FFE4E6' : '#FEF3C7'
-                }}
-              >
-                <span className="text-[10px] sm:text-xs font-medium text-slate-800 -rotate-45 translate-x-3 -translate-y-2 text-center max-w-[80px]">
-                  {p.label}
-                </span>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Center Button */}
-        <button
-          onClick={spin}
-          disabled={spinning}
-          className="absolute z-20 w-16 h-16 rounded-full bg-white border border-rose-200 shadow-lg flex items-center justify-center text-rose-500 font-semibold text-xs tracking-wider uppercase hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
-        >
-          {spinning ? '...' : 'TOURNER'}
-        </button>
-      </div>
-
-      {winner && (
-        <div className="p-4 bg-white border border-rose-200 rounded-2xl shadow-sm text-center animate-scale-up max-w-sm">
-          <p className="text-xs text-rose-500 uppercase font-semibold tracking-wider">Résultat du tirage 🎉</p>
-          <h4 className="text-lg font-serif text-slate-900 font-medium mt-1">{winner}</h4>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default function App() {
-  const [phase, setPhase] = useState('countdown');
-  const [countdownNum, setCountdownNum] = useState(3);
+export default function Temp() {
+  // --- ÉTATS ANIMATIONS ET JEUX ---
+  const [phase, setPhase] = useState('countdown')
+  const [count, setCount] = useState(3)
+  const [hearts, setHearts] = useState([])
+  const [backpackSecret, setBackpackSecret] = useState(false)
+  const [candlesBlown, setCandlesBlown] = useState(false)
   
-  const [isMuted, setIsMuted] = useState(true);
+  // Repas & Films
+  const [selectedMeals, setSelectedMeals] = useState([])
+  const [selectedMovies, setSelectedMovies] = useState([])
 
-  // FX States
-  const [clickPos, setClickPos] = useState(null);
-  const [fxTrigger, setFxTrigger] = useState(0);
-  const [fxType, setFxType] = useState('heart');
+  // Quiz
+  const [quizAnswers, setQuizAnswers] = useState({})
+  const [quizScore, setQuizScore] = useState(null)
 
-  // Interactive Game States
-  const [selectedMeals, setSelectedMeals] = useState([]);
-  const [selectedMovies, setSelectedMovies] = useState([]);
-  const [backpackUnlocked, setBackpackUnlocked] = useState(false);
-  const [candlesBlown, setCandlesBlown] = useState(false);
+  // Roue des attentions
+  const [isSpinning, setIsSpinning] = useState(false)
+  const [wheelRotation, setWheelRotation] = useState(0)
+  const [wheelResult, setWheelResult] = useState(null)
 
-  // Quiz Game State
-  const [quizScore, setQuizScore] = useState(0);
-  const [quizAnswers, setQuizAnswers] = useState({});
+  // Carte à gratter (Boisson Surprise)
+  const canvasRef = useRef(null)
+  const [isScratched, setIsScratched] = useState(false)
 
-  // Photos State
+  // Photos téléversables
   const [photos, setPhotos] = useState({
-    before: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1000&auto=format&fit=crop&q=80',
-    today: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1000&auto=format&fit=crop&q=80',
-    encounter: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=1000&auto=format&fit=crop&q=80',
-    couple: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=1000&auto=format&fit=crop&q=80',
-  });
+    before: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80',
+    after: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80',
+    date: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=800&q=80',
+    couple: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800&q=80'
+  })
 
+  // --- DÉCOMPTE INITIAL ---
   useEffect(() => {
     if (phase === 'countdown') {
-      if (countdownNum > 0) {
-        const timer = setTimeout(() => setCountdownNum(prev => prev - 1), 900);
-        return () => clearTimeout(timer);
+      if (count > 0) {
+        const timer = setTimeout(() => setCount(count - 1), 750)
+        return () => clearTimeout(timer)
       } else {
-        setPhase('reveal');
+        setPhase('surprise')
       }
-    } else if (phase === 'reveal') {
-      const timer = setTimeout(() => {
-        setPhase('main');
-      }, 1800);
-      return () => clearTimeout(timer);
+    } else if (phase === 'surprise') {
+      const timer = setTimeout(() => setPhase('main'), 1400)
+      return () => clearTimeout(timer)
     }
-  }, [countdownNum, phase]);
+  }, [count, phase])
 
-  const handleImageUpload = (key, event) => {
-    const file = event.target.files[0];
+  // --- CARTE À GRATTER (CANVAS BOISSON SURPRISE) ---
+  useEffect(() => {
+    if (phase !== 'main') return
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+
+    canvas.width = 340
+    canvas.height = 140
+
+    // Couche argentée épurée
+    ctx.fillStyle = '#e2e8f0'
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+    // Motif élégant par-dessus
+    ctx.fillStyle = '#94a3b8'
+    ctx.font = '600 14px system-ui'
+    ctx.textAlign = 'center'
+    ctx.fillText('✨ Gratte ici avec ta souris ou ton doigt ✨', canvas.width / 2, canvas.height / 2 + 5)
+
+    let isDrawing = false
+
+    const scratch = (x, y) => {
+      ctx.globalCompositeOperation = 'destination-out'
+      ctx.beginPath()
+      ctx.arc(x, y, 22, 0, Math.PI * 2)
+      ctx.fill()
+
+      // Calcul du pourcentage gratté
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+      let transparentPixels = 0
+      for (let i = 3; i < imageData.data.length; i += 4) {
+        if (imageData.data[i] === 0) transparentPixels++
+      }
+      if (transparentPixels / (canvas.width * canvas.height) > 0.45) {
+        setIsScratched(true)
+      }
+    }
+
+    const handleMouseDown = (e) => {
+      isDrawing = true
+      const rect = canvas.getBoundingClientRect()
+      scratch(e.clientX - rect.left, e.clientY - rect.top)
+    }
+    const handleMouseMove = (e) => {
+      if (!isDrawing) return
+      const rect = canvas.getBoundingClientRect()
+      scratch(e.clientX - rect.left, e.clientY - rect.top)
+    }
+    const handleMouseUp = () => { isDrawing = false }
+
+    const handleTouchStart = (e) => {
+      isDrawing = true
+      const rect = canvas.getBoundingClientRect()
+      const touch = e.touches[0]
+      scratch(touch.clientX - rect.left, touch.clientY - rect.top)
+    }
+    const handleTouchMove = (e) => {
+      if (!isDrawing) return
+      const rect = canvas.getBoundingClientRect()
+      const touch = e.touches[0]
+      scratch(touch.clientX - rect.left, touch.clientY - rect.top)
+    }
+
+    canvas.addEventListener('mousedown', handleMouseDown)
+    canvas.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('mouseup', handleMouseUp)
+
+    canvas.addEventListener('touchstart', handleTouchStart)
+    canvas.addEventListener('touchmove', handleTouchMove)
+    window.addEventListener('touchend', handleMouseUp)
+
+    return () => {
+      canvas.removeEventListener('mousedown', handleMouseDown)
+      canvas.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mouseup', handleMouseUp)
+      canvas.removeEventListener('touchstart', handleTouchStart)
+      canvas.removeEventListener('touchmove', handleTouchMove)
+      window.removeEventListener('touchend', handleMouseUp)
+    }
+  }, [phase])
+
+  // Changement de photo
+  const handlePhotoUpload = (key, file) => {
     if (file) {
-      const url = URL.createObjectURL(file);
-      setPhotos(prev => ({ ...prev, [key]: url }));
+      setPhotos(prev => ({ ...prev, [key]: URL.createObjectURL(file) }))
     }
-  };
+  }
 
-  const triggerBurst = (e, type = 'heart') => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX || rect.left + rect.width / 2;
-    const y = e.clientY || rect.top + rect.height / 2;
-    setClickPos({ x, y });
-    setFxType(type);
-    setFxTrigger(prev => prev + 1);
-  };
+  // Easter egg cœurs
+  const triggerHearts = (e) => {
+    const newHearts = Array.from({ length: 7 }).map((_, i) => ({
+      id: Date.now() + i,
+      x: e.clientX + (Math.random() * 50 - 25),
+      y: e.clientY + (Math.random() * 50 - 25),
+    }))
+    setHearts(prev => [...prev, ...newHearts])
+    setTimeout(() => {
+      setHearts(prev => prev.filter(h => !newHearts.includes(h)))
+    }, 1200)
+  }
 
-  const toggleMeal = (id) => {
-    if (selectedMeals.includes(id)) {
-      setSelectedMeals(selectedMeals.filter(m => m !== id));
-    } else if (selectedMeals.length < 3) {
-      setSelectedMeals([...selectedMeals, id]);
-    }
-  };
-
-  const toggleMovie = (id) => {
-    if (selectedMovies.includes(id)) {
-      setSelectedMovies(selectedMovies.filter(m => m !== id));
-    } else {
-      setSelectedMovies([...selectedMovies, id]);
-    }
-  };
-
-  const handleBlowCandle = (e) => {
-    triggerBurst(e, 'sparks');
-    setCandlesBlown(!candlesBlown);
-  };
-
-  const quizQuestions = [
+  // Quiz
+  const questions = [
     {
       id: 1,
-      question: "Quelle était la météo lors de notre premier rendez-vous le 27 Janvier ?",
-      options: [
-        { text: "Un soleil éclatant d'hiver ☀️", isCorrect: false },
-        { text: "Une pluie douce & romantique 🌧️", isCorrect: true },
-        { text: "Un ciel dégagé & frais ☁️", isCorrect: false }
-      ]
+      question: "Quelle était la météo lors de notre rendez-vous du 27 Janvier ?",
+      options: ["Un soleil éclatant d'hiver", "Une douce fraîcheur", "Un ciel dégagé & romantique"],
+      correct: 1
     },
     {
       id: 2,
-      question: "Qui dit ou mentionne 'Sac à dos' en premier lors des sorties ?",
-      options: [
-        { text: "Toi (Swafi), c'est ton expression culte ! 🎒", isCorrect: true },
-        { text: "Moi, toujours à anticiper 🧭", isCorrect: false },
-        { text: "On le crie en même temps ! 🗣️", isCorrect: false }
-      ]
+      question: "Qui mentionne 'Sac à dos' en premier lors des sorties ?",
+      options: ["Toi (Swafi), c'est ton expression !", "Moi, pour ne rien oublier", "On le dit en même temps !"],
+      correct: 0
     },
     {
       id: 3,
-      question: "Quel film programmation 2026 est en tête de notre liste ?",
-      options: [
-        { text: "Klara et le Soleil ☀️", isCorrect: false },
-        { text: "Clayface 🎬", isCorrect: true },
-        { text: "Wife and Dog 🐾", isCorrect: false }
-      ]
+      question: "Quel film en programmation est en haut de notre liste de rendez-vous ?",
+      options: ["Klara et le Soleil", "Clayface", "Wife and Dog"],
+      correct: 1
     }
-  ];
+  ]
 
-  const handleQuizSelect = (qId, optionIdx, isCorrect, e) => {
-    if (quizAnswers[qId] !== undefined) return;
-    setQuizAnswers(prev => ({ ...prev, [qId]: optionIdx }));
-    if (isCorrect) {
-      setQuizScore(prev => prev + 1);
-      triggerBurst(e, 'heart');
-    }
-  };
+  const handleQuizSelect = (qId, optionIdx) => {
+    setQuizAnswers({ ...quizAnswers, [qId]: optionIdx })
+  }
 
+  const validateQuiz = () => {
+    let score = 0
+    questions.forEach(q => {
+      if (quizAnswers[q.id] === q.correct) score++
+    })
+    setQuizScore(score)
+  }
+
+  // Roue des attentions
+  const wheelAttentions = [
+    "Un petit-déjeuner surprise au lit 🥐",
+    "Un massage des épaules 💆‍♀️",
+    "Ton dessert préféré commandé 🍰",
+    "Une soirée cinéma avec ton choix de film 🍿",
+    "Une promenade romantique à deux 🌹",
+    "Un câlin géant réconfortant ✨"
+  ]
+
+  const spinWheel = () => {
+    if (isSpinning) return
+    setIsSpinning(true)
+    setWheelResult(null)
+    const randomDegrees = 1440 + Math.floor(Math.random() * 360)
+    setWheelRotation(randomDegrees)
+
+    setTimeout(() => {
+      setIsSpinning(false)
+      const actualDegree = randomDegrees % 360
+      const segmentAngle = 360 / wheelAttentions.length
+      const index = Math.floor((360 - (actualDegree % 360)) / segmentAngle) % wheelAttentions.length
+      setWheelResult(wheelAttentions[index])
+    }, 3500)
+  }
+
+  // Listes des 9 repas et 9 films
   const mealsList = [
-    { id: 1, name: 'Sushis préparés minute', sub: 'Frais, purs, équilibre parfait' },
-    { id: 2, name: 'Pizza au feu de bois', sub: 'Pâte alvéolée & burrata fondante' },
-    { id: 3, name: 'Tacos street-food', sub: 'Épicés juste comme tu aimes' },
-    { id: 4, name: 'Burger artisan gourmet', sub: 'Pain brioché & frites maison' },
-    { id: 5, name: 'Brunch sucré-salé', sub: 'Pancakes moelleux & avocado toast' },
-    { id: 6, name: 'Ramen traditionnel', sub: 'Bouillon miroitant mijoté 12h' },
-    { id: 7, name: 'Grillades au feu de bois', sub: 'Saveurs fumées délicates' },
-    { id: 8, name: 'Plat traditionnel raffiné', sub: 'La chaleur des recettes d’autrefois' },
-    { id: 9, name: 'Dîner gastronomique', sub: 'Accord mets & ambiance tamisée' },
-  ];
+    { id: 1, name: 'Sushis préparés minute', desc: 'Frais, légers et gourmands' },
+    { id: 2, name: 'Pizza au feu de bois', desc: 'Croûte alvéolée & burrata' },
+    { id: 3, name: 'Tacos street-food', desc: 'Épicés juste comme tu aimes' },
+    { id: 4, name: 'Burger artisan gourmet', desc: 'Pain brioché & frites maison' },
+    { id: 5, name: 'Brunch sucré-salé', desc: 'Pancakes, avocado toast et jus' },
+    { id: 6, name: 'Ramen traditionnel', desc: 'Bouillon mijoté et réconfortant' },
+    { id: 7, name: 'Grillades au feu', desc: 'Saveurs fumées et conviviales' },
+    { id: 8, name: 'Cuisine du monde', desc: 'Une nouvelle saveur à découvrir' },
+    { id: 9, name: 'Dîner gastronomique', desc: 'Table tamisée et chandelles' },
+  ]
 
   const moviesList = [
-    { id: 1, title: 'Clayface', date: '21 Octobre 2026', desc: 'Le thriller sombre & immersif très attendu' },
-    { id: 2, title: 'Klara et le Soleil', date: '21 Octobre 2026', desc: 'Poésie visuelle & drame futuriste' },
-    { id: 3, title: 'The Social Reckoning', date: '7 Octobre 2026', desc: 'Histoire captivante signée Aaron Sorkin' },
-    { id: 4, title: 'Ducobu et le fantôme', date: '7 Octobre 2026', desc: 'Moment de détente & rigolade garantie' },
-    { id: 5, title: 'Les Misérables', date: '14 Octobre 2026', desc: 'Grande fresque émotionnelle' },
-    { id: 6, title: 'Karma', date: '21 Octobre 2026', desc: 'Nouveau film poignant de Guillaume Canet' },
-    { id: 7, title: 'Street Fighter', date: '14 Octobre 2026', desc: 'Séance d’action effrénée & rétro' },
-    { id: 8, title: 'Wife And Dog', date: '28 Octobre 2026', desc: 'Comédie noire signée Guy Ritchie' },
-    { id: 9, title: 'Shaun le Mouton : Halloween', date: '21 Octobre 2026', desc: 'Cocooning & animation réconfortante' },
-  ];
+    { id: 1, title: 'Clayface', date: 'Sortie Cinéma', detail: 'Le thriller horrifique événement DC' },
+    { id: 2, title: 'Klara et le soleil', date: 'Sortie Cinéma', detail: 'Adaptation poétique & émouvante' },
+    { id: 3, title: 'The Social Reckoning', date: 'Sortie Cinéma', detail: 'Le drame captivant d’Aaron Sorkin' },
+    { id: 4, title: 'Ducobu et le fantôme', date: 'Sortie Cinéma', detail: 'Pour une soirée rigolade légère' },
+    { id: 5, title: 'Les Misérables', date: 'Sortie Cinéma', detail: 'Grande fresque historique' },
+    { id: 6, title: 'Karma', date: 'Sortie Cinéma', detail: 'Le nouveau film de Guillaume Canet' },
+    { id: 7, title: 'Street Fighter', date: 'Sortie Cinéma', detail: 'Grosse séance d’action déjantée' },
+    { id: 8, title: 'Wife And Dog', date: 'Sortie Cinéma', detail: 'Comédie noire & thriller' },
+    { id: 9, title: 'Shaun le Mouton : Halloween', date: 'Sortie Cinéma', detail: 'Petit moment cocooning' },
+  ]
+
+  const toggleMeal = (id) => {
+    if (selectedMeals.includes(id)) {
+      setSelectedMeals(selectedMeals.filter(m => m !== id))
+    } else if (selectedMeals.length < 3) {
+      setSelectedMeals([...selectedMeals, id])
+    }
+  }
+
+  const toggleMovie = (id) => {
+    if (selectedMovies.includes(id)) {
+      setSelectedMovies(selectedMovies.filter(m => m !== id))
+    } else {
+      setSelectedMovies([...selectedMovies, id])
+    }
+  }
+
+  // ÉCRANS D'INTRO
+  if (phase !== 'main') {
+    return (
+      <div className="temp-intro-wrapper">
+        {phase === 'countdown' ? (
+          <div className="temp-intro-content">
+            <span className="temp-countdown-value">{count}</span>
+            <p className="temp-intro-caption">Préparation de ton coin secret...</p>
+          </div>
+        ) : (
+          <div className="temp-intro-content">
+            <h1 className="temp-surprise-heading">Joyeux Anniversaire Swafi ! ❤️</h1>
+            <p className="temp-intro-caption">Déverrouillage de ton espace dédié...</p>
+          </div>
+        )}
+      </div>
+    )
+  }
 
   return (
-    <div className="min-h-screen bg-[#FBFBFD] text-[#1D1D1F] font-sans selection:bg-rose-100 selection:text-rose-900 relative overflow-x-hidden">
-      
-      {/* Particle Effects Canvas */}
-      <ParticleCanvas active={fxTrigger > 0} type={fxType} triggerPos={clickPos} />
+    <div className="temp-page">
 
-      {/* Subtle Background Glows */}
-      <div className="fixed top-0 left-1/4 w-[600px] h-[600px] bg-rose-200/20 rounded-full blur-[140px] pointer-events-none -z-10" />
-      <div className="fixed bottom-0 right-1/4 w-[700px] h-[700px] bg-amber-100/30 rounded-full blur-[160px] pointer-events-none -z-10" />
+      {/* Cœurs volants au clic */}
+      {hearts.map(h => (
+        <span key={h.id} className="temp-heart-anim" style={{ left: h.x, top: h.y }}>❤️</span>
+      ))}
 
-      {/* Header Bar */}
-      <header className="fixed top-6 right-6 z-40 flex items-center gap-3">
-        <button 
-          onClick={() => setIsMuted(!isMuted)}
-          className="p-3 bg-white/70 hover:bg-white border border-black/5 shadow-sm rounded-full backdrop-blur-md transition-all duration-300 text-slate-600 hover:scale-105 active:scale-95"
-          title={isMuted ? "Activer l'ambiance sonore" : "Couper le son"}
-        >
-          {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} className="text-rose-500 animate-pulse" />}
-        </button>
-      </header>
+      {/* INJECTION DIRECTE DU CSS NATIVE */}
+      <style>{`
+        .temp-page {
+          background-color: #fbfbfd;
+          color: #1d1d1f;
+          font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+          width: 100%;
+          min-height: 100vh;
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          overflow-x: hidden;
+        }
 
-      {}
-      {phase !== 'main' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#FBFBFD] transition-opacity duration-1000">
-          {phase === 'countdown' ? (
-            <div className="text-center space-y-6 animate-fade-in">
-              <span className="text-8xl sm:text-9xl font-serif font-light text-rose-500 tracking-tighter transition-all duration-300">
-                {countdownNum}
-              </span>
-              <p className="text-sm uppercase tracking-[0.3em] text-slate-400 font-medium">
-                Préparation de ton espace secret...
-              </p>
+        .temp-intro-wrapper {
+          width: 100vw;
+          height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: #ffffff;
+        }
+
+        .temp-intro-content { text-align: center; }
+        .temp-countdown-value { font-size: 7rem; font-weight: 800; color: #e11d48; }
+        .temp-surprise-heading { font-size: 3rem; font-weight: 700; color: #1d1d1f; }
+        .temp-intro-caption { font-size: 1.1rem; color: #86868b; margin-top: 10px; }
+
+        .temp-section {
+          min-height: 85vh;
+          max-width: 1000px;
+          margin: 0 auto;
+          padding: 60px 20px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+
+        .temp-hero-card { text-align: center; max-width: 750px; margin: 0 auto; }
+        .temp-pill {
+          display: inline-block;
+          padding: 6px 16px;
+          background-color: #ffe4e6;
+          color: #e11d48;
+          border-radius: 20px;
+          font-size: 0.85rem;
+          font-weight: 600;
+          margin-bottom: 20px;
+        }
+
+        .temp-main-title {
+          font-size: 3.5rem;
+          font-weight: 800;
+          letter-spacing: -1px;
+          margin-bottom: 20px;
+          cursor: pointer;
+        }
+
+        .temp-highlight {
+          color: #e11d48;
+          border-bottom: 3px solid #fecdd3;
+        }
+
+        .temp-body-text {
+          font-size: 1.2rem;
+          line-height: 1.7;
+          color: #48484a;
+        }
+
+        .temp-hint { font-size: 0.85rem; color: #a1a1a6; margin-top: 16px; cursor: pointer; display: block; }
+
+        .temp-section-header { text-align: center; margin-bottom: 40px; }
+        .temp-section-title { font-size: 2.3rem; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 10px; }
+        .temp-section-sub { font-size: 1.1rem; color: #6e6e73; max-width: 600px; margin: 0 auto; }
+
+        /* GRID PHOTOS */
+        .temp-grid-2 {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 24px;
+        }
+
+        .temp-photo-card {
+          background-color: #ffffff;
+          border-radius: 20px;
+          padding: 16px;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+          border: 1px solid #f1f5f9;
+        }
+
+        .temp-photo-frame {
+          width: 100%;
+          height: 320px;
+          border-radius: 14px;
+          overflow: hidden;
+          background-color: #f8fafc;
+        }
+
+        .temp-photo-img { width: 100%; height: 100%; object-fit: cover; }
+        .temp-photo-footer {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-top: 12px;
+          padding: 0 4px;
+        }
+        .temp-photo-label { font-weight: 600; font-size: 1rem; color: #1e293b; }
+        .temp-upload-btn { font-size: 0.8rem; color: #6366f1; font-weight: 500; cursor: pointer; }
+
+        /* BANNIÈRE MASTER */
+        .temp-banner {
+          background-color: #ffffff;
+          border-top: 1px solid #f1f5f9;
+          border-bottom: 1px solid #f1f5f9;
+          padding: 70px 20px;
+          text-align: center;
+        }
+        .temp-banner-inner { max-width: 700px; margin: 0 auto; }
+        .temp-badge-purple { color: #9333ea; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* GRIDS INTERACTIFS (JEUX, MEALS, MOVIES) */
+        .temp-grid-3 {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+          gap: 16px;
+        }
+
+        .temp-card-item {
+          background-color: #ffffff;
+          border-radius: 16px;
+          padding: 20px;
+          border: 1px solid #e2e8f0;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          position: relative;
+        }
+        .temp-card-item:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.04); }
+        .temp-card-title { font-size: 1.1rem; font-weight: 700; margin: 0 0 6px 0; color: #1e293b; }
+        .temp-card-desc { font-size: 0.9rem; color: #64748b; margin: 0; line-height: 1.4; }
+
+        .temp-tag-selected {
+          display: inline-block;
+          margin-top: 10px;
+          padding: 4px 10px;
+          background-color: #e11d48;
+          color: #fff;
+          border-radius: 10px;
+          font-size: 0.75rem;
+          font-weight: 600;
+        }
+
+        /* BOISSON SURPRISE (GRATTER) */
+        .temp-scratch-box {
+          background-color: #ffffff;
+          border-radius: 24px;
+          padding: 40px 20px;
+          text-align: center;
+          border: 1px solid #f1f5f9;
+          box-shadow: 0 15px 35px rgba(0,0,0,0.03);
+          max-width: 500px;
+          margin: 0 auto;
+        }
+        .temp-scratch-container {
+          position: relative;
+          width: 340px;
+          height: 140px;
+          margin: 20px auto;
+          border-radius: 16px;
+          overflow: hidden;
+          box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        }
+        .temp-scratch-reveal {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, #fff1f2, #ffe4e6);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 16px;
+        }
+        .temp-scratch-canvas {
+          position: absolute;
+          inset: 0;
+          cursor: pointer;
+          touch-action: none;
+        }
+
+        /* QUIZ */
+        .temp-quiz-card {
+          background-color: #ffffff;
+          border-radius: 20px;
+          padding: 24px;
+          border: 1px solid #e2e8f0;
+          margin-bottom: 20px;
+        }
+        .temp-quiz-option {
+          padding: 12px 16px;
+          border-radius: 12px;
+          border: 1px solid #cbd5e1;
+          margin-top: 10px;
+          cursor: pointer;
+          font-weight: 500;
+          transition: all 0.2s;
+        }
+        .temp-quiz-btn {
+          background-color: #1e293b;
+          color: #fff;
+          border: none;
+          padding: 14px 28px;
+          border-radius: 25px;
+          font-weight: 700;
+          cursor: pointer;
+          font-size: 1rem;
+          display: block;
+          margin: 20px auto 0 auto;
+        }
+
+        /* ROUE DES ATTENTIONS */
+        .temp-wheel-container {
+          text-align: center;
+          max-width: 450px;
+          margin: 0 auto;
+        }
+        .temp-wheel-wrapper {
+          position: relative;
+          width: 280px;
+          height: 280px;
+          margin: 20px auto;
+        }
+        .temp-wheel {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          border: 6px solid #ffffff;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+          transition: transform 3.5s cubic-bezier(0.15, 0.99, 0.18, 0.99);
+          background: conic-gradient(
+            #fecdd3 0deg 60deg,
+            #e0e7ff 60deg 120deg,
+            #fef08a 120deg 180deg,
+            #dcfce7 180deg 240deg,
+            #f3e8ff 240deg 300deg,
+            #ffe4e6 300deg 360deg
+          );
+        }
+        .temp-wheel-pointer {
+          position: absolute;
+          top: -12px;
+          left: 50%;
+          transform: translateX(-50%);
+          font-size: 1.8rem;
+          z-index: 10;
+        }
+
+        /* SAC À DOS */
+        .temp-backpack-box {
+          background-color: #ffffff;
+          border-radius: 28px;
+          border: 2px dashed #f43f5e;
+          padding: 50px 20px;
+          text-align: center;
+          cursor: pointer;
+          max-width: 500px;
+          margin: 0 auto;
+        }
+        .temp-backpack-title { font-size: 3rem; font-weight: 900; letter-spacing: 4px; color: #f43f5e; margin: 0; }
+
+        /* BOUGIES */
+        .temp-cake-box { text-align: center; max-width: 500px; margin: 0 auto; }
+        .temp-btn-pink {
+          background-color: #e11d48;
+          color: #ffffff;
+          border: none;
+          padding: 16px 36px;
+          border-radius: 30px;
+          font-size: 1.1rem;
+          font-weight: 700;
+          cursor: pointer;
+          transition: transform 0.2s;
+        }
+
+        .temp-heart-anim {
+          position: fixed;
+          font-size: 1.5rem;
+          pointer-events: none;
+          animation: tempFloatUp 1.2s forwards;
+          z-index: 9999;
+        }
+
+        @keyframes tempFloatUp {
+          0% { transform: translateY(0) scale(1); opacity: 1; }
+          100% { transform: translateY(-80px) scale(1.3); opacity: 0; }
+        }
+      `}</style>
+
+      {/* --- HERO / ACCUEIL --- */}
+      <section className="temp-section">
+        <div className="temp-hero-card">
+          <span className="temp-pill">Accès réservé • Code 270125 Validé</span>
+          <h1 className="temp-main-title" onClick={triggerHearts}>
+            Félicitations, <span className="temp-highlight">Swafwata</span>
+          </h1>
+          <p className="temp-body-text">
+            Tu as déverrouillé ton espace secret. Un havre de douceur pensé dans les moindres détails pour marquer ton anniversaire et nos moments précieux.
+          </p>
+          <span className="temp-hint" onClick={triggerHearts}>
+            ♡ Clique sur ton prénom pour une petite attention
+          </span>
+        </div>
+      </section>
+
+      {/* --- AVANT / APRÈS --- */}
+      <section className="temp-section">
+        <div className="temp-section-header">
+          <h2 className="temp-section-title">Le temps passe, les mémoires restent</h2>
+          <p className="temp-section-sub">Regarde un peu ce beau chemin parcouru ensemble.</p>
+        </div>
+
+        <div className="temp-grid-2">
+          {/* PHOTO 1 */}
+          <div className="temp-photo-card">
+            <div className="temp-photo-frame">
+              <img src={photos.before} alt="Avant" className="temp-photo-img" />
             </div>
-          ) : (
-            <div className="text-center space-y-4 px-6 animate-scale-up">
-              <span className="inline-block px-4 py-1.5 bg-rose-50 border border-rose-200/60 text-rose-600 text-xs tracking-widest uppercase rounded-full mb-2">
-                27 Janvier &bull; Code 270125
-              </span>
-              <h1 className="text-4xl sm:text-6xl font-serif font-normal text-slate-900 tracking-tight">
-                Joyeux Anniversaire, <span className="italic text-rose-500">Swafwata</span>
-              </h1>
-              <p className="text-slate-500 text-base font-light max-w-md mx-auto">
-                Tout ce qui suit a été créé sur-mesure pour célébrer ta journée.
-              </p>
+            <div className="temp-photo-footer">
+              <span className="temp-photo-label">Avant</span>
+              <label className="temp-upload-btn">
+                Changer la photo
+                <input type="file" accept="image/*" hidden onChange={(e) => handlePhotoUpload('before', e.target.files[0])} />
+              </label>
+            </div>
+          </div>
+
+          {/* PHOTO 2 */}
+          <div className="temp-photo-card">
+            <div className="temp-photo-frame">
+              <img src={photos.after} alt="Aujourd'hui" className="temp-photo-img" />
+            </div>
+            <div className="temp-photo-footer">
+              <span className="temp-photo-label">Aujourd’hui</span>
+              <label className="temp-upload-btn">
+                Changer la photo
+                <input type="file" accept="image/*" hidden onChange={(e) => handlePhotoUpload('after', e.target.files[0])} />
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* --- FÉLICITATIONS MASTER --- */}
+      <section className="temp-banner">
+        <div className="temp-banner-inner">
+          <span className="temp-badge-purple">Une étape majeure</span>
+          <h2 className="temp-section-title" style={{ marginTop: '10px' }}>Bravo pour ton Master Swafi ! 🎓</h2>
+          <p className="temp-body-text">
+            Tes efforts et ta persévérance ont payé. Je suis tellement fier de te voir franchir ce cap. Que la suite de ton parcours ne te réserve que du bonheur et des réussites éclatantes !
+          </p>
+        </div>
+      </section>
+
+      {/* --- MINI-JEU 1 : QUIZ DE NOTRE HISTOIRE --- */}
+      <section className="temp-section">
+        <div className="temp-section-header">
+          <span className="temp-pill">Mini-Jeu 1</span>
+          <h2 className="temp-section-title">Quiz de Notre Histoire 🧠</h2>
+          <p className="temp-section-sub">Teste tes souvenirs avec ces quelques questions douces.</p>
+        </div>
+
+        <div style={{ maxWidth: '650px', margin: '0 auto', width: '100%' }}>
+          {questions.map((q) => (
+            <div key={q.id} className="temp-quiz-card">
+              <h3 style={{ fontSize: '1.1rem', margin: '0 0 12px 0', color: '#1e293b' }}>{q.id}. {q.question}</h3>
+              {q.options.map((opt, idx) => {
+                const isSelected = quizAnswers[q.id] === idx
+                return (
+                  <div
+                    key={idx}
+                    className="temp-quiz-option"
+                    onClick={() => handleQuizSelect(q.id, idx)}
+                    style={{
+                      borderColor: isSelected ? '#e11d48' : '#cbd5e1',
+                      backgroundColor: isSelected ? '#fff1f2' : '#ffffff',
+                      color: isSelected ? '#e11d48' : '#334155'
+                    }}
+                  >
+                    {opt} {isSelected && '✓'}
+                  </div>
+                )
+              })}
+            </div>
+          ))}
+
+          <button className="temp-quiz-btn" onClick={validateQuiz}>
+            Valider mes réponses ✨
+          </button>
+
+          {quizScore !== null && (
+            <div style={{ textAlign: 'center', marginTop: '20px', padding: '16px', backgroundColor: '#f0fdf4', borderRadius: '16px', color: '#166534', fontWeight: '600' }}>
+              🎉 Ton score : {quizScore} / {questions.length} ! {quizScore === 3 ? "Sans faute ! Tu es incroyable ❤️" : "Presque parfait ! 😊"}
             </div>
           )}
         </div>
-      )}
+      </section>
 
-      {}
-      <main className="w-full">
+      {/* --- MINI-JEU 2 : BOISSON SURPRISE A GRATTER --- */}
+      <section className="temp-section">
+        <div className="temp-section-header">
+          <span className="temp-pill">Mini-Jeu 2</span>
+          <h2 className="temp-section-title">Boisson Surprise à Gratter 🍹</h2>
+          <p className="temp-section-sub">Gratte la carte ci-dessous pour découvrir ton cadeau surprise !</p>
+        </div>
 
-        {/* ---------------- SECTION 1: HERO ---------------- */}
-        <section className="min-h-screen w-full flex flex-col justify-between items-center px-6 py-12 relative">
-          <div />
+        <div className="temp-scratch-box">
+          <h3 style={{ margin: '0 0 6px 0', fontSize: '1.2rem', color: '#1e293b' }}>Ticket Cadeau Privilège</h3>
+          <p style={{ margin: 0, fontSize: '0.9rem', color: '#64748b' }}>Utilisable lors de notre prochaine sortie</p>
 
-          <div className="max-w-4xl mx-auto text-center space-y-8 my-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/5 border border-black/5 text-xs text-slate-600 font-medium tracking-wide">
-              <Key size={14} className="text-amber-500" />
-              <span>Accès réservé &bull; Code 270125 Validé</span>
-            </div>
-
-            <h1 
-              onClick={(e) => triggerBurst(e, 'heart')}
-              className="text-5xl sm:text-7xl lg:text-8xl font-serif font-light tracking-tight text-slate-900 leading-[1.08] cursor-pointer select-none group"
-            >
-              Félicitations, <br />
-              <span className="italic text-rose-500 font-normal relative inline-block group-hover:scale-105 transition-transform duration-300">
-                Swafwata
-                <span className="absolute left-0 bottom-1 w-full h-[3px] bg-rose-200 rounded-full -z-10" />
+          <div className="temp-scratch-container">
+            <div className="temp-scratch-reveal">
+              <span style={{ fontSize: '1.8rem' }}>🍹✨</span>
+              <strong style={{ color: '#e11d48', fontSize: '1.1rem', marginTop: '4px' }}>PASS BOISSON SURPRISE</strong>
+              <span style={{ fontSize: '0.85rem', color: '#475569', marginTop: '2px' }}>
+                Un cocktail / mocktail surprise de ton choix offert !
               </span>
-            </h1>
+            </div>
+            <canvas ref={canvasRef} className="temp-scratch-canvas" />
+          </div>
 
-            <p className="text-lg sm:text-xl text-slate-500 font-light max-w-2xl mx-auto leading-relaxed">
-              Tu as déverrouillé ton espace. Un havre de douceur pensé dans les moindres détails pour marquer ton anniversaire et nos moments précieux.
+          {isScratched && (
+            <p style={{ color: '#16a34a', fontWeight: '600', margin: '10px 0 0 0', fontSize: '0.95rem' }}>
+              ✨ Ticket débloqué ! À consommer ensemble très vite ❤️
             </p>
+          )}
+        </div>
+      </section>
 
-            <div className="pt-4">
-              <button 
-                onClick={(e) => triggerBurst(e, 'heart')}
-                className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-slate-400 hover:text-rose-500 transition-colors duration-300 cursor-pointer"
+      {/* --- MINI-JEU 3 : ROUE DES ATTENTIONS --- */}
+      <section className="temp-section">
+        <div className="temp-section-header">
+          <span className="temp-pill">Mini-Jeu 3</span>
+          <h2 className="temp-section-title">La Roue des Attentions 🎡</h2>
+          <p className="temp-section-sub">Tourne la roue pour tirer au sort une petite attention de ma part !</p>
+        </div>
+
+        <div className="temp-wheel-container">
+          <div className="temp-wheel-wrapper">
+            <div className="temp-wheel-pointer">👇</div>
+            <div className="temp-wheel" style={{ transform: `rotate(${wheelRotation}deg)` }} />
+          </div>
+
+          <button className="temp-quiz-btn" onClick={spinWheel} disabled={isSpinning}>
+            {isSpinning ? 'La roue tourne...' : 'Tourner la roue 🎲'}
+          </button>
+
+          {wheelResult && (
+            <div style={{ marginTop: '24px', padding: '20px', backgroundColor: '#fff1f2', borderRadius: '20px', border: '1px solid #fecdd3' }}>
+              <span style={{ fontSize: '0.85rem', color: '#e11d48', fontWeight: '700', textTransform: 'uppercase' }}>Résultat du tirage</span>
+              <h3 style={{ color: '#9f1239', margin: '6px 0 0 0', fontSize: '1.2rem' }}>{wheelResult}</h3>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* --- MENU RETROUVAILLES (3 SELECTIONS) --- */}
+      <section className="temp-section">
+        <div className="temp-section-header">
+          <h2 className="temp-section-title">Ce qu’on mangera à nos retrouvailles 🍽️</h2>
+          <p className="temp-section-sub">
+            Sélectionne 3 repas parmi les 9 propositions ({selectedMeals.length}/3) :
+          </p>
+        </div>
+
+        <div className="temp-grid-3">
+          {mealsList.map((meal) => {
+            const isSelected = selectedMeals.includes(meal.id)
+            return (
+              <div
+                key={meal.id}
+                className="temp-card-item"
+                onClick={() => toggleMeal(meal.id)}
+                style={{
+                  borderColor: isSelected ? '#e11d48' : '#e2e8f0',
+                  backgroundColor: isSelected ? '#fff1f2' : '#ffffff'
+                }}
               >
-                <Heart size={14} className="text-rose-400 fill-rose-100" />
-                <span>Clique sur ton prénom pour une attention</span>
-              </button>
-            </div>
-          </div>
-
-          <div className="animate-bounce text-slate-300 pb-4">
-            <ChevronDown size={24} />
-          </div>
-        </section>
-
-        {}
-        <section className="min-h-screen w-full flex items-center justify-center px-6 py-20 bg-rose-50/40 backdrop-blur-sm border-y border-black/5">
-          <div className="max-w-4xl w-full mx-auto space-y-12">
-            
-            <div className="text-center space-y-3 max-w-xl mx-auto">
-              <div className="inline-flex items-center gap-2 text-rose-500 text-xs uppercase tracking-widest font-semibold">
-                <HelpCircle size={14} />
-                <span>Mini-Jeu 1</span>
+                <h3 className="temp-card-title">{meal.name}</h3>
+                <p className="temp-card-desc">{meal.desc}</p>
+                {isSelected && <span className="temp-tag-selected">Sélectionné</span>}
               </div>
-              <h2 className="text-3xl sm:text-5xl font-serif font-light text-slate-900">
-                Quiz de Notre Histoire
-              </h2>
-              <p className="text-slate-500 font-light text-sm sm:text-base">
-                Teste tes souvenirs avec ces quelques questions douces et complices.
-              </p>
-            </div>
+            )
+          })}
+        </div>
+      </section>
 
-            <div className="space-y-8">
-              {quizQuestions.map((q) => (
-                <div key={q.id} className="p-6 sm:p-8 bg-white rounded-3xl border border-black/5 shadow-sm space-y-4">
-                  <h3 className="font-serif text-lg sm:text-xl text-slate-800 font-medium">
-                    {q.id}. {q.question}
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    {q.options.map((opt, idx) => {
-                      const isSelected = quizAnswers[q.id] === idx;
-                      return (
-                        <button
-                          key={idx}
-                          onClick={(e) => handleQuizSelect(q.id, idx, opt.isCorrect, e)}
-                          className={`p-4 rounded-2xl border text-left text-xs sm:text-sm transition-all ${
-                            isSelected
-                              ? opt.isCorrect 
-                                ? 'bg-emerald-50 border-emerald-300 text-emerald-900 font-medium'
-                                : 'bg-rose-50 border-rose-300 text-rose-900 font-medium'
-                              : 'bg-[#FBFBFD] border-black/5 hover:border-rose-200 hover:bg-white text-slate-700'
-                          }`}
-                        >
-                          {opt.text}
-                          {isSelected && (
-                            <span className="block mt-2 font-mono text-[10px] uppercase">
-                              {opt.isCorrect ? '✓ Exact !' : '✨ Doux souvenir'}
-                            </span>
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {Object.keys(quizAnswers).length === quizQuestions.length && (
-              <div className="p-6 bg-white border border-rose-200 rounded-3xl text-center space-y-2 animate-scale-up">
-                <span className="text-2xl">🏆</span>
-                <h4 className="font-serif text-xl text-slate-900 font-medium">
-                  Score : {quizScore} / {quizQuestions.length} !
-                </h4>
-                <p className="text-xs text-slate-500">
-                  Merci d'écrire ces si beaux souvenirs jour après jour.
-                </p>
-              </div>
-            )}
-
-          </div>
-        </section>
-
-        {/* ---------------- SECTION 2: AVANT / APRÈS (GALLERY) ---------------- */}
-        <section className="min-h-screen w-full flex items-center justify-center px-6 py-20 bg-white/60 backdrop-blur-sm border-b border-black/5">
-          <div className="max-w-6xl w-full mx-auto space-y-16">
-            
-            <div className="text-center space-y-3 max-w-xl mx-auto">
-              <span className="text-xs uppercase tracking-[0.25em] text-rose-500 font-semibold">
-                Mémoires & Évolution
-              </span>
-              <h2 className="text-3xl sm:text-5xl font-serif font-light text-slate-900">
-                Le fil de nos souvenirs
-              </h2>
-              <p className="text-slate-500 font-light text-sm sm:text-base">
-                Chaque étape a sa beauté. Tu peux importer tes photos préférées directement ci-dessous.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
-              
-              {/* PHOTO 1: AVANT */}
-              <div className="group relative bg-[#FBFBFD] border border-black/5 rounded-3xl p-4 shadow-sm hover:shadow-xl transition-all duration-500">
-                <div className="aspect-[4/5] w-full rounded-2xl overflow-hidden relative bg-slate-100">
-                  <img 
-                    src={photos.before} 
-                    alt="Photo Avant" 
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <label className="absolute bottom-4 right-4 bg-white/90 hover:bg-white text-slate-800 p-3 rounded-full shadow-lg backdrop-blur-md cursor-pointer transition-all duration-300 hover:scale-110">
-                    <Camera size={18} />
-                    <input 
-                      type="file" 
-                      accept="image/*" 
-                      className="hidden" 
-                      onChange={(e) => handleImageUpload('before', e)} 
-                    />
-                  </label>
-                </div>
-                <div className="pt-4 px-2 flex justify-between items-center">
-                  <div>
-                    <h3 className="font-serif text-lg text-slate-800">Avant</h3>
-                    <p className="text-xs text-slate-400">Les tout premiers instants</p>
-                  </div>
-                  <span className="text-xs font-mono text-slate-300">01 / 02</span>
-                </div>
-              </div>
-
-              {/* PHOTO 2: AUJOURD'HUI */}
-              <div className="group relative bg-[#FBFBFD] border border-black/5 rounded-3xl p-4 shadow-sm hover:shadow-xl transition-all duration-500">
-                <div className="aspect-[4/5] w-full rounded-2xl overflow-hidden relative bg-slate-100">
-                  <img 
-                    src={photos.today} 
-                    alt="Photo Aujourd'hui" 
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <label className="absolute bottom-4 right-4 bg-white/90 hover:bg-white text-slate-800 p-3 rounded-full shadow-lg backdrop-blur-md cursor-pointer transition-all duration-300 hover:scale-110">
-                    <Camera size={18} />
-                    <input 
-                      type="file" 
-                      accept="image/*" 
-                      className="hidden" 
-                      onChange={(e) => handleImageUpload('today', e)} 
-                    />
-                  </label>
-                </div>
-                <div className="pt-4 px-2 flex justify-between items-center">
-                  <div>
-                    <h3 className="font-serif text-lg text-slate-800">Aujourd'hui</h3>
-                    <p className="text-xs text-rose-500 font-medium">Rayonnante & accomplie</p>
-                  </div>
-                  <span className="text-xs font-mono text-slate-300">02 / 02</span>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </section>
-
-        {}
-        <section className="min-h-screen w-full flex items-center justify-center px-6 py-20">
-          <div className="max-w-3xl w-full mx-auto space-y-10 text-center">
-            
-            <div className="space-y-3">
-              <div className="inline-flex items-center gap-2 text-rose-500 text-xs uppercase tracking-widest font-semibold">
-                <Eraser size={14} />
-                <span>Mini-Jeu 2</span>
-              </div>
-              <h2 className="text-3xl sm:text-5xl font-serif font-light text-slate-900">
-                La Boîte à Souvenirs Secret
-              </h2>
-              <p className="text-slate-500 font-light text-sm sm:text-base max-w-md mx-auto">
-                Gratte délicatement la surface ci-dessous pour découvrir la surprise personnalisée réservée pour toi.
-              </p>
-            </div>
-
-            <ScratchCard onScratchComplete={() => setFxTrigger(prev => prev + 1)} />
-
-          </div>
-        </section>
-
-        {/* ---------------- SECTION 3: MASTER CONGRATULATIONS ---------------- */}
-        <section className="min-h-[80vh] w-full flex items-center justify-center px-6 py-20 relative overflow-hidden bg-white/40">
-          <div className="max-w-4xl w-full mx-auto text-center space-y-8 relative z-10">
-            
-            <div className="w-16 h-16 mx-auto rounded-full bg-rose-50 border border-rose-200/60 flex items-center justify-center text-rose-500 shadow-sm">
-              <GraduationCap size={28} />
-            </div>
-
-            <div className="space-y-3">
-              <span className="text-xs uppercase tracking-[0.3em] text-slate-400 font-medium">
-                Accomplissement
-              </span>
-              <h2 className="text-4xl sm:text-6xl font-serif font-light text-slate-900">
-                Bravo pour ton <span className="italic font-normal text-rose-500">Master</span>
-              </h2>
-            </div>
-
-            <p className="text-base sm:text-xl text-slate-600 font-light leading-relaxed max-w-2xl mx-auto">
-              Ton travail, ta persévérance et ton intelligence ont porté leurs fruits. Obtenir ton diplôme de Master est une étape immense. Je suis profondément fier de te voir franchir ce sommet avec autant de grâce et de brillance.
+      {/* --- EXPLICATION CODE 270125 + PHOTO --- */}
+      <section className="temp-section">
+        <div className="temp-grid-2" style={{ alignItems: 'center' }}>
+          <div>
+            <span className="temp-pill">Origine du code</span>
+            <h2 className="temp-section-title">Le secret du 27.01.25</h2>
+            <p className="temp-body-text">
+              Ce code correspond au <strong>27 Janvier 2025</strong> : le jour de notre rencontre, pile 3 ans après le bac. Une date gravée pour toujours.
             </p>
-
-            <div className="pt-4 inline-block">
-              <div className="px-6 py-3 rounded-full bg-white border border-black/5 shadow-sm text-xs font-medium text-slate-600 tracking-wide">
-                🎓 Diplômée &bull; Fierté Absolue
-              </div>
-            </div>
-
           </div>
-        </section>
-
-        {}
-        <section className="min-h-screen w-full flex items-center justify-center px-6 py-20 bg-amber-50/30 border-y border-black/5">
-          <div className="max-w-4xl w-full mx-auto space-y-12">
-            
-            <div className="text-center space-y-3 max-w-xl mx-auto">
-              <div className="inline-flex items-center gap-2 text-rose-500 text-xs uppercase tracking-widest font-semibold">
-                <RefreshCw size={14} />
-                <span>Mini-Jeu 3</span>
-              </div>
-              <h2 className="text-3xl sm:text-5xl font-serif font-light text-slate-900">
-                La Roue des Attentions
-              </h2>
-              <p className="text-slate-500 font-light text-sm sm:text-base">
-                Fais tourner la roue pour découvrir l'attention spéciale à concrétiser !
-              </p>
+          <div className="temp-photo-card">
+            <div className="temp-photo-frame">
+              <img src={photos.date} alt="Rencontre" className="temp-photo-img" />
             </div>
-
-            <WheelOfFortune onWin={(prize) => triggerBurst({ currentTarget: { getBoundingClientRect: () => ({ left: window.innerWidth/2, top: window.innerHeight/2, width: 0, height: 0 }) } }, 'confetti')} />
-
+            <div className="temp-photo-footer">
+              <span className="temp-photo-label">Jour de notre rencontre</span>
+              <label className="temp-upload-btn">
+                Changer la photo
+                <input type="file" accept="image/*" hidden onChange={(e) => handlePhotoUpload('date', e.target.files[0])} />
+              </label>
+            </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ---------------- SECTION 4: MENU DE RETROUVAILLES ---------------- */}
-        <section className="min-h-screen w-full flex items-center justify-center px-6 py-20 bg-white/60 backdrop-blur-sm border-b border-black/5">
-          <div className="max-w-5xl w-full mx-auto space-y-12">
-            
-            <div className="text-center space-y-3 max-w-xl mx-auto">
-              <div className="inline-flex items-center gap-2 text-rose-500 text-xs uppercase tracking-widest font-semibold">
-                <Utensils size={14} />
-                <span>Prochaine Retrouvaille</span>
-              </div>
-              <h2 className="text-3xl sm:text-5xl font-serif font-light text-slate-900">
-                Le Menu Gourmand
-              </h2>
-              <p className="text-slate-500 font-light text-sm sm:text-base">
-                Choisis 3 repas parmi les 9 propositions ci-dessous pour notre prochain rendez-vous. ({selectedMeals.length}/3 sélectionnés)
-              </p>
-            </div>
-
-            {/* 9 Meals Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {mealsList.map((meal) => {
-                const isSelected = selectedMeals.includes(meal.id);
-                return (
-                  <div
-                    key={meal.id}
-                    onClick={() => toggleMeal(meal.id)}
-                    className={`p-6 rounded-2xl border transition-all duration-300 cursor-pointer select-none flex flex-col justify-between h-36 ${
-                      isSelected 
-                        ? 'bg-rose-50/80 border-rose-300 shadow-sm scale-[1.02]' 
-                        : 'bg-[#FBFBFD] border-black/5 hover:border-black/15 hover:bg-white'
-                    }`}
-                  >
-                    <div className="flex justify-between items-start">
-                      <h3 className={`font-serif text-base ${isSelected ? 'text-rose-900 font-medium' : 'text-slate-800'}`}>
-                        {meal.name}
-                      </h3>
-                      <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${
-                        isSelected ? 'bg-rose-500 border-rose-500 text-white' : 'border-slate-300'
-                      }`}>
-                        {isSelected && <Check size={12} />}
-                      </div>
-                    </div>
-                    <p className="text-xs text-slate-400 font-light">
-                      {meal.sub}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-
-          </div>
-        </section>
-
-        {/* ---------------- SECTION 5: SIGNIFICATION CODE 270125 + PHOTO ---------------- */}
-        <section className="min-h-screen w-full flex items-center justify-center px-6 py-20">
-          <div className="max-w-5xl w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            
-            <div className="space-y-6">
-              <span className="text-xs uppercase tracking-[0.3em] text-rose-500 font-semibold">
-                La Date Clé &bull; 270125
-              </span>
-              <h2 className="text-3xl sm:text-5xl font-serif font-light text-slate-900 leading-tight">
-                Le secret du code <br />
-                <span className="italic font-normal text-rose-500">27 Janvier 2025</span>
-              </h2>
-              <p className="text-slate-600 font-light leading-relaxed text-base sm:text-lg">
-                Ce code représente le 27 Janvier 2025 : le jour de notre rencontre, exactement 3 ans après l'obtention du baccalauréat. Une coïncidence magique gravée pour toujours.
-              </p>
-              
-              <div className="pt-2">
-                <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white border border-black/5 shadow-sm text-xs text-slate-500">
-                  <Calendar size={16} className="text-rose-400" />
-                  <span>27.01.2025 — Jour mémorable</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Photo Rencontre */}
-            <div className="bg-white border border-black/5 rounded-3xl p-4 shadow-sm">
-              <div className="aspect-square w-full rounded-2xl overflow-hidden relative bg-slate-100">
-                <img 
-                  src={photos.encounter} 
-                  alt="Photo Rencontre" 
-                  className="w-full h-full object-cover"
-                />
-                <label className="absolute bottom-4 right-4 bg-white/90 hover:bg-white text-slate-800 p-3 rounded-full shadow-lg backdrop-blur-md cursor-pointer transition-all duration-300 hover:scale-110">
-                  <Camera size={18} />
-                  <input 
-                    type="file" 
-                    accept="image/*" 
-                    className="hidden" 
-                    onChange={(e) => handleImageUpload('encounter', e)} 
-                  />
-                </label>
-              </div>
-              <p className="text-center text-xs text-slate-400 pt-3">
-                Photo du jour de notre rencontre
-              </p>
-            </div>
-
-          </div>
-        </section>
-
-        {/* ---------------- SECTION 6: EASTER EGG SAC À DOS ---------------- */}
-        <section className="min-h-[70vh] w-full flex items-center justify-center px-6 py-20 bg-slate-900 text-white relative overflow-hidden">
-          <div 
-            onClick={() => setBackpackUnlocked(!backpackUnlocked)}
-            className="max-w-2xl w-full mx-auto text-center space-y-6 cursor-pointer p-10 rounded-3xl border border-white/10 hover:border-rose-500/50 transition-all duration-500 bg-slate-950/40 backdrop-blur-md group"
-          >
-            <span className="text-xs uppercase tracking-[0.4em] text-rose-400 font-medium">
-              Easter Egg Indémodable
-            </span>
-
-            <h2 className="text-5xl sm:text-7xl font-serif font-light tracking-widest text-white group-hover:text-rose-300 transition-colors">
-              SAC À DOS
-            </h2>
-
-            <p className="text-xs text-slate-400 tracking-widest font-mono">
-              {backpackUnlocked ? "🔒 Souvenir déverrouillé" : "(Clique sur le titre si tu te souviens)"}
+      {/* --- EASTER EGG : SAC À DOS --- */}
+      <section className="temp-section" style={{ minHeight: 'auto', padding: '40px 20px' }}>
+        <div className="temp-backpack-box" onClick={() => setBackpackSecret(!backpackSecret)}>
+          <h2 className="temp-backpack-title">SAC À DOS</h2>
+          <span className="temp-hint" style={{ marginTop: '10px' }}>
+            {backpackSecret ? "🔒 Mot secret déverrouillé !" : "(Clique ici si tu te souviens)"}
+          </span>
+          {backpackSecret && (
+            <p style={{ marginTop: '16px', fontSize: '1.1rem', color: '#1e293b', lineHeight: '1.6' }}>
+              Peu importe la destination, du moment qu'on a notre sac à dos et tous nos beaux souvenirs ! ❤️
             </p>
+          )}
+        </div>
+      </section>
 
-            {backpackUnlocked && (
-              <p className="text-base sm:text-lg font-serif italic text-rose-200 pt-4 animate-fade-in leading-relaxed">
-                "Peu importe la destination ou le chemin, du moment qu'on a notre sac à dos et tous nos beaux souvenirs gravés ensemble."
-              </p>
-            )}
-          </div>
-        </section>
+      {/* --- PROGRAMME CINÉMA OCTOBRE --- */}
+      <section className="temp-section">
+        <div className="temp-section-header">
+          <h2 className="temp-section-title">Nos prochaines séances Cinéma 🍿</h2>
+          <p className="temp-section-sub">
+            Sélectionne les films qu'on va aller voir en Octobre (dont le très attendu <strong>Clayface</strong> !) :
+          </p>
+        </div>
 
-        {/* ---------------- SECTION 7: CINÉMA OCTOBRE 2026 ---------------- */}
-        <section className="min-h-screen w-full flex items-center justify-center px-6 py-20 bg-white/60 backdrop-blur-sm border-b border-black/5">
-          <div className="max-w-5xl w-full mx-auto space-y-12">
-            
-            <div className="text-center space-y-3 max-w-xl mx-auto">
-              <div className="inline-flex items-center gap-2 text-rose-500 text-xs uppercase tracking-widest font-semibold">
-                <Film size={14} />
-                <span>Programmation Octobre 2026</span>
-              </div>
-              <h2 className="text-3xl sm:text-5xl font-serif font-light text-slate-900">
-                Nos Séances Cinéma
-              </h2>
-              <p className="text-slate-500 font-light text-sm sm:text-base">
-                Inclus le très attendu <em>Clayface</em> ! Sélectionne les films que tu veux qu'on aille voir ensemble.
-              </p>
-            </div>
-
-            {/* 9 Movies Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {moviesList.map((movie) => {
-                const isSelected = selectedMovies.includes(movie.id);
-                return (
-                  <div
-                    key={movie.id}
-                    onClick={() => toggleMovie(movie.id)}
-                    className={`p-6 rounded-2xl border transition-all duration-300 cursor-pointer select-none flex flex-col justify-between h-40 ${
-                      isSelected 
-                        ? 'bg-rose-50/80 border-rose-300 shadow-sm scale-[1.02]' 
-                        : 'bg-[#FBFBFD] border-black/5 hover:border-black/15 hover:bg-white'
-                    }`}
-                  >
-                    <div>
-                      <div className="flex justify-between items-start mb-1">
-                        <h3 className={`font-serif text-base ${isSelected ? 'text-rose-900 font-medium' : 'text-slate-800'}`}>
-                          {movie.title}
-                        </h3>
-                        <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-500">
-                          {movie.date}
-                        </span>
-                      </div>
-                      <p className="text-xs text-slate-400 font-light mt-1">
-                        {movie.desc}
-                      </p>
-                    </div>
-
-                    <div className="flex justify-end">
-                      <span className={`text-xs px-3 py-1 rounded-full font-medium ${
-                        isSelected ? 'bg-rose-500 text-white' : 'text-slate-400 bg-slate-100'
-                      }`}>
-                        {isSelected ? 'Réservé ✓' : 'Sélectionner'}
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-          </div>
-        </section>
-
-        {/* ---------------- SECTION 8: MOT D'AMOUR & PHOTO COUPLE ---------------- */}
-        <section className="min-h-screen w-full flex items-center justify-center px-6 py-20">
-          <div className="max-w-4xl w-full mx-auto text-center space-y-12">
-            
-            <div className="space-y-4">
-              <span className="text-xs uppercase tracking-[0.3em] text-rose-500 font-semibold">
-                Sincèrement
-              </span>
-              <h2 className="text-3xl sm:text-5xl font-serif font-light text-slate-900">
-                Un mot du cœur
-              </h2>
-            </div>
-
-            <p className="text-xl sm:text-2xl font-serif italic text-slate-700 leading-relaxed max-w-2xl mx-auto">
-              "Swafwata, ta présence illumine les journées. Ta gentillesse, ton sourire et ton élégance font de toi une personne profondément unique. Merci d'être toi."
-            </p>
-
-            {/* Photo Couple */}
-            <div className="max-w-md mx-auto bg-white border border-black/5 rounded-3xl p-4 shadow-sm">
-              <div className="aspect-[4/5] w-full rounded-2xl overflow-hidden relative bg-slate-100">
-                <img 
-                  src={photos.couple} 
-                  alt="Photo de Couple" 
-                  className="w-full h-full object-cover"
-                />
-                <label className="absolute bottom-4 right-4 bg-white/90 hover:bg-white text-slate-800 p-3 rounded-full shadow-lg backdrop-blur-md cursor-pointer transition-all duration-300 hover:scale-110">
-                  <Camera size={18} />
-                  <input 
-                    type="file" 
-                    accept="image/*" 
-                    className="hidden" 
-                    onChange={(e) => handleImageUpload('couple', e)} 
-                  />
-                </label>
-              </div>
-              <p className="text-center text-xs text-slate-400 pt-3">
-                Notre souvenir ensemble
-              </p>
-            </div>
-
-          </div>
-        </section>
-
-        {/* ---------------- SECTION 9: GÂTEAU D'ANNIVERSAIRE INTERACTIF ---------------- */}
-        <section className="min-h-screen w-full flex items-center justify-center px-6 py-20 bg-white/60 backdrop-blur-sm border-t border-black/5">
-          <div className="max-w-2xl w-full mx-auto text-center space-y-8">
-            
-            <div className="space-y-2">
-              <span className="text-xs uppercase tracking-[0.3em] text-rose-500 font-semibold">
-                Fais un vœu
-              </span>
-              <h2 className="text-3xl sm:text-5xl font-serif font-light text-slate-900">
-                Joyeux Anniversaire Swafi
-              </h2>
-            </div>
-
-            {/* Candle Graphic */}
-            <div className="py-8 flex flex-col items-center justify-center">
-              <div className="relative">
-                {!candlesBlown ? (
-                  <div className="animate-bounce mb-2 text-amber-500 flex justify-center">
-                    <Flame size={48} className="fill-amber-400 animate-pulse" />
-                  </div>
-                ) : (
-                  <div className="mb-2 text-slate-300 flex justify-center animate-fade-in">
-                    <Wind size={48} />
-                  </div>
-                )}
-                <div className="w-12 h-32 bg-slate-100 border border-black/5 rounded-t-lg mx-auto shadow-inner" />
-                <div className="w-48 h-12 bg-rose-100 border border-rose-200 rounded-lg mx-auto -mt-2 shadow-sm flex items-center justify-center text-rose-400">
-                  <Gift size={20} />
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <button
-                onClick={handleBlowCandle}
-                className={`px-8 py-4 rounded-full font-medium text-sm tracking-wide transition-all duration-300 shadow-sm ${
-                  candlesBlown 
-                    ? 'bg-slate-900 text-white hover:bg-slate-800' 
-                    : 'bg-rose-500 text-white hover:bg-rose-600 hover:scale-105'
-                }`}
+        <div className="temp-grid-3">
+          {moviesList.map((movie) => {
+            const isSelected = selectedMovies.includes(movie.id)
+            return (
+              <div
+                key={movie.id}
+                className="temp-card-item"
+                onClick={() => toggleMovie(movie.id)}
+                style={{
+                  borderColor: isSelected ? '#6366f1' : '#e2e8f0',
+                  backgroundColor: isSelected ? '#eeef2ff' : '#ffffff'
+                }}
               >
-                {candlesBlown ? 'Rallumer la bougie 🕯️' : 'Souffler la bougie 💨'}
-              </button>
-            </div>
-
-            {candlesBlown && (
-              <div className="p-8 bg-rose-50/60 border border-rose-200/60 rounded-3xl animate-scale-up space-y-2">
-                <h3 className="font-serif text-xl text-rose-900">
-                  ✨ Vœu exaucé !
-                </h3>
-                <p className="text-sm text-slate-600 font-light max-w-md mx-auto">
-                  Que cette année t'apporte de la joie, de belles surprises, du bonheur et la réussite dans chacun de tes projets.
-                </p>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <h3 className="temp-card-title">{movie.title}</h3>
+                </div>
+                <p className="temp-card-desc">{movie.detail}</p>
+                {isSelected && <span className="temp-tag-selected" style={{ backgroundColor: '#6366f1' }}>Au programme</span>}
               </div>
-            )}
+            )
+          })}
+        </div>
+      </section>
 
+      {/* --- MOT D'AMOUR + PHOTO COUPLE --- */}
+      <section className="temp-section">
+        <div style={{ backgroundColor: '#ffffff', borderRadius: '28px', padding: '40px 24px', textAlign: 'center', border: '1px solid #f1f5f9', boxShadow: '0 15px 35px rgba(0,0,0,0.03)' }}>
+          <h2 className="temp-section-title">Un mot du cœur 💌</h2>
+          <p className="temp-body-text" style={{ fontStyle: 'italic', maxWidth: '650px', margin: '0 auto 30px auto' }}>
+            "Swafwata, chaque moment passé à tes côtés est précieux. Merci d'être la personne exceptionnelle que tu es au quotidien. Je t'aime."
+          </p>
+
+          <div className="temp-photo-card" style={{ maxWidth: '480px', margin: '0 auto' }}>
+            <div className="temp-photo-frame">
+              <img src={photos.couple} alt="Nous deux" className="temp-photo-img" />
+            </div>
+            <div className="temp-photo-footer">
+              <span className="temp-photo-label">Nous deux ❤️</span>
+              <label className="temp-upload-btn">
+                Changer notre photo
+                <input type="file" accept="image/*" hidden onChange={(e) => handlePhotoUpload('couple', e.target.files[0])} />
+              </label>
+            </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-      </main>
+      {/* --- BOUGIES D'ANNIVERSAIRE --- */}
+      <section className="temp-section">
+        <div className="temp-cake-box">
+          <h2 className="temp-section-title">Fais un vœu Swafi ! 🎂</h2>
+          <p className="temp-section-sub">Souffle ta bougie d'anniversaire virtuelle :</p>
 
-      {/* Footer */}
-      <footer className="py-12 border-t border-black/5 text-center text-xs text-slate-400 font-light tracking-widest uppercase">
-        Pour Swafwata &bull; Joyeux Anniversaire
-      </footer>
+          <div style={{ margin: '40px 0', fontSize: '5rem' }}>
+            {!candlesBlown ? '🕯️✨' : '💨🍰'}
+          </div>
+
+          <button className="temp-btn-pink" onClick={() => setCandlesBlown(!candlesBlown)}>
+            {candlesBlown ? '🕯️ Rallumer la bougie' : '💨 Souffler la bougie !'}
+          </button>
+
+          {candlesBlown && (
+            <div style={{ marginTop: '24px', padding: '20px', backgroundColor: '#ecfdf5', borderRadius: '20px', color: '#065f46' }}>
+              <h3 style={{ margin: '0 0 6px 0', fontSize: '1.2rem' }}>✨ Joyeux Anniversaire Swafwata ! ✨</h3>
+              <p style={{ margin: 0, fontSize: '0.95rem' }}>Que tous tes vœux et tes rêves les plus chers se réalisent ! ❤️</p>
+            </div>
+          )}
+        </div>
+      </section>
 
     </div>
-  );
+  )
 }
