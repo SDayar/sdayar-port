@@ -147,98 +147,113 @@ function App() {
   return (
     <>
       {loading && <Loader onLoaded={() => setLoading(false)} />}
-      <div className="app" style={{ opacity: loading ? 0 : 1, transition: 'opacity 0.5s' }}>
-        
-        {/* Petit terminal en haut de page */}
-        <div 
-          style={{
-            backgroundColor: '#1e1e1e',
-            color: '#00ff66',
-            fontFamily: 'monospace',
-            /*padding: '8px 16px',*/
-            borderBottom: '1px solid #333',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '10px',
-            zIndex: 1000,
-            position: 'relative'
-          }}
+      
+      {/* 1. Terminal fixé tout en haut avec le zIndex le plus élevé */}
+      <div 
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          backgroundColor: '#0d1117',
+          color: '#00ff66',
+          fontFamily: 'monospace',
+          padding: '10px 20px',
+          borderBottom: '2px solid #00ff66',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '12px',
+          zIndex: 99999,
+          boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+          boxSizing: 'border-box'
+        }}
+      >
+        <form 
+          onSubmit={handleCodeSubmit} 
+          style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: 0 }}
         >
-          <form 
-            onSubmit={handleCodeSubmit} 
-            style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: 0 }}
+          <span style={{ color: '#00ff66', fontWeight: 'bold' }}>&gt;_ terminal:</span>
+          <input
+            type="password"
+            value={inputCode}
+            onChange={(e) => {
+              setInputCode(e.target.value)
+              if (errorMessage) setErrorMessage('')
+            }}
+            placeholder="Code d'accès..."
+            style={{
+              backgroundColor: '#161b22',
+              color: '#00ff66',
+              border: errorMessage ? '1px solid #ff4d4d' : '1px solid #30363d',
+              borderRadius: '4px',
+              padding: '6px 12px',
+              fontFamily: 'monospace',
+              outline: 'none',
+              fontSize: '14px'
+            }}
+          />
+          <button
+            type="submit"
+            style={{
+              backgroundColor: '#00ff66',
+              color: '#0d1117',
+              border: 'none',
+              borderRadius: '4px',
+              padding: '6px 16px',
+              fontFamily: 'monospace',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              transition: 'all 0.2s'
+            }}
           >
-            <span style={{ color: '#888' }}>&gt;_ enter_code:</span>
-            <input
-              type="password"
-              value={inputCode}
-              onChange={(e) => {
-                setInputCode(e.target.value)
-                if (errorMessage) setErrorMessage('')
-              }}
-              placeholder="......"
-              style={{
-                backgroundColor: '#000',
-                color: '#00ff66',
-                border: '1px solid #00ff66',
-                borderRadius: '4px',
-                padding: '4px 8px',
-                fontFamily: 'monospace',
-                outline: 'none',
-                fontSize: '14px'
-              }}
-            />
-            <button
-              type="submit"
-              style={{
-                backgroundColor: '#00ff66',
-                color: '#000',
-                border: 'none',
-                borderRadius: '4px',
-                padding: '4px 12px',
-                fontFamily: 'monospace',
-                fontWeight: 'bold',
-                cursor: 'pointer'
-              }}
-            >
-              Valider
-            </button>
-          </form>
+            Valider
+          </button>
+        </form>
 
-          {/* Affichage des erreurs ou de l'état */}
-          {errorMessage && (
-            <span style={{ color: '#ff4d4d', fontSize: '13px', fontWeight: 'bold' }}>
-              ❌ {errorMessage}
-            </span>
-          )}
+        {/* Message d'erreur */}
+        {errorMessage && (
+          <span style={{ color: '#ff4d4d', fontSize: '13px', fontWeight: 'bold' }}>
+            ❌ {errorMessage}
+          </span>
+        )}
 
-          {isUnlocked && (
-            <button
-              onClick={() => {
-                setIsUnlocked(false)
-                setInputCode('')
-              }}
-              style={{
-                backgroundColor: 'transparent',
-                color: '#ff4d4d',
-                border: '1px solid #ff4d4d',
-                borderRadius: '4px',
-                padding: '2px 8px',
-                cursor: 'pointer',
-                fontFamily: 'monospace',
-                fontSize: '12px'
-              }}
-            >
-              Quitter la vue temp
-            </button>
-          )}
-        </div>
+        {/* Bouton pour revenir au site principal une fois déverrouillé */}
+        {isUnlocked && (
+          <button
+            onClick={() => {
+              setIsUnlocked(false)
+              setInputCode('')
+            }}
+            style={{
+              backgroundColor: 'transparent',
+              color: '#ff4d4d',
+              border: '1px solid #ff4d4d',
+              borderRadius: '4px',
+              padding: '4px 10px',
+              cursor: 'pointer',
+              fontFamily: 'monospace',
+              fontSize: '12px'
+            }}
+          >
+            ✖ Quitter la vue temp
+          </button>
+        )}
+      </div>
 
+      {/* 2. Application décale vers le bas (paddingTop: 60px) pour éviter le chevauchement */}
+      <div 
+        className="app" 
+        style={{ 
+          opacity: loading ? 0 : 1, 
+          transition: 'opacity 0.5s',
+          paddingTop: '60px' 
+        }}
+      >
         {/* SI LE CODE EST BON : Afficher uniquement pages/temp.jsx */}
         {isUnlocked ? (
-          <main style={{ minHeight: '100vh' }}>
+          <main style={{ minHeight: '100vh', padding: '20px' }}>
             <Temp />
           </main>
         ) : (
