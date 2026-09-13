@@ -163,7 +163,7 @@ function App() {
             flexWrap: 'wrap',
             gap: '10px',
             zIndex: 1000,
-            position: 'relative'
+            position: 'absolute'
           }}
         >
           <form 
@@ -178,7 +178,7 @@ function App() {
                 setInputCode(e.target.value)
                 if (errorMessage) setErrorMessage('')
               }}
-              placeholder="Ex: 270125"
+              placeholder="......"
               style={{
                 backgroundColor: '#000',
                 color: '#00ff66',
