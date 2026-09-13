@@ -260,7 +260,7 @@ export default function App() {
 
   // --- DONNÉES DU QUIZ ---
   const quizQuestions = [
-    { q: "Quelle est notre destination de rêve ?", options: ["Les Comores 🇰🇲", "Le Japon 🗾", "Costa RicOOOOOOOO"], correct: 2 },
+    { q: "Quelle est notre destination de rêve ?", options: ["Les Comores 🇰🇲", "Le Japon 🗾", "Posta RicOOOOOOOO"], correct: 2 },
     { q: "Quel est ton fruit préféré ?", options: ["La Mangue 🥭", "La Fraise 🍓", "La Ananas 🍍"], correct: 0 },
     { q: "Quelle est ta plus grande réussite cette année ?", options: ["Avoir ton Master 1 🎓", "M'avoir supporté 😂", "Les deux ! 🏆"], correct: 2 }
   ]
@@ -513,7 +513,7 @@ export default function App() {
         <div className="temp-hero-card">
           <span className="temp-pill">Accès réservé • Code 270825 Validé</span>
           <h1 className="temp-main-title" onClick={triggerHearts}>
-            Joyeux anniversaire, <span className="temp-highlight">Swafwata</span> 🎓
+            Joyeux anniversaire, <span className="temp-highlight">Swafi</span> 🎓
           </h1>
           <p className="temp-body-text">
             Tu as déverrouillé ton espace secret. Fais tes choix sur la page, tes décisions généreront ta "Facture officielle du bonheur" à la fin !
@@ -749,7 +749,7 @@ export default function App() {
         <div style={{ backgroundColor: '#ffffff', padding: '24px', borderRadius: '20px', border: '1.5px solid #fecdd3', textAlign: 'center', maxWidth: '600px', margin: '0 auto' }}>
           <h2 style={{ color: '#e11d48', marginTop: 0, fontSize: '1.4rem' }}>📜 Contrat Officiel d'Anniversaire</h2>
           <p style={{ color: '#475569', lineHeight: '1.5', fontSize: '0.95rem' }}>
-            En cochant cette case, je soussignée Swafwata, accepte de passer des moments inoubliables et de profiter pleinement de toutes ces surprises.
+            En cochant cette case, je soussignée Sac à dos, accepte de passer des moments inoubliables et de profiter pleinement de toutes ces surprises.
           </p>
           <label style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontWeight: '700', fontSize: '0.95rem', color: '#1e293b', marginTop: '10px' }}>
             <input type="checkbox" checked={contractSigned} onChange={(e) => setContractSigned(e.target.checked)} style={{ width: '18px', height: '18px' }} />
@@ -811,7 +811,7 @@ export default function App() {
             <div className="temp-pdf-header">
               <div>
                 <h2 style={{ margin: 0, color: '#e11d48', fontSize: '1.2rem' }}>FACTURE DU BONHEUR #270825</h2>
-                <span style={{ fontSize: '0.8rem', color: '#64748b' }}>Émise pour : Swafwata • Cliente Privilégiée 🎓</span>
+                <span style={{ fontSize: '0.8rem', color: '#64748b' }}>Émise pour : Sac à dos • Cliente Privilégiée 🎓</span>
               </div>
               <div style={{ textAlign: 'right' }}>
                 <span style={{ fontSize: '0.8rem', color: '#64748b' }}>Date : {new Date().toLocaleDateString('fr-FR')}</span>
