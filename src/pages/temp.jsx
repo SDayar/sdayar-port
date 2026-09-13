@@ -332,7 +332,7 @@ export default function App() {
   ]
 
   const moviesList = [
-    { id: 1, title: 'Kal el', detail: 'Le grand retour épique' },
+    { id: 1, title: 'Une série Prime-Video', detail: 'Enfin.....' },
     { id: 2, title: 'Clayface', detail: 'Le thriller horrifique DC' },
     { id: 3, title: 'Klara et le soleil', detail: 'Adaptation poétique' },
     { id: 4, title: 'The Social Reckoning', detail: 'Le drame captivant' },
@@ -526,13 +526,13 @@ export default function App() {
 
       {/* --- SECTION NOTRE PREMIÈRE RENCONTRE --- */}
       <section className="temp-section">
-        <div style={{ backgroundColor: '#ffffff', padding: '30px', borderRadius: '24px', border: '1px solid #ffe4e6', boxShadow: '0 10px 30px rgba(225, 29, 72, 0.04)', position: 'relative', z-index: 1 }}>
+        <div style={{ backgroundColor: '#ffffff', padding: '30px', borderRadius: '24px', border: '1px solid #ffe4e6', boxShadow: '0 10px 30px rgba(225, 29, 72, 0.04)', position: 'relative', zIndex: 1 }}>
           <div className="temp-section-header" style={{ marginBottom: '20px' }}>
-            <span className="temp-pill" style={{ backgroundColor: '#fff1f2' }}>Souvenir gravé 💫</span>
-            <h2 className="temp-section-title" style={{ color: '#e11d48' }}>Notre toute première rencontre 👩‍❤️‍👨</h2>
+            <span className="temp-pill" style={{ backgroundColor: '#fff1f2' }}>27.08.25 ? </span>
+            <h2 className="temp-section-title" style={{ color: '#e11d48' }}>Après 3 ans ....</h2>
           </div>
           <p className="temp-body-text" style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto', color: '#334155' }}>
-            Se souvenir du tout premier regard, du premier sourire et de ce moment précis où tout a commencé. Un instant simple en apparence, mais qui restera pour toujours le début de notre belle histoire.
+            Se souvenir du tout premier regard, du premier sourire et de ce moment précis où tout a commencé. Dans un gare. Dans une fac. Un instant simple en apparence, mais qui restera pour toujours le début de notre belle histoire.
           </p>
         </div>
       </section>
@@ -660,7 +660,7 @@ export default function App() {
               </div>
             ) : (
               <div style={{ backgroundColor: '#fff1f2', padding: '20px', borderRadius: '12px', border: '1px dashed #e11d48', color: '#e11d48', fontWeight: '800' }}>
-                🎁 GAGNÉ : Un massage des épaules illimité sur demande !
+                🎁 GAGNÉ : Oh... Une autre mangue !
               </div>
             )}
           </div>
