@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+/*import React, { useState, useEffect, useRef } from 'react'
 import html2pdf from 'html2pdf.js'
 import before from '../assets/images/before.jpeg'
 import after from '../assets/images/after.jpeg'
@@ -501,17 +501,19 @@ export default function App() {
   return (
     <div className="temp-page">
       <style>{customStyles}</style>
+*/
 
       {/* Canvas arrière-plan dynamique */}
-      <canvas ref={backgroundCanvasRef} className="temp-bg-canvas" />
+      /*<canvas ref={backgroundCanvasRef} className="temp-bg-canvas" />
 
       {/* Particules cliquables */}
+/*
       {hearts.map(h => (
         <span key={h.id} className="temp-heart-anim" style={{ left: h.x, top: h.y }}>{h.symbol}</span>
       ))}
 
       {/* --- PARTIE 1 : HERO & CÉLÉBRATION MASTER 1 --- */}
-      <section className="temp-section">
+      /*<section className="temp-section">
         <div className="temp-hero-card">
           <span className="temp-pill">Accès réservé • Code 270825 Validé</span>
           <h1 className="temp-main-title" onClick={triggerHearts}>
@@ -524,7 +526,7 @@ export default function App() {
       </section>
 
       {/* --- SECTION NOTRE PREMIÈRE RENCONTRE --- */}
-      <section className="temp-section">
+      /*<section className="temp-section">
         <div style={{ backgroundColor: '#ffffff', padding: '30px', borderRadius: '24px', border: '1px solid #ffe4e6', boxShadow: '0 10px 30px rgba(225, 29, 72, 0.04)', position: 'relative', zIndex: 1 }}>
           <div className="temp-section-header" style={{ marginBottom: '20px' }}>
             <span className="temp-pill" style={{ backgroundColor: '#fff1f2' }}>27.08.25 ? </span>
@@ -546,7 +548,7 @@ export default function App() {
       </section>
 
       {/* --- AVANT / APRÈS --- */}
-      <section className="temp-section">
+      /*<section className="temp-section">
         <div className="temp-section-header">
           <h2 className="temp-section-title">Le temps passe, les mémoires restent 📸</h2>
         </div>
@@ -569,7 +571,7 @@ export default function App() {
       </section>
 
       {/* --- PARTIE 2 : REPAS (AVEC PLUIE DE MANGUES 🥭) --- */}
-      <section className="temp-section" style={{ position: 'relative', overflow: 'hidden' }}>
+      /*<section className="temp-section" style={{ position: 'relative', overflow: 'hidden' }}>
         <canvas ref={mangoCanvasRef} className="section-canvas" />
         <div className="temp-section-header">
           <h2 className="temp-section-title">Ce qu’on mangera à nos retrouvailles 🍽️</h2>
@@ -590,7 +592,7 @@ export default function App() {
       </section>
 
       {/* --- PARTIE 3 : QUIZ & JEUX COMPLÉMENTAIRES --- */}
-      <section className="temp-section">
+      /*<section className="temp-section">
         <div className="temp-section-header">
           <h2 className="temp-section-title">Le Quiz & Challenge 🧠</h2>
           <p className="temp-section-sub">Testons tes connaissances et ton audace !</p>
@@ -598,7 +600,7 @@ export default function App() {
 
         <div className="temp-grid-2">
           {/* Quiz */}
-          <div style={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0' }}>
+          /*<div style={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0' }}>
             <h3 style={{ marginTop: 0, color: '#e11d48' }}>Quiz spécial</h3>
             {!quizFinished ? (
               quizQuestions.map((q, qIdx) => (
@@ -634,7 +636,7 @@ export default function App() {
           </div>
 
           {/* Cap ou Pas Cap */}
-          <div style={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+          /*<div style={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
             <h3 style={{ marginTop: 0, color: '#e11d48' }}>Cap ou Pas Cap ? ⚡</h3>
             <p style={{ fontStyle: 'italic', fontSize: '0.95rem', minHeight: '48px', display: 'flex', alignItems: 'center', justify: 'center' }}>
               "{capList[capIndex]}"
@@ -657,7 +659,7 @@ export default function App() {
           </div>
 
           {/* Carte à gratter */}
-          <div style={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+          /**<div style={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
             <h3 style={{ marginTop: 0, color: '#e11d48' }}>Carte à gratter magique 🎟️</h3>
             {!isScratched ? (
               <div
@@ -674,7 +676,7 @@ export default function App() {
           </div>
 
           {/* Sac à dos secret (Easter Egg) */}
-          <div style={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+          /*<div style={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
             <h3 style={{ marginTop: 0, color: '#e11d48' }}>Le Sac à dos secret 🎒</h3>
             <button className="temp-quiz-btn" onClick={() => setBackpackOpen(!backpackOpen)}>
               {backpackOpen ? 'Fermer le sac' : 'Fouiller le sac 🔍'}
@@ -694,7 +696,7 @@ export default function App() {
       </section>
 
       {/* --- PARTIE 4 : CINÉMA & SORTIES (AVEC VOL DE PIGEONS 🕊️) --- */}
-      <section className="temp-section" style={{ position: 'relative', overflow: 'hidden' }}>
+     /* <section className="temp-section" style={{ position: 'relative', overflow: 'hidden' }}>
         <canvas ref={pigeonCanvasRef} className="section-canvas" />
         <div className="temp-section-header">
           <h2 className="temp-section-title">Nos prochaines séances Cinéma 🍿</h2>
@@ -715,35 +717,35 @@ export default function App() {
       </section>
 
       {/* --- PARTIE 5 : AUTRES MINI-JEUX --- */}
-      <section className="temp-section">
+      /*<section className="temp-section">
         <div className="temp-section-header">
           <h2 className="temp-section-title">Petites Intentions & Douceurs ✨</h2>
         </div>
 
         <div className="temp-grid-2">
           {/* Surnom secret */}
-          <div style={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+         /* <div style={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
             <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem' }}>Générateur de Surnom ✨</h3>
             <button className="temp-quiz-btn" onClick={generateNickname}>Découvrir mon surnom</button>
             {generatedNickname && <p style={{ marginTop: '12px', fontSize: '1rem', color: '#e11d48', fontWeight: '700' }}>{generatedNickname}</p>}
           </div>
 
           {/* Bisous */}
-          <div style={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+        /*  <div style={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
             <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem' }}>Envoyer des bisous 💋</h3>
             <button onClick={(e) => { setKissCount(kissCount + 1); triggerHearts(e); }} style={{ fontSize: '2.2rem', background: 'none', border: 'none', cursor: 'pointer' }}>💋</button>
             <p style={{ marginTop: '6px', fontWeight: '700', color: '#e11d48' }}>{kissCount} bisous comptabilisés !</p>
           </div>
 
           {/* Roue */}
-          <div style={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+          /*<div style={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
             <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem' }}>Roue des attentions 🎡</h3>
             <button className="temp-quiz-btn" onClick={spinWheel} disabled={isSpinning}>{isSpinning ? '...' : 'Tourner'}</button>
             {wheelResult && <p style={{ marginTop: '12px', color: '#9f1239', fontWeight: '700', fontSize: '0.95rem' }}>{wheelResult}</p>}
           </div>
 
           {/* Vœu */}
-          <div style={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+         /* <div style={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
             <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem' }}>Boîte à vœu secret 💌</h3>
             {!wishSaved ? (
               <>
@@ -756,7 +758,7 @@ export default function App() {
       </section>
 
       {/* --- CONTRAT D'AMOUR --- */}
-      <section className="temp-section">
+     /* <section className="temp-section">
         <div style={{ backgroundColor: '#ffffff', padding: '24px', borderRadius: '20px', border: '1.5px solid #fecdd3', textAlign: 'center', maxWidth: '600px', margin: '0 auto' }}>
           <h2 style={{ color: '#e11d48', marginTop: 0, fontSize: '1.4rem' }}>📜 Contrat Officiel d'Anniversaire</h2>
           <p style={{ color: '#475569', lineHeight: '1.5', fontSize: '0.95rem' }}>
@@ -770,7 +772,7 @@ export default function App() {
       </section>
 
       {/* --- FACTURE DYNAMIQUE AVEC JEUX INTERACTIFS --- */}
-      <section className="temp-section">
+     /* <section className="temp-section">
         <div className="temp-section-header">
           <span className="temp-pill">Récapitulatif</span>
           <h2 className="temp-section-title">Ta Facture officielle du bonheur 🧾</h2>
@@ -778,9 +780,9 @@ export default function App() {
         </div>
 
         {/* JEUX POUR LA FACTURE */}
-        <div className="temp-grid-2" style={{ marginBottom: '24px' }}>
+        /*<div className="temp-grid-2" style={{ marginBottom: '24px' }}>
           {/* Jeu 1 : Curseur Pourboire d'Amour */}
-          <div style={{ backgroundColor: '#ffffff', padding: '16px', borderRadius: '16px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+          /*<div style={{ backgroundColor: '#ffffff', padding: '16px', borderRadius: '16px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
             <label style={{ fontWeight: '700', fontSize: '0.9rem', color: '#1e293b', display: 'block', marginBottom: '8px' }}>
               🎚️ Pourboire d'Amour : {tipPercentage}%
             </label>
@@ -797,7 +799,7 @@ export default function App() {
           </div>
 
           {/* Jeu 2 : Code Promo Secret */}
-          <div style={{ backgroundColor: '#ffffff', padding: '16px', borderRadius: '16px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+         /* <div style={{ backgroundColor: '#ffffff', padding: '16px', borderRadius: '16px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
             <label style={{ fontWeight: '700', fontSize: '0.9rem', color: '#1e293b', display: 'block', marginBottom: '8px' }}>
               🏷️ Code Promo Secret
             </label>
@@ -886,7 +888,7 @@ export default function App() {
             </div>
 
             {/* Tampon de validation interactif */}
-            {invoiceStamped && <div className="invoice-stamp">PAYÉ AVEC AMOUR</div>}
+            /*{invoiceStamped && <div className="invoice-stamp">PAYÉ AVEC AMOUR</div>}
           </div>
         </div>
 
