@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import html2pdf from 'html2pdf.js'
 import before from '../assets/images/before.jpeg'
 import after from '../assets/images/after.jpeg'
+import first_meet from '../assets/images/first_meet.jpeg'
 
 export default function App() {
   // --- ÉTATS COMPTE À REBOURS ANIMÉ & ANECDOTES ---
@@ -73,7 +74,8 @@ export default function App() {
   // Photos
   const [photos, setPhotos] = useState({
     before: before,
-    after: after
+    after: after,
+    first_meet:first_meet
   })
 
   // --- 1. ARRIÈRE-PLAN DYNAMIQUE GÉNÉRAL ---
@@ -513,7 +515,7 @@ export default function App() {
         <div className="temp-hero-card">
           <span className="temp-pill">Accès réservé • Code 270825 Validé</span>
           <h1 className="temp-main-title" onClick={triggerHearts}>
-            Joyeux anniversaire, <span className="temp-highlight">Swafi</span> 🎓
+            Joyeux anniversaire, <span className="temp-highlight">Swafi</span> 
           </h1>
           <p className="temp-body-text">
             Tu as déverrouillé ton espace secret. Fais tes choix sur la page, tes décisions généreront ta "Facture officielle du bonheur" à la fin !
@@ -530,6 +532,15 @@ export default function App() {
           </div>
           <p className="temp-body-text" style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto', color: '#334155' }}>
             Se souvenir du tout premier regard, du premier sourire et de ce moment précis où tout a commencé. Dans un gare. Dans une fac. Un instant simple en apparence, mais qui restera pour toujours le début de notre belle histoire.
+          <center>
+            <div className="temp-photo-card">
+            <div className="temp-photo-frame"><img src={photos.first_meet} alt="First_meet" className="temp-photo-img" /></div>
+            <div className="temp-photo-footer">
+              <span className="temp-photo-label">Naissance de kal-Il</span>
+              <label className="temp-upload-btn">Changer la photo<input type="file" accept="image/*" hidden onChange={(e) => handlePhotoUpload('first_meet', e.target.files[0])} /></label>
+            </div>
+          </div>
+          </center>
           </p>
         </div>
       </section>
