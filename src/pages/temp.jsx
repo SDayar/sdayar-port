@@ -142,7 +142,7 @@ export default function Temp() {
                 type="file" 
                 accept="image/*" 
                 hidden 
-                onChange={(e) => e.target.files[0] && setAfterImage(URL.target.files[0]))} 
+                onChange={(e) => e.target.files[0] && setAfterImage(URL.target.files[0])} 
               />
             </label>
           </div>
