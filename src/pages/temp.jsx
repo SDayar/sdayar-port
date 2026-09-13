@@ -7,12 +7,12 @@ export default function Temp() {
   const [hearts, setHearts] = useState([])
   const [backpackSecret, setBackpackSecret] = useState(false)
   const [candlesBlown, setCandlesBlown] = useState(false)
-  
+
   // Repas & Films
   const [selectedMeals, setSelectedMeals] = useState([])
   const [selectedMovies, setSelectedMovies] = useState([])
 
-  // Quiz
+  // Quiz mis à jour
   const [quizAnswers, setQuizAnswers] = useState({})
   const [quizScore, setQuizScore] = useState(null)
 
@@ -24,6 +24,16 @@ export default function Temp() {
   // Carte à gratter (Boisson Surprise)
   const canvasRef = useRef(null)
   const [isScratched, setIsScratched] = useState(false)
+
+  // NOUVEAU : Cap ou pas cap
+  const [currentDare, setCurrentDare] = useState(null)
+
+  // NOUVEAU : Boîte à vœu secret
+  const [secretWish, setSecretWish] = useState('')
+  const [wishSaved, setWishSaved] = useState(false)
+
+  // NOUVEAU : Compteur de bisous
+  const [kissCount, setKissCount] = useState(0)
 
   // Photos téléversables
   const [photos, setPhotos] = useState({
@@ -48,7 +58,7 @@ export default function Temp() {
     }
   }, [count, phase])
 
-  // --- CARTE À GRATTER (CANVAS BOISSON SURPRISE) ---
+  // --- CARTE À GRATTER (BOISSON SURPRISE) ---
   useEffect(() => {
     if (phase !== 'main') return
     const canvas = canvasRef.current
@@ -58,11 +68,9 @@ export default function Temp() {
     canvas.width = 340
     canvas.height = 140
 
-    // Couche argentée épurée
     ctx.fillStyle = '#e2e8f0'
     ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-    // Motif élégant par-dessus
     ctx.fillStyle = '#94a3b8'
     ctx.font = '600 14px system-ui'
     ctx.textAlign = 'center'
@@ -76,7 +84,6 @@ export default function Temp() {
       ctx.arc(x, y, 22, 0, Math.PI * 2)
       ctx.fill()
 
-      // Calcul du pourcentage gratté
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
       let transparentPixels = 0
       for (let i = 3; i < imageData.data.length; i += 4) {
@@ -130,14 +137,14 @@ export default function Temp() {
     }
   }, [phase])
 
-  // Changement de photo
+  // Importation de photo
   const handlePhotoUpload = (key, file) => {
     if (file) {
       setPhotos(prev => ({ ...prev, [key]: URL.createObjectURL(file) }))
     }
   }
 
-  // Easter egg cœurs
+  // Cœurs animés au clic
   const triggerHearts = (e) => {
     const newHearts = Array.from({ length: 7 }).map((_, i) => ({
       id: Date.now() + i,
@@ -150,25 +157,25 @@ export default function Temp() {
     }, 1200)
   }
 
-  // Quiz
+  // QUESTIONS DU QUIZ (Mises à jour selon tes demandes)
   const questions = [
     {
       id: 1,
-      question: "Quelle était la météo lors de notre rendez-vous du 27 Janvier ?",
-      options: ["Un soleil éclatant d'hiver", "Une douce fraîcheur", "Un ciel dégagé & romantique"],
+      question: "Quelle était la date exacte de notre première rencontre (3 ans après le bac) ?",
+      options: ["27 Janvier 2025", "27 Août 2025", "14 Février 2025"],
       correct: 1
     },
     {
       id: 2,
-      question: "Qui mentionne 'Sac à dos' en premier lors des sorties ?",
+      question: "Qui dit ou mentionne 'Sac à dos' en premier lors des sorties ?",
       options: ["Toi (Swafi), c'est ton expression !", "Moi, pour ne rien oublier", "On le dit en même temps !"],
       correct: 0
     },
     {
       id: 3,
-      question: "Quel film en programmation est en haut de notre liste de rendez-vous ?",
-      options: ["Klara et le Soleil", "Clayface", "Wife and Dog"],
-      correct: 1
+      question: "Quel est le premier film qu'on était censé aller voir ensemble ?",
+      options: ["Superman (2025)", "Clayface", "Klara et le soleil"],
+      correct: 0
     }
   ]
 
@@ -210,6 +217,20 @@ export default function Temp() {
     }, 3500)
   }
 
+  // Cap ou Pas Cap ?
+  const dares = [
+    "Cap de me faire ton plus beau sourire pendant 5 secondes ? 😁",
+    "Cap de choisir la prochaine destination de notre balade ? 🗺️",
+    "Cap de fermer les yeux et de faire un vœu immédiatement ? ✨",
+    "Cap de me donner un câlin de 10 secondes tout de suite ? 🫂",
+    "Cap de choisir la boisson surprise qu'on va boire ensemble ? 🍹"
+  ]
+
+  const drawDare = () => {
+    const randomIdx = Math.floor(Math.random() * dares.length)
+    setCurrentDare(dares[randomIdx])
+  }
+
   // Listes des 9 repas et 9 films
   const mealsList = [
     { id: 1, name: 'Sushis préparés minute', desc: 'Frais, légers et gourmands' },
@@ -224,14 +245,14 @@ export default function Temp() {
   ]
 
   const moviesList = [
-    { id: 1, title: 'Clayface', date: 'Sortie Cinéma', detail: 'Le thriller horrifique événement DC' },
-    { id: 2, title: 'Klara et le soleil', date: 'Sortie Cinéma', detail: 'Adaptation poétique & émouvante' },
-    { id: 3, title: 'The Social Reckoning', date: 'Sortie Cinéma', detail: 'Le drame captivant d’Aaron Sorkin' },
-    { id: 4, title: 'Ducobu et le fantôme', date: 'Sortie Cinéma', detail: 'Pour une soirée rigolade légère' },
-    { id: 5, title: 'Les Misérables', date: 'Sortie Cinéma', detail: 'Grande fresque historique' },
-    { id: 6, title: 'Karma', date: 'Sortie Cinéma', detail: 'Le nouveau film de Guillaume Canet' },
-    { id: 7, title: 'Street Fighter', date: 'Sortie Cinéma', detail: 'Grosse séance d’action déjantée' },
-    { id: 8, title: 'Wife And Dog', date: 'Sortie Cinéma', detail: 'Comédie noire & thriller' },
+    { id: 1, title: 'Superman (2025)', date: 'Premier film prévu', detail: 'Le grand retour épique de l’homme d’acier' },
+    { id: 2, title: 'Clayface', date: 'Sortie Cinéma', detail: 'Le thriller horrifique événement DC' },
+    { id: 3, title: 'Klara et le soleil', date: 'Sortie Cinéma', detail: 'Adaptation poétique & émouvante' },
+    { id: 4, title: 'The Social Reckoning', date: 'Sortie Cinéma', detail: 'Le drame captivant d’Aaron Sorkin' },
+    { id: 5, title: 'Ducobu et le fantôme', date: 'Sortie Cinéma', detail: 'Pour une soirée rigolade légère' },
+    { id: 6, title: 'Les Misérables', date: 'Sortie Cinéma', detail: 'Grande fresque historique' },
+    { id: 7, title: 'Karma', date: 'Sortie Cinéma', detail: 'Le nouveau film de Guillaume Canet' },
+    { id: 8, title: 'Street Fighter', date: 'Sortie Cinéma', detail: 'Grosse séance d’action déjantée' },
     { id: 9, title: 'Shaun le Mouton : Halloween', date: 'Sortie Cinéma', detail: 'Petit moment cocooning' },
   ]
 
@@ -278,7 +299,7 @@ export default function Temp() {
         <span key={h.id} className="temp-heart-anim" style={{ left: h.x, top: h.y }}>❤️</span>
       ))}
 
-      {/* INJECTION DIRECTE DU CSS NATIVE */}
+      {/* INJECTION DU CSS */}
       <style>{`
         .temp-page {
           background-color: #fbfbfd;
@@ -546,7 +567,7 @@ export default function Temp() {
         }
         .temp-backpack-title { font-size: 3rem; font-weight: 900; letter-spacing: 4px; color: #f43f5e; margin: 0; }
 
-        /* BOUGIES */
+        /* BOUGIES ET BOUTONS */
         .temp-cake-box { text-align: center; max-width: 500px; margin: 0 auto; }
         .temp-btn-pink {
           background-color: #e11d48;
@@ -577,7 +598,7 @@ export default function Temp() {
       {/* --- HERO / ACCUEIL --- */}
       <section className="temp-section">
         <div className="temp-hero-card">
-          <span className="temp-pill">Accès réservé • Code 270125 Validé</span>
+          <span className="temp-pill">Accès réservé • Code 270825 Validé</span>
           <h1 className="temp-main-title" onClick={triggerHearts}>
             Félicitations, <span className="temp-highlight">Swafwata</span>
           </h1>
@@ -598,7 +619,6 @@ export default function Temp() {
         </div>
 
         <div className="temp-grid-2">
-          {/* PHOTO 1 */}
           <div className="temp-photo-card">
             <div className="temp-photo-frame">
               <img src={photos.before} alt="Avant" className="temp-photo-img" />
@@ -612,7 +632,6 @@ export default function Temp() {
             </div>
           </div>
 
-          {/* PHOTO 2 */}
           <div className="temp-photo-card">
             <div className="temp-photo-frame">
               <img src={photos.after} alt="Aujourd'hui" className="temp-photo-img" />
@@ -644,7 +663,7 @@ export default function Temp() {
         <div className="temp-section-header">
           <span className="temp-pill">Mini-Jeu 1</span>
           <h2 className="temp-section-title">Quiz de Notre Histoire 🧠</h2>
-          <p className="temp-section-sub">Teste tes souvenirs avec ces quelques questions douces.</p>
+          <p className="temp-section-sub">Teste tes souvenirs avec ces questions complices.</p>
         </div>
 
         <div style={{ maxWidth: '650px', margin: '0 auto', width: '100%' }}>
@@ -677,13 +696,13 @@ export default function Temp() {
 
           {quizScore !== null && (
             <div style={{ textAlign: 'center', marginTop: '20px', padding: '16px', backgroundColor: '#f0fdf4', borderRadius: '16px', color: '#166534', fontWeight: '600' }}>
-              🎉 Ton score : {quizScore} / {questions.length} ! {quizScore === 3 ? "Sans faute ! Tu es incroyable ❤️" : "Presque parfait ! 😊"}
+              🎉 Ton score : {quizScore} / {questions.length} ! {quizScore === 3 ? "Sans faute ! Tu es une championne ❤️" : "Presque parfait ! 😊"}
             </div>
           )}
         </div>
       </section>
 
-      {/* --- MINI-JEU 2 : BOISSON SURPRISE A GRATTER --- */}
+      {/* --- MINI-JEU 2 : BOISSON SURPRISE À GRATTER --- */}
       <section className="temp-section">
         <div className="temp-section-header">
           <span className="temp-pill">Mini-Jeu 2</span>
@@ -741,7 +760,76 @@ export default function Temp() {
         </div>
       </section>
 
-      {/* --- MENU RETROUVAILLES (3 SELECTIONS) --- */}
+      {/* --- MINI-JEU 4 : CAP OU PAS CAP ? --- */}
+      <section className="temp-section">
+        <div className="temp-section-header">
+          <span className="temp-pill">Mini-Jeu 4</span>
+          <h2 className="temp-section-title">Générateur Cap ou Pas Cap ? 🎲</h2>
+          <p className="temp-section-sub">Tire au sort un petit défi rigolo à réaliser !</p>
+        </div>
+
+        <div style={{ textAlign: 'center', maxWidth: '500px', margin: '0 auto', backgroundColor: '#ffffff', padding: '30px', borderRadius: '24px', border: '1px solid #e2e8f0', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
+          <button className="temp-quiz-btn" onClick={drawDare} style={{ margin: '0 auto 20px auto' }}>
+            Tirer un défi 🎯
+          </button>
+
+          {currentDare && (
+            <div style={{ padding: '16px', backgroundColor: '#f0fdf4', borderRadius: '16px', color: '#166534', fontWeight: '600', fontSize: '1.1rem' }}>
+              {currentDare}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* --- MINI-JEU 5 : BOÎTE À VŒU SECRET --- */}
+      <section className="temp-section">
+        <div className="temp-section-header">
+          <span className="temp-pill">Mini-Jeu 5</span>
+          <h2 className="temp-section-title">La Boîte à Vœu Secret 💌</h2>
+          <p className="temp-section-sub">Écris un vœu secret pour cette nouvelle année d'anniversaire.</p>
+        </div>
+
+        <div style={{ maxWidth: '550px', margin: '0 auto', width: '100%', backgroundColor: '#ffffff', padding: '30px', borderRadius: '24px', border: '1px solid #e2e8f0' }}>
+          {!wishSaved ? (
+            <>
+              <textarea
+                value={secretWish}
+                onChange={(e) => setSecretWish(e.target.value)}
+                placeholder="Mon vœu secret pour cette année..."
+                style={{ width: '100%', height: '100px', padding: '14px', borderRadius: '14px', border: '1px solid #cbd5e1', fontFamily: 'inherit', fontSize: '1rem', boxSizing: 'border-box' }}
+              />
+              <button className="temp-quiz-btn" onClick={() => secretWish.trim() && setWishSaved(true)} style={{ marginTop: '16px' }}>
+                Enfermer mon vœu dans la boîte 🔒
+              </button>
+            </>
+          ) : (
+            <div style={{ textAlign: 'center', padding: '20px', color: '#9333ea', backgroundColor: '#f3e8ff', borderRadius: '16px', fontWeight: '600' }}>
+              🔒 Ton vœu a été scellé avec amour ! Qu'il se réalise très vite ✨
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* --- MINI-JEU 6 : MACHINE À BISOUS --- */}
+      <section className="temp-section">
+        <div className="temp-section-header">
+          <span className="temp-pill">Mini-Jeu 6</span>
+          <h2 className="temp-section-title">Compteur de Bisous & Attentions 💖</h2>
+          <p className="temp-section-sub">Clique sur le bouton pour cumuler tes bisous d'anniversaire !</p>
+        </div>
+
+        <div style={{ textAlign: 'center' }}>
+          <button
+            onClick={(e) => { setKissCount(kissCount + 1); triggerHearts(e); }}
+            style={{ fontSize: '4rem', background: 'none', border: 'none', cursor: 'pointer', transition: 'transform 0.1s' }}
+          >
+            💋
+          </button>
+          <h3 style={{ fontSize: '1.8rem', color: '#e11d48', margin: '10px 0 0 0' }}>{kissCount} bisous envoyés !</h3>
+        </div>
+      </section>
+
+      {/* --- MENU RETROUVAILLES --- */}
       <section className="temp-section">
         <div className="temp-section-header">
           <h2 className="temp-section-title">Ce qu’on mangera à nos retrouvailles 🍽️</h2>
@@ -772,14 +860,14 @@ export default function Temp() {
         </div>
       </section>
 
-      {/* --- EXPLICATION CODE 270125 + PHOTO --- */}
+      {/* --- EXPLICATION CODE 270825 + PHOTO RENCONTRE --- */}
       <section className="temp-section">
         <div className="temp-grid-2" style={{ alignItems: 'center' }}>
           <div>
             <span className="temp-pill">Origine du code</span>
-            <h2 className="temp-section-title">Le secret du 27.01.25</h2>
+            <h2 className="temp-section-title">Le secret du 27.08.25</h2>
             <p className="temp-body-text">
-              Ce code correspond au <strong>27 Janvier 2025</strong> : le jour de notre rencontre, pile 3 ans après le bac. Une date gravée pour toujours.
+              Ce code correspond au <strong>27 Août 2025</strong> : le jour de notre toute première rencontre, pile 3 ans après le bac. Une date unique gravée pour toujours.
             </p>
           </div>
           <div className="temp-photo-card">
@@ -787,7 +875,7 @@ export default function Temp() {
               <img src={photos.date} alt="Rencontre" className="temp-photo-img" />
             </div>
             <div className="temp-photo-footer">
-              <span className="temp-photo-label">Jour de notre rencontre</span>
+              <span className="temp-photo-label">Notre rencontre (27 Août 2025)</span>
               <label className="temp-upload-btn">
                 Changer la photo
                 <input type="file" accept="image/*" hidden onChange={(e) => handlePhotoUpload('date', e.target.files[0])} />
@@ -817,7 +905,7 @@ export default function Temp() {
         <div className="temp-section-header">
           <h2 className="temp-section-title">Nos prochaines séances Cinéma 🍿</h2>
           <p className="temp-section-sub">
-            Sélectionne les films qu'on va aller voir en Octobre (dont le très attendu <strong>Clayface</strong> !) :
+            Sélectionne les films qu'on va aller voir (avec <strong>Superman (2025)</strong> & <strong>Clayface</strong>) :
           </p>
         </div>
 
