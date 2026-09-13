@@ -1,782 +1,547 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Heart, Sparkles, Lock, Unlock, Volume2, VolumeX, Gift, Flame, 
-  ArrowLeft, Code, User, Briefcase, Mail, Terminal, ChevronRight, 
-  Star, Award, CheckCircle, FlameKindling, RefreshCw, Send, Check
-} from 'lucide-react';
+import React, { useState, useEffect } from 'react'
 
-// Preloader component with progress animation
-function Loader({ onLoaded }) {
-  const [progress, setProgress] = useState(0);
+export default function Temp() {
+  // --- ÉTATS ANIMATION D'ENTRÉE ---
+  const [countdown, setCountdown] = useState(3)
+  const [showSurprise, setShowSurprise] = useState(false)
+  const [isReady, setIsReady] = useState(false)
 
+  // --- ÉTATS JEU 1 : 3 REPAS PARMI 9 ---
+  const [selectedMeals, setSelectedMeals] = useState([])
+
+  // --- ÉTATS JEU 2 : FILMS EN OCTOBRE PARMI 9 ---
+  const [selectedMovies, setSelectedMovies] = useState([])
+
+  // --- ÉTAT GÂTEAU & BOUGIES ---
+  const [candlesBlown, setCandlesBlown] = useState(false)
+
+  // --- IMAGES PAR DÉFAUT (Remplaçables facilement) ---
+  const [beforeImage, setBeforeImage] = useState('https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&q=80')
+  const [afterImage, setAfterImage] = useState('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&q=80')
+  const [dateImage, setDateImage] = useState('https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=500&q=80')
+  const [coupleImage, setCoupleImage] = useState('https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=500&q=80')
+
+  // Animation de démarrage (Compte à rebours 3, 2, 1 -> Surprise !)
   useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(timer);
-          setTimeout(onLoaded, 400);
-          return 100;
-        }
-        return prev + 5;
-      });
-    }, 40);
-
-    return () => clearInterval(timer);
-  }, [onLoaded]);
-
-  return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#080811] text-white font-mono">
-      <div className="w-64 space-y-4 text-center">
-        <div className="flex items-center justify-center gap-2 text-rose-500 font-bold text-lg">
-          <Terminal className="w-5 h-5 animate-pulse" />
-          <span>dayar.saifidine</span>
-        </div>
-        <div className="w-full h-2 bg-gray-800 rounded-full overflow-hidden border border-rose-900/40">
-          <div 
-            className="h-full bg-gradient-to-r from-rose-500 to-purple-600 transition-all duration-150"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-        <div className="flex justify-between text-xs text-gray-400">
-          <span>INITIALIZING...</span>
-          <span>{progress}%</span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Easter Egg Birthday Surprise Component
-function TempPage({ onClose }) {
-  const [unlocked, setUnlocked] = useState(false);
-  const [passkeyInput, setPasskeyInput] = useState('');
-  const [audioMuted, setAudioMuted] = useState(true);
-  const [candleStates, setCandleStates] = useState([true, true, true]);
-  const [flippedCards, setFlippedCards] = useState({});
-  const [redeemedCoupons, setRedeemedCoupons] = useState({});
-  const [typewriterIndex, setTypewriterIndex] = useState(0);
-  const [displayedText, setDisplayedText] = useState('');
-  const [currentCompliment, setCurrentCompliment] = useState('');
-
-  const canvasRef = useRef(null);
-  const audioCtxRef = useRef(null);
-  const particlesRef = useRef([]);
-
-  const letterText = "Joyeux anniversaire Swafi ! J'ai voulu créer cet easter egg secret sur mon portfolio parce que tu occupes une place unique dans ma vie. Que cette nouvelle année t'apporte autant de joie et de bonheur que tu m'en donnes chaque jour. Merci d'être à mes côtés ! ❤️";
-
-  const compliments = [
-    "Tu es le plus beau bug de ma vie, celui que je ne voudrais jamais corriger ! ❤️",
-    "Ton sourire illumine chacune de mes journées.",
-    "Merci d'être cette personne exceptionnelle (et bizarre) remplie de douceur.",
-    "Avec toi, chaque moment devient un précieux souvenir. Voilà pourquoi une année de proximité avec toi nous paresse comme des années.",
-  ];
-
-  const initAudio = () => {
-    if (!audioCtxRef.current) {
-      audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000)
+      return () => clearTimeout(timer)
+    } else if (countdown === 0 && !showSurprise) {
+      setShowSurprise(true)
+      const timer = setTimeout(() => {
+        setShowSurprise(false)
+        setIsReady(true)
+      }, 1800)
+      return () => clearTimeout(timer)
     }
-  };
+  }, [countdown, showSurprise])
 
-  const playSynthSound = (type) => {
-    if (audioMuted) return;
-    try {
-      initAudio();
-      const ctx = audioCtxRef.current;
-      const now = ctx.currentTime;
+  // Liste des 9 repas
+  const mealsList = [
+    { id: 1, name: 'Sushi & Makis', icon: '🍣' },
+    { id: 2, name: 'Pizza Artisanale', icon: '🍕' },
+    { id: 3, name: 'Tacos / Burritos', icon: '🌮' },
+    { id: 4, name: 'Burger Gourmet', icon: '🍔' },
+    { id: 5, name: 'Pâtisserie & Brunch', icon: '🥐' },
+    { id: 6, name: 'Noodles & Ramen', icon: '🍜' },
+    { id: 7, name: 'Barbecue / Grillades', icon: '🍖' },
+    { id: 8, name: 'Plat Traditionnel', icon: '🍲' },
+    { id: 9, name: 'Restaurant Gastronomique', icon: '🍷' },
+  ]
 
-      if (type === 'click') {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(523.25, now);
-        osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.08);
-        gain.gain.setValueAtTime(0.12, now);
-        gain.gain.linearRampToValueAtTime(0.01, now + 0.08);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(now);
-        osc.stop(now + 0.08);
-      } else if (type === 'unlock') {
-        const notes = [523.25, 659.25, 783.99, 1046.50];
-        notes.forEach((freq, idx) => {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(freq, now + idx * 0.1);
-          gain.gain.setValueAtTime(0.15, now + idx * 0.1);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.1 + 0.3);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start(now + idx * 0.1);
-          osc.stop(now + idx * 0.1 + 0.3);
-        });
-      } else if (type === 'heart') {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(349.23, now);
-        osc.frequency.exponentialRampToValueAtTime(523.25, now + 0.2);
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(now);
-        osc.stop(now + 0.2);
-      }
-    } catch (e) {
-      console.log('Audio error:', e);
+  // Liste des 9 films en octobre (Incluant Clayface)
+  const moviesList = [
+    { id: 1, title: 'Clayface', genre: 'Horreur / DC Universe', date: '21 Octobre', icon: '🎭' },
+    { id: 2, title: 'Klara et le soleil', genre: 'Sci-Fi / Drame', date: '21 Octobre', icon: '☀️' },
+    { id: 3, title: 'Ducobu & le fantôme', genre: 'Comédie / Halloween', date: '7 Octobre', icon: '👻' },
+    { id: 4, title: 'Les Misérables', genre: 'Drame Historique', date: '14 Octobre', icon: '🎬' },
+    { id: 5, title: 'Karma (Guillaume Canet)', genre: 'Thriller', date: '21 Octobre', icon: '🔮' },
+    { id: 6, title: 'Street Fighter', genre: 'Action / Adapt.', date: '14 Octobre', icon: '🥊' },
+    { id: 7, title: 'Wife And Dog', genre: 'Comédie / Thriller', date: '28 Octobre', icon: '🐕' },
+    { id: 8, title: 'The Social Reckoning', genre: 'Drame', date: '7 Octobre', icon: '📱' },
+    { id: 9, title: 'Shaun le Mouton : Halloween', genre: 'Animation', date: '21 Octobre', icon: '🎃' },
+  ]
+
+  const handleMealToggle = (meal) => {
+    if (selectedMeals.find(m => m.id === meal.id)) {
+      setSelectedMeals(selectedMeals.filter(m => m.id !== meal.id))
+    } else if (selectedMeals.length < 3) {
+      setSelectedMeals([...selectedMeals, meal])
     }
-  };
+  }
 
-  const toggleAudio = () => {
-    if (audioMuted) {
-      initAudio();
-      setAudioMuted(false);
-      playSynthSound('unlock');
+  const handleMovieToggle = (movie) => {
+    if (selectedMovies.find(m => m.id === movie.id)) {
+      setSelectedMovies(selectedMovies.filter(m => m.id !== movie.id))
     } else {
-      setAudioMuted(true);
+      setSelectedMovies([...selectedMovies, movie])
     }
-  };
+  }
 
-  const unlockSecretQuest = () => {
-    playSynthSound('unlock');
-    setUnlocked(true);
-    triggerHeartBurst();
-  };
-
-  useEffect(() => {
-    if (unlocked && typewriterIndex < letterText.length) {
-      const timeout = setTimeout(() => {
-        setDisplayedText((prev) => prev + letterText.charAt(typewriterIndex));
-        setTypewriterIndex((prev) => prev + 1);
-      }, 35);
-      return () => clearTimeout(timeout);
-    }
-  }, [unlocked, typewriterIndex]);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let animationFrameId;
-
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    class Particle {
-      constructor(x, y, isHeart = true) {
-        this.x = x || Math.random() * canvas.width;
-        this.y = y || canvas.height + 20;
-        this.isHeart = isHeart;
-        this.size = Math.random() * 12 + 8;
-        this.vx = (Math.random() - 0.5) * 3;
-        this.vy = isHeart ? -(Math.random() * 2 + 1) : (Math.random() - 0.5) * 8;
-        this.alpha = 1;
-        this.decay = Math.random() * 0.01 + 0.005;
-        this.color = ['#f43f5e', '#ec4899', '#a855f7', '#fb7185', '#f59e0b'][Math.floor(Math.random() * 5)];
-      }
-
-      draw() {
-        ctx.save();
-        ctx.globalAlpha = this.alpha;
-        ctx.fillStyle = this.color;
-
-        if (this.isHeart) {
-          ctx.beginPath();
-          const topCurveHeight = this.size * 0.3;
-          ctx.moveTo(this.x, this.y + topCurveHeight);
-          ctx.bezierCurveTo(this.x, this.y, this.x - this.size / 2, this.y, this.x - this.size / 2, this.y + topCurveHeight);
-          ctx.bezierCurveTo(this.x - this.size / 2, this.y + (this.size + topCurveHeight) / 2, this.x, this.y + this.size, this.x, this.y + this.size);
-          ctx.bezierCurveTo(this.x, this.y + this.size, this.x + this.size / 2, this.y + (this.size + topCurveHeight) / 2, this.x + this.size / 2, this.y + topCurveHeight);
-          ctx.bezierCurveTo(this.x + this.size / 2, this.y, this.x, this.y, this.x, this.y + topCurveHeight);
-          ctx.closePath();
-          ctx.fill();
-        } else {
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, this.size / 3, 0, Math.PI * 2);
-          ctx.fill();
-        }
-        ctx.restore();
-      }
-
-      update() {
-        this.x += this.vx;
-        this.y += this.vy;
-        this.alpha -= this.decay;
-      }
-    }
-
-    const render = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particlesRef.current.forEach((p, index) => {
-        p.update();
-        p.draw();
-        if (p.alpha <= 0 || p.y < -20) {
-          particlesRef.current.splice(index, 1);
-        }
-      });
-      animationFrameId = requestAnimationFrame(render);
-    };
-
-    render();
-
-    const interval = setInterval(() => {
-      if (unlocked && particlesRef.current.length < 35) {
-        particlesRef.current.push(new Particle(Math.random() * canvas.width, canvas.height + 10, true));
-      }
-    }, 600);
-
-    return () => {
-      window.removeEventListener('resize', resizeCanvas);
-      cancelAnimationFrame(animationFrameId);
-      clearInterval(interval);
-    };
-  }, [unlocked]);
-
-  const triggerHeartBurst = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    for (let i = 0; i < 40; i++) {
-      particlesRef.current.push(new (class {
-        constructor() {
-          this.x = canvas.width / 2 + (Math.random() - 0.5) * 300;
-          this.y = canvas.height / 2 + (Math.random() - 0.5) * 200;
-          this.isHeart = true;
-          this.size = Math.random() * 12 + 8;
-          this.vx = (Math.random() - 0.5) * 3;
-          this.vy = -(Math.random() * 2 + 1);
-          this.alpha = 1;
-          this.decay = Math.random() * 0.01 + 0.005;
-          this.color = ['#f43f5e', '#ec4899', '#a855f7', '#fb7185', '#f59e0b'][Math.floor(Math.random() * 5)];
-        }
-        draw() {
-          const ctx = canvas.getContext('2d');
-          ctx.save();
-          ctx.globalAlpha = this.alpha;
-          ctx.fillStyle = this.color;
-          ctx.beginPath();
-          const topCurveHeight = this.size * 0.3;
-          ctx.moveTo(this.x, this.y + topCurveHeight);
-          ctx.bezierCurveTo(this.x, this.y, this.x - this.size / 2, this.y, this.x - this.size / 2, this.y + topCurveHeight);
-          ctx.bezierCurveTo(this.x - this.size / 2, this.y + (this.size + topCurveHeight) / 2, this.x, this.y + this.size, this.x, this.y + this.size);
-          ctx.bezierCurveTo(this.x, this.y + this.size, this.x + this.size / 2, this.y + (this.size + topCurveHeight) / 2, this.x + this.size / 2, this.y + topCurveHeight);
-          ctx.bezierCurveTo(this.x + this.size / 2, this.y, this.x, this.y, this.x, this.y + topCurveHeight);
-          ctx.closePath();
-          ctx.fill();
-          ctx.restore();
-        }
-        update() {
-          this.x += this.vx;
-          this.y += this.vy;
-          this.alpha -= this.decay;
-        }
-      })());
-    }
-  };
-
-  const toggleCard = (id) => {
-    playSynthSound('click');
-    setFlippedCards((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
-
-  const toggleCandle = (index) => {
-    playSynthSound('click');
-    setCandleStates((prev) => {
-      const copy = [...prev];
-      copy[index] = !copy[index];
-      return copy;
-    });
-  };
-
-  const lightAllCandles = () => {
-    playSynthSound('unlock');
-    setCandleStates([true, true, true]);
-  };
-
-  const blowOutCandles = () => {
-    playSynthSound('heart');
-    setCandleStates([false, false, false]);
-    triggerHeartBurst();
-  };
-
-  const generateRandomCompliment = () => {
-    playSynthSound('heart');
-    const random = compliments[Math.floor(Math.random() * compliments.length)];
-    setCurrentCompliment(random);
-    triggerHeartBurst();
-  };
-
-  const redeemCoupon = (id) => {
-    playSynthSound('unlock');
-    setRedeemedCoupons((prev) => ({ ...prev, [id]: true }));
-    triggerHeartBurst();
-  };
-
-  return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-[#080811] text-gray-100 font-sans selection:bg-rose-500 selection:text-white">
-      {/* Background Canvas */}
-      <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0" />
-
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-[#12121e]/80 backdrop-blur-md border-b border-rose-900/30 px-4 lg:px-8 py-3.5 flex items-center justify-between">
-        <button
-          onClick={onClose}
-          className="flex items-center gap-2 group transition-all text-xs sm:text-sm font-mono text-gray-300 hover:text-rose-400"
-        >
-          <span className="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center group-hover:bg-rose-600 group-hover:text-white transition-all">
-            <ArrowLeft className="w-4 h-4" />
-          </span>
-          <span>
-            dayar.saifidine.portfolio<span className="text-rose-500 font-bold">/secret/love.sh</span>
-          </span>
-        </button>
-
-        <div className="flex items-center gap-3">
-          {unlocked && (
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-rose-950/60 border border-rose-800/40 text-xs text-rose-300 font-mono">
-              <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
-              <span>PROTOCOL: EASTER_EGG_270825</span>
-            </div>
-          )}
-
-          <button
-            onClick={toggleAudio}
-            className={`p-2 rounded-xl border text-xs font-mono transition-all flex items-center gap-2 ${
-              audioMuted
-                ? 'bg-gray-900 border-gray-700 text-gray-400'
-                : 'bg-rose-950/80 border-rose-500 text-rose-400'
-            }`}
-          >
-            {audioMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-            <span>{audioMuted ? 'Audio Off' : 'Audio On'}</span>
-          </button>
-        </div>
-      </header>
-
-      {/* Main Container */}
-      <main className="relative z-10 max-w-5xl mx-auto px-4 py-8 space-y-10">
-        {!unlocked ? (
-          <div className="my-12 p-6 sm:p-10 rounded-3xl bg-[#12121e]/90 border border-rose-500/40 backdrop-blur-xl shadow-2xl space-y-6">
-            <div className="flex items-center justify-between border-b border-gray-800 pb-4">
-              <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
-                <span className="w-3 h-3 rounded-full bg-yellow-500 inline-block"></span>
-                <span className="w-3 h-3 rounded-full bg-green-500 inline-block"></span>
-                <span className="ml-2 font-mono text-xs text-rose-400">dayar@portfolio: ~/secret-easter-egg</span>
-              </div>
-              <span className="font-mono text-xs text-rose-400 flex items-center gap-1">
-                <Lock className="w-3 h-3" /> ENCRYPTED SESSION
-              </span>
-            </div>
-
-            <div className="space-y-4 font-mono text-xs sm:text-sm">
-              <p className="text-rose-400 font-bold">[PORTFOLIO SECURITY] Zone Confidentielle Détectée.</p>
-              <p className="text-gray-300">
-                Vous avez exécuté le code secret <strong className="text-rose-400">270825</strong> sur le site de Dayar Saifidine !
-              </p>
-              <div className="p-4 rounded-xl bg-rose-950/30 border border-rose-900/40 text-rose-200">
-                <p className="font-bold">🔑 Mot de passe requis pour continuer :</p>
-                <p className="text-gray-400 italic">Tapez "love" ou cliquez sur le bouton ci-dessous.</p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                <input
-                  type="password"
-                  value={passkeyInput}
-                  onChange={(e) => setPasskeyInput(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && unlockSecretQuest()}
-                  placeholder="Mot de passe..."
-                  className="flex-1 px-4 py-3 rounded-xl bg-gray-900 border border-rose-500/40 text-rose-200 focus:outline-none focus:border-rose-400 font-mono"
-                />
-                <button
-                  onClick={unlockSecretQuest}
-                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white font-semibold shadow-lg shadow-rose-600/30 transition-all active:scale-95 flex items-center justify-center gap-2"
-                >
-                  <Heart className="w-4 h-4 text-white fill-white animate-pulse" />
-                  <span>Ouvrir la Surprise</span>
-                </button>
-              </div>
-            </div>
+  // --- ANIMATION INITIALE ---
+  if (!isReady) {
+    return (
+      <div style={styles.introOverlay}>
+        {!showSurprise ? (
+          <div style={styles.countdownContainer}>
+            <span style={styles.countdownNumber}>{countdown}</span>
+            <p style={styles.introSubText}>Chargement de ton espace secret...</p>
           </div>
         ) : (
-          <div className="space-y-12 animate-fade-in">
-            {/* Romantic Banner */}
-            <section className="text-center space-y-4 pt-4">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xs sm:text-sm font-medium">
-                <Heart className="w-4 h-4 text-rose-400 fill-rose-400" /> Easter Egg Anniversaire Spécial
-              </div>
-              <h1 className="text-4xl sm:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-pink-400 to-amber-300">
-                Joyeux Anniversaire Mon sac à dos ! ❤️
-              </h1>
-              <p className="text-gray-300 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
-                Tu as déverrouillé la page cachée de mon portfolio avec notre code magique (Devine ce qu'il signifie) !
-              </p>
-            </section>
-
-            {/* Chapter 1: Memory Cards */}
-            <section className="space-y-6">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center font-bold font-mono">01</div>
-                <h2 className="text-xl sm:text-2xl font-bold">Nos Souvenirs & Stats</h2>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {[
-                  { id: 1, tag: '[COMMIT #001]', title: 'Trois ans plus tard...', desc: '"Depuis ce jour là, tu illumines mon quotidien. Rien n\'est plus précieux que le son de ton rire."' },
-                  { id: 2, tag: '[METRIC: INFINITY]', title: 'Stats de notre Couple', desc: '"Tu es la seule personne qui sait apaiser mes journées. Jours Aimés: ∞, Bugs: 0."' },
-                  { id: 3, tag: '[FUTURE_RELEASE]', title: 'Avenir', desc: '"Que cette nouvelle année de ta vie soit remplie de rires avec ton neveu (Et le nouveau), de voyages et de bonheur avec tes proches!"' }
-                ].map((card) => (
-                  <div
-                    key={card.id}
-                    onClick={() => toggleCard(card.id)}
-                    className="cursor-pointer h-56 p-6 rounded-2xl bg-[#12121e]/80 border border-rose-900/40 hover:border-rose-500/60 transition-all flex flex-col justify-between shadow-xl relative overflow-hidden"
-                  >
-                    {flippedCards[card.id] ? (
-                      <div className="my-auto text-center space-y-3">
-                        <p className="text-sm italic text-rose-200">{card.desc}</p>
-                        <span className="text-[10px] font-mono text-rose-400 uppercase">★ Clic pour retourner</span>
-                      </div>
-                    ) : (
-                      <>
-                        <div className="space-y-2">
-                          <span className="text-xs font-mono text-rose-400 font-bold">{card.tag}</span>
-                          <h3 className="text-lg font-bold text-white">{card.title}</h3>
-                        </div>
-                        <div className="text-xs font-mono text-rose-300 flex justify-between items-center border-t border-gray-800 pt-3">
-                          <span>Cliquez pour révéler</span>
-                          <RefreshCw className="w-3.5 h-3.5" />
-                        </div>
-                      </>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            {/* Chapter 2: Love Syntax & Typewriter */}
-            <section className="p-6 sm:p-8 rounded-3xl bg-[#12121e]/80 border border-rose-500/30 space-y-6 shadow-xl">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-800 pb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center justify-center font-bold font-mono">02</div>
-                  <h2 className="text-xl sm:text-2xl font-bold">Love Syntax : Ma lettre pour toi</h2>
-                </div>
-                <button
-                  onClick={generateRandomCompliment}
-                  className="px-4 py-2 rounded-xl bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/40 text-xs font-semibold flex items-center gap-2"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-rose-400" />
-                  <span>Clique pour voir...</span>
-                </button>
-              </div>
-
-              <div className="p-6 rounded-2xl bg-gray-950/80 border border-rose-900/40 font-mono text-xs sm:text-sm space-y-4">
-                <div className="flex justify-between text-gray-500 text-xs border-b border-gray-900 pb-2">
-                  <span>letter_of_love.txt</span>
-                  <span className="text-rose-400">&lt;dayar:love&gt;</span>
-                </div>
-                <p className="text-gray-200 leading-relaxed min-h-[80px]">{displayedText}</p>
-
-                {currentCompliment && (
-                  <div className="p-4 rounded-xl bg-rose-950/60 border border-rose-500/40 text-rose-200 text-sm flex items-center gap-3">
-                    <Heart className="w-4 h-4 text-rose-400 fill-rose-400 flex-shrink-0" />
-                    <span>{currentCompliment}</span>
-                  </div>
-                )}
-              </div>
-            </section>
-
-            {/* Chapter 3: Birthday Cake */}
-            <section className="p-6 sm:p-10 rounded-3xl bg-[#12121e]/90 border border-rose-500/40 space-y-8 text-center">
-              <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center font-bold font-mono">03</div>
-                  <h2 className="text-xl sm:text-2xl font-bold">Gâteau de célébration (Le vrai arrive...)</h2>
-                </div>
-                <div className="flex gap-2">
-                  <button onClick={lightAllCandles} className="px-4 py-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs flex items-center gap-1">
-                    <Flame className="w-3.5 h-3.5" /> Rallumer
-                  </button>
-                  <button onClick={blowOutCandles} className="px-4 py-2 rounded-xl bg-rose-600 text-white text-xs font-bold shadow-lg shadow-rose-600/30 flex items-center gap-1">
-                    🌬️ Souffler !
-                  </button>
-                </div>
-              </div>
-
-              {/* Interactive Cake Visual */}
-              <div className="flex justify-center py-6">
-                <div className="flex flex-col items-center">
-                  <div className="flex gap-6 mb-2">
-                    {[0, 1, 2].map((idx) => (
-                      <div key={idx} onClick={() => toggleCandle(idx)} className="cursor-pointer relative flex flex-col items-center">
-                        {candleStates[idx] ? (
-                          <div className="w-3 h-5 bg-gradient-to-t from-orange-500 to-yellow-300 rounded-full animate-pulse shadow-lg shadow-amber-500" />
-                        ) : (
-                          <div className="w-1.5 h-3 bg-gray-500 rounded-full" />
-                        )}
-                        <div className="w-3 h-12 bg-gradient-to-b from-rose-300 to-rose-600 rounded-t-sm" />
-                      </div>
-                    ))}
-                  </div>
-                  <div className="w-48 h-16 bg-gradient-to-r from-rose-600 via-pink-500 to-purple-600 rounded-t-2xl flex items-center justify-center font-bold text-white shadow-xl">
-                    Happy Birthday
-                  </div>
-                  <div className="w-60 h-20 bg-gradient-to-r from-purple-900 via-rose-900 to-purple-900 rounded-t-xl flex items-center justify-center text-xs text-rose-300 border-t border-rose-500/30 shadow-2xl">
-                    ❤️ Dayar & Mon Amour ❤️
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            {/* Chapter 4: Redeemable Coupons */}
-            <section className="space-y-6">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center font-bold font-mono">04</div>
-                <h2 className="text-xl sm:text-2xl font-bold">Bons Cadeaux Romantiques</h2>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                {[
-                  { id: 1, title: 'Dîner Fait Maison', desc: 'Entrée, plat, dessert préparés par Dayar.' },
-                  { id: 2, title: 'Soirée Cinéma & Câlins', desc: 'Choix du film, pop-corn et câlins illimités.' },
-                  { id: 3, title: 'Massage Relaxant', desc: 'Moment de détente sur-mesure.' },
-                  { id: 4, title: 'Week-end Évasion', desc: 'Escapade surprise en amoureux.' }
-                ].map((coupon) => (
-                  <div key={coupon.id} className="p-5 rounded-2xl bg-[#12121e]/80 border border-rose-900/40 relative flex flex-col justify-between space-y-4">
-                    <div className="space-y-2">
-                      <span className="text-[10px] font-mono bg-rose-950 px-2 py-0.5 rounded border border-rose-800 text-rose-400">COUPON #{coupon.id}</span>
-                      <h3 className="font-bold text-white text-base">{coupon.title}</h3>
-                      <p className="text-xs text-gray-400">{coupon.desc}</p>
-                    </div>
-
-                    {redeemedCoupons[coupon.id] ? (
-                      <div className="w-full py-2 bg-rose-950/80 border border-rose-500 text-rose-400 text-xs font-bold text-center rounded-xl flex items-center justify-center gap-1">
-                        <Check className="w-3.5 h-3.5" /> VALIDÉ ❤️
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => redeemCoupon(coupon.id)}
-                        className="w-full py-2 rounded-xl bg-rose-600/20 hover:bg-rose-600/40 text-rose-300 border border-rose-500/40 text-xs font-semibold"
-                      >
-                        Utiliser le Bon
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </section>
+          <div style={styles.surpriseContainer}>
+            <h1 style={styles.surpriseTitle}>✨ SURPRISE SWAFWATA ! 🎉</h1>
+            <p style={styles.surpriseSub}>Bienvenue dans ton coin secret ❤️</p>
           </div>
         )}
-      </main>
-    </div>
-  );
-}
+      </div>
+    )
+  }
 
-function Navbar({ onOpenSecret }) {
+  // --- RENDU DE LA PAGE TEMPORAIRE ---
   return (
-    <nav className="sticky top-0 z-40 bg-[#080811]/80 backdrop-blur-md border-b border-gray-800 px-4 lg:px-8 py-3.5">
-      <div className="max-w-6xl mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-2 font-mono font-bold text-rose-400 text-sm sm:text-base">
-          <Code className="w-5 h-5 text-rose-500" />
-          <span>dayar.saifidine</span>
-        </div>
-
-        <div className="hidden md:flex items-center gap-6 text-sm text-gray-300 font-medium">
-          <a href="#home" className="hover:text-rose-400 transition-colors">Accueil</a>
-          <a href="#experiences" className="hover:text-rose-400 transition-colors">Expériences</a>
-          <a href="#interests" className="hover:text-rose-400 transition-colors">Passions</a>
-          <a href="#references" className="hover:text-rose-400 transition-colors">Références</a>
-          <a href="#contact" className="hover:text-rose-400 transition-colors">Contact</a>
-        </div>
-
-        <button
-          onClick={onOpenSecret}
-          className="px-3 py-1.5 rounded-lg bg-rose-950/60 border border-rose-500/40 text-rose-300 text-xs font-mono hover:bg-rose-900/60 transition-all flex items-center gap-1.5"
-          title="Secret Code Trigger (270825)"
-        >
-          <Lock className="w-3 h-3 text-rose-400" />
-          <span>Code: 270825</span>
-        </button>
-      </div>
-    </nav>
-  );
-}
-
-function Home({ onTriggerSecret }) {
-  return (
-    <section className="max-w-6xl mx-auto px-4 py-16 sm:py-24 text-center space-y-6">
-      <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-mono">
-        <Sparkles className="w-3.5 h-3.5" /> Développeur Full-Stack & Passionné
-      </div>
-      <h1 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight">
-        Bonjour, je suis <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-pink-400 to-purple-400">Dayar Saifidine</span>
-      </h1>
-      <p className="max-w-2xl mx-auto text-gray-400 text-sm sm:text-base leading-relaxed">
-        Bienvenue sur mon portfolio interactif. Je conçois et développe des applications web modernes, performantes et élégantes.
-      </p>
-
-      {/* Secret Easter Egg Hint */}
-      <div className="pt-4 flex justify-center">
-        <button
-          onClick={onTriggerSecret}
-          className="p-4 rounded-2xl bg-[#12121e] border border-rose-500/30 hover:border-rose-500/60 transition-all text-xs font-mono text-rose-300 flex items-center gap-3 shadow-lg group"
-        >
-          <Lock className="w-4 h-4 text-rose-400 group-hover:rotate-12 transition-transform" />
-          <span>Tapez le code <strong className="text-rose-400">270825</strong> au clavier pour déverrouiller la surprise cachée !</span>
-        </button>
-      </div>
-    </section>
-  );
-}
-
-function Experiences() {
-  const experiences = [
-    { title: "Développeur Full-Stack Senior", company: "Tech Innovations", period: "2023 - Présent", desc: "Développement d'applications cloud et architectures microservices." },
-    { title: "Ingénieur Logiciel React & Node.js", company: "Digital Studio", period: "2021 - 2023", desc: "Création d'interfaces utilisateurs haute performance et intégration d'APIs." }
-  ];
-
-  return (
-    <section id="experiences" className="max-w-6xl mx-auto px-4 py-12 space-y-8">
-      <div className="flex items-center gap-3">
-        <Briefcase className="w-6 h-6 text-rose-400" />
-        <h2 className="text-2xl font-bold text-white">Expériences Professionnelles</h2>
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-6">
-        {experiences.map((exp, idx) => (
-          <div key={idx} className="p-6 rounded-2xl bg-[#12121e] border border-gray-800 space-y-3">
-            <span className="text-xs font-mono text-rose-400">{exp.period}</span>
-            <h3 className="text-lg font-bold text-white">{exp.title}</h3>
-            <p className="text-xs font-medium text-gray-400">{exp.company}</p>
-            <p className="text-sm text-gray-300">{exp.desc}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function Interests() {
-  return (
-    <section id="interests" className="max-w-6xl mx-auto px-4 py-12 space-y-8">
-      <div className="flex items-center gap-3">
-        <Star className="w-6 h-6 text-rose-400" />
-        <h2 className="text-2xl font-bold text-white">Centres d'Intérêt</h2>
-      </div>
-
-      <div className="grid sm:grid-cols-3 gap-6">
-        {['Développement Web', 'Design UI/UX', 'Nouvelles Technologies'].map((item, idx) => (
-          <div key={idx} className="p-5 rounded-2xl bg-[#12121e] border border-gray-800 text-center font-semibold text-rose-200">
-            {item}
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function References() {
-  return (
-    <section id="references" className="max-w-6xl mx-auto px-4 py-12 space-y-8">
-      <div className="flex items-center gap-3">
-        <Award className="w-6 h-6 text-rose-400" />
-        <h2 className="text-2xl font-bold text-white">Références</h2>
-      </div>
-
-      <div className="p-6 rounded-2xl bg-[#12121e] border border-gray-800 italic text-gray-300 text-sm">
-        "Dayar est un développeur très passionné, rigoureux et attentif aux détails. Travailler avec lui est une véritable opportunité !"
-      </div>
-    </section>
-  );
-}
-
-function Contact() {
-  return (
-    <section id="contact" className="max-w-6xl mx-auto px-4 py-12 space-y-8">
-      <div className="flex items-center gap-3">
-        <Mail className="w-6 h-6 text-rose-400" />
-        <h2 className="text-2xl font-bold text-white">Me Contacter</h2>
-      </div>
-
-      <div className="p-6 sm:p-8 rounded-2xl bg-[#12121e] border border-gray-800 max-w-xl mx-auto space-y-4">
-        <input type="email" placeholder="Votre Email" className="w-full px-4 py-3 rounded-xl bg-gray-900 border border-gray-700 text-white text-sm focus:outline-none focus:border-rose-400" />
-        <textarea placeholder="Votre Message" rows="4" className="w-full px-4 py-3 rounded-xl bg-gray-900 border border-gray-700 text-white text-sm focus:outline-none focus:border-rose-400" />
-        <button className="w-full py-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-sm transition-all flex items-center justify-center gap-2">
-          <Send className="w-4 h-4" /> Envoyer le Message
-        </button>
-      </div>
-    </section>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="border-t border-gray-800 py-8 px-4 text-center text-xs text-gray-500 font-mono space-y-2">
-      <p>Dayar Saifidine Portfolio &copy; {new Date().getFullYear()} — Tous droits réservés.</p>
-      <p className="text-rose-400/80">Code secret d'anniversaire : 270825 ❤️</p>
-    </footer>
-  );
-}
-
-export default function App() {
-  const [loading, setLoading] = useState(true);
-  const [showSecret, setShowSecret] = useState(false);
-
-  useEffect(() => {
-    if (loading) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-  }, [loading]);
-
-  // Global keydown listener for secret code 270825
-  useEffect(() => {
-    const targetCode = '270825';
-    let inputBuffer = '';
-
-    const handleKeyDown = (e) => {
-      if (/^[0-9]$/.test(e.key)) {
-        inputBuffer += e.key;
-        if (inputBuffer.length > targetCode.length) {
-          inputBuffer = inputBuffer.slice(-targetCode.length);
-        }
-        if (inputBuffer === targetCode) {
-          setShowSecret(true);
-          inputBuffer = '';
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
-
-  return (
-    <div className="bg-[#080811] text-gray-100 min-h-screen font-sans">
-      {loading && <Loader onLoaded={() => setLoading(false)} />}
+    <div style={styles.container}>
       
-      <div style={{ opacity: loading ? 0 : 1, transition: 'opacity 0.5s' }}>
-        <Navbar onOpenSecret={() => setShowSecret(true)} />
-        <main>
-          <section id="home">
-            <Home onTriggerSecret={() => setShowSecret(true)} />
-          </section>
-          <Experiences />
-          <Interests />
-          <References />
-          <section id="contact">
-            <Contact />
-          </section>
-        </main>
-        <Footer />
-      </div>
+      {/* 1. SECTION FÉLICITATIONS CODE */}
+      <section style={styles.card}>
+        <div style={styles.badge}>Bravo Swafi ! 🎉</div>
+        <h1 style={styles.title}>Félicitations ma Swafwata ❤️</h1>
+        <p style={styles.text}>
+          Tu as réussi à déchiffrer le code secret ! C'est une petite surprise spécialement conçue pour toi, 
+          en attendant tout ce qu'on va prévoir et fêter ensemble très bientôt. Prends le temps d'explorer cette page !
+        </p>
+      </section>
 
-      {/* Secret Birthday Quest Modal Overlay */}
-      {showSecret && <TempPage onClose={() => setShowSecret(false)} />}
+      {/* 2. SECTION AVANT / APRÈS */}
+      <section style={styles.card}>
+        <h2 style={styles.sectionTitle}>📸 Avant vs Après</h2>
+        <p style={styles.text}>Regarde un peu le chemin parcouru depuis le début...</p>
+        
+        <div style={styles.gridTwo}>
+          {/* PHOTO AVANT */}
+          <div style={styles.photoBox}>
+            <h3 style={styles.photoLabel}>Avant</h3>
+            <img src={beforeImage} alt="Avant" style={styles.image} />
+            <label style={styles.uploadBtn}>
+              Changer photo avant
+              <input 
+                type="file" 
+                accept="image/*" 
+                hidden 
+                onChange={(e) => e.target.files[0] && setBeforeImage(URL.createObjectURL(e.target.files[0]))} 
+              />
+            </label>
+          </div>
+
+          {/* PHOTO APRÈS */}
+          <div style={styles.photoBox}>
+            <h3 style={styles.photoLabel}>Après</h3>
+            <img src={afterImage} alt="Après" style={styles.image} />
+            <label style={styles.uploadBtn}>
+              Changer photo après
+              <input 
+                type="file" 
+                accept="image/*" 
+                hidden 
+                onChange={(e) => e.target.files[0] && setAfterImage(URL.target.files[0]))} 
+              />
+            </label>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. SECTION FÉLICITATIONS MASTER */}
+      <section style={{ ...styles.card, borderLeft: '6px solid #a855f7' }}>
+        <h2 style={styles.sectionTitle}>🎓 Félicitations pour ton Master !</h2>
+        <p style={styles.text}>
+          Swafi, je suis tellement fier de toi et de tout le travail acharné que tu as fourni pour tes études en Master. 
+          Tu as montré une détermination incroyable. Je te souhaite que du bonheur, de la réussite et plein de belles choses pour la suite de ton parcours ! 🌟
+        </p>
+      </section>
+
+      {/* 4. JEU : CHOIX DES REPAS (3 PARMI 9) */}
+      <section style={styles.card}>
+        <h2 style={styles.sectionTitle}>🍽️ Le Menu de Retrouvailles (Choisis 3 repas)</h2>
+        <p style={styles.text}>
+          Choisis 3 repas parmi les 9 propositions ci-dessous pour notre prochain rendez-vous ! <br />
+          <strong>Sélectionnés : ({selectedMeals.length}/3)</strong>
+        </p>
+
+        <div style={styles.gridThree}>
+          {mealsList.map((meal) => {
+            const isSelected = selectedMeals.some(m => m.id === meal.id)
+            return (
+              <button
+                key={meal.id}
+                onClick={() => handleMealToggle(meal)}
+                style={{
+                  ...styles.choiceCard,
+                  borderColor: isSelected ? '#ff4757' : '#333',
+                  backgroundColor: isSelected ? 'rgba(255, 71, 87, 0.15)' : '#1a1a1a',
+                }}
+              >
+                <span style={{ fontSize: '2rem' }}>{meal.icon}</span>
+                <span style={{ color: '#fff', fontWeight: 'bold' }}>{meal.name}</span>
+                {isSelected && <span style={styles.checkBadge}>✓ Choisis</span>}
+              </button>
+            )
+          })}
+        </div>
+
+        {selectedMeals.length === 3 && (
+          <div style={styles.recapBox}>
+            <h3>✨ Ton menu idéal :</h3>
+            <ul>
+              {selectedMeals.map(m => <li key={m.id}>{m.icon} {m.name}</li>)}
+            </ul>
+            <p style={{ color: '#ff4757', fontWeight: 'bold' }}>C'est noté ! On mangera ça quand on se revoit ! 🔥</p>
+          </div>
+        )}
+      </section>
+
+      {/* 5. EXPLICATION DU CODE 270125 */}
+      <section style={styles.card}>
+        <h2 style={styles.sectionTitle}>🔑 Pourquoi le code "270125" ?</h2>
+        <p style={styles.text}>
+          Le code correspond au <strong>27 Janvier 2025</strong> : le jour où on s'est rencontré, exactement 3 ans après le bac ! Un moment inoubliable. ❤️
+        </p>
+        
+        <div style={{ ...styles.photoBox, maxWidth: '400px', margin: '20px auto 0 auto' }}>
+          <img src={dateImage} alt="Notre rencontre" style={styles.image} />
+          <label style={styles.uploadBtn}>
+            Changer la photo du souvenir
+            <input 
+              type="file" 
+              accept="image/*" 
+              hidden 
+              onChange={(e) => e.target.files[0] && setDateImage(URL.createObjectURL(e.target.files[0]))} 
+            />
+          </label>
+        </div>
+      </section>
+
+      {/* 6. MENTION ICONIQUE "SAC À DOS" */}
+      <section style={styles.backpackSection}>
+        <div style={styles.backpackGlow}>🎒</div>
+        <h1 style={styles.iconicText}>SAC À DOS</h1>
+        <p style={{ color: '#888', fontStyle: 'italic', marginTop: '10px' }}>Si tu sais, tu sais... 😉</p>
+      </section>
+
+      {/* 7. JEU : FILMS D'OCTOBRE */}
+      <section style={styles.card}>
+        <h2 style={styles.sectionTitle}>🍿 Soirées Cinéma d'Octobre</h2>
+        <p style={styles.text}>
+          Sélectionne les films qui te tentent pour nos séances ciné en Octobre (notamment le fameux <strong>Clayface</strong> !) :
+        </p>
+
+        <div style={styles.gridThree}>
+          {moviesList.map((movie) => {
+            const isSelected = selectedMovies.some(m => m.id === movie.id)
+            return (
+              <button
+                key={movie.id}
+                onClick={() => handleMovieToggle(movie)}
+                style={{
+                  ...styles.choiceCard,
+                  borderColor: isSelected ? '#a855f7' : '#333',
+                  backgroundColor: isSelected ? 'rgba(168, 85, 247, 0.15)' : '#1a1a1a',
+                }}
+              >
+                <span style={{ fontSize: '2.2rem' }}>{movie.icon}</span>
+                <span style={{ color: '#fff', fontWeight: 'bold' }}>{movie.title}</span>
+                <span style={{ color: '#aaa', fontSize: '0.85rem' }}>{movie.genre}</span>
+                <span style={{ color: '#a855f7', fontSize: '0.8rem', marginTop: '4px' }}>Sortie : {movie.date}</span>
+                {isSelected && <span style={{ ...styles.checkBadge, backgroundColor: '#a855f7' }}>✓ Sélectionné</span>}
+              </button>
+            )
+          })}
+        </div>
+
+        {selectedMovies.length > 0 && (
+          <div style={{ ...styles.recapBox, borderColor: '#a855f7' }}>
+            <h3>📽️ Ta liste de films retenus :</h3>
+            <ul>
+              {selectedMovies.map(m => <li key={m.id}>{m.icon} <strong>{m.title}</strong> ({m.date})</li>)}
+            </ul>
+          </div>
+        )}
+      </section>
+
+      {/* 8. MOT D'AMOUR & PHOTO DE COUPLE */}
+      <section style={styles.card}>
+        <h2 style={styles.sectionTitle}>💌 Un mot pour toi Swafi</h2>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+          <p style={{ ...styles.text, fontSize: '1.2rem', textAlign: 'center', fontStyle: 'italic', lineHeight: '1.8' }}>
+            "Swafwata, je voulais te rappeler à quel point tu es précieuse pour moi et à quel point je t'aime. 
+            Chaque jour à tes côtés est un bonheur, et j'ai tellement hâte de partager encore d'innombrables moments extraordinaires avec toi."
+          </p>
+          
+          <div style={{ ...styles.photoBox, maxWidth: '450px', width: '100%' }}>
+            <img src={coupleImage} alt="Nous deux" style={styles.image} />
+            <label style={styles.uploadBtn}>
+              Mettre notre photo
+              <input 
+                type="file" 
+                accept="image/*" 
+                hidden 
+                onChange={(e) => e.target.files[0] && setCoupleImage(URL.createObjectURL(e.target.files[0]))} 
+              />
+            </label>
+          </div>
+        </div>
+      </section>
+
+      {/* 9. GÂTEAU D'ANNIVERSAIRE INTERACTIF */}
+      <section style={{ ...styles.card, textAlign: 'center' }}>
+        <h2 style={styles.sectionTitle}>🎂 Joyeux Anniversaire Swafwata !</h2>
+        <p style={styles.text}>Fais un vœu et souffle tes bougies !</p>
+
+        <div style={styles.cakeContainer}>
+          <div style={styles.candlesBox}>
+            {[1, 2, 3].map((i) => (
+              <div key={i} style={styles.candle}>
+                {!candlesBlown ? (
+                  <div style={styles.flame}>🔥</div>
+                ) : (
+                  <div style={styles.smoke}>💨</div>
+                )}
+                <div style={styles.stick}></div>
+              </div>
+            ))}
+          </div>
+          <div style={styles.cakeBody}>🎂</div>
+        </div>
+
+        <button
+          onClick={() => setCandlesBlown(!candlesBlown)}
+          style={{
+            ...styles.actionBtn,
+            backgroundColor: candlesBlown ? '#333' : '#ff4757',
+            color: '#fff',
+          }}
+        >
+          {candlesBlown ? '🕯️ Rallumer les bougies' : '💨 Souffler les bougies !'}
+        </button>
+
+        {candlesBlown && (
+          <div style={{ marginTop: '20px', animation: 'fadeIn 1s' }}>
+            <h3 style={{ color: '#00ff66', fontSize: '1.5rem' }}>🎉 Que tous tes vœux se réalisent Swafi ! ❤️</h3>
+          </div>
+        )}
+      </section>
+
     </div>
-  );
+  )
+}
+
+// --- STYLES CSS-IN-JS (SANS DÉPENDANCES D'ICÔNES OU EXTERNES) ---
+const styles = {
+  container: {
+    maxWidth: '900px',
+    margin: '0 auto',
+    padding: '20px',
+    color: '#f1f1f1',
+    fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '30px',
+  },
+  introOverlay: {
+    minHeight: '80vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#0d1117',
+    color: '#fff',
+    textAlign: 'center',
+  },
+  countdownContainer: {
+    fontSize: '2rem',
+  },
+  countdownNumber: {
+    fontSize: '7rem',
+    fontWeight: 'bold',
+    color: '#ff4757',
+    display: 'block',
+  },
+  introSubText: {
+    color: '#aaa',
+    marginTop: '10px',
+  },
+  surpriseContainer: {
+    animation: 'pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+  },
+  surpriseTitle: {
+    fontSize: '3rem',
+    color: '#ff4757',
+    marginBottom: '10px',
+  },
+  surpriseSub: {
+    fontSize: '1.5rem',
+    color: '#fff',
+  },
+  card: {
+    backgroundColor: '#161b22',
+    borderRadius: '16px',
+    padding: '28px',
+    border: '1px solid #30363d',
+    boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+    position: 'relative',
+  },
+  badge: {
+    display: 'inline-block',
+    backgroundColor: 'rgba(255, 71, 87, 0.2)',
+    color: '#ff4757',
+    padding: '6px 14px',
+    borderRadius: '20px',
+    fontSize: '0.85rem',
+    fontWeight: 'bold',
+    marginBottom: '12px',
+  },
+  title: {
+    fontSize: '2.2rem',
+    color: '#ffffff',
+    margin: '0 0 12px 0',
+  },
+  sectionTitle: {
+    fontSize: '1.6rem',
+    color: '#ffffff',
+    marginBottom: '12px',
+  },
+  text: {
+    color: '#c9d1d9',
+    lineHeight: '1.6',
+    fontSize: '1.05rem',
+  },
+  gridTwo: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+    gap: '20px',
+    marginTop: '20px',
+  },
+  gridThree: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+    gap: '15px',
+    marginTop: '20px',
+  },
+  photoBox: {
+    backgroundColor: '#0d1117',
+    borderRadius: '12px',
+    padding: '12px',
+    border: '1px solid #30363d',
+    textAlign: 'center',
+  },
+  photoLabel: {
+    color: '#ff4757',
+    marginBottom: '8px',
+  },
+  image: {
+    width: '100%',
+    height: '240px',
+    objectFit: 'cover',
+    borderRadius: '8px',
+    marginBottom: '10px',
+  },
+  uploadBtn: {
+    display: 'inline-block',
+    backgroundColor: '#21262d',
+    color: '#58a6ff',
+    padding: '6px 12px',
+    borderRadius: '6px',
+    fontSize: '0.85rem',
+    cursor: 'pointer',
+    border: '1px solid #30363d',
+  },
+  choiceCard: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '20px',
+    borderRadius: '12px',
+    border: '2px solid #333',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+    gap: '8px',
+    position: 'relative',
+  },
+  checkBadge: {
+    backgroundColor: '#ff4757',
+    color: '#fff',
+    fontSize: '0.75rem',
+    padding: '2px 8px',
+    borderRadius: '10px',
+    marginTop: '4px',
+  },
+  recapBox: {
+    marginTop: '20px',
+    padding: '16px',
+    backgroundColor: '#0d1117',
+    borderRadius: '10px',
+    border: '1px solid #ff4757',
+  },
+  backpackSection: {
+    textAlign: 'center',
+    padding: '40px 20px',
+    backgroundColor: '#111',
+    borderRadius: '20px',
+    border: '2px dashed #e17055',
+  },
+  backpackGlow: {
+    fontSize: '4rem',
+    animation: 'bounce 2s infinite',
+  },
+  iconicText: {
+    fontSize: '3.5rem',
+    fontWeight: '900',
+    letterSpacing: '8px',
+    background: 'linear-gradient(45deg, #ff7675, #fdcb6e, #6c5ce7)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    margin: '10px 0 0 0',
+  },
+  cakeContainer: {
+    margin: '30px 0',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  candlesBox: {
+    display: 'flex',
+    gap: '20px',
+    marginBottom: '-10px',
+    zIndex: 2,
+  },
+  candle: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  flame: {
+    fontSize: '1.5rem',
+    animation: 'pulse 0.5s infinite alternate',
+  },
+  smoke: {
+    fontSize: '1.2rem',
+    opacity: 0.6,
+  },
+  stick: {
+    width: '8px',
+    height: '35px',
+    backgroundColor: '#ff7675',
+    borderRadius: '4px',
+  },
+  cakeBody: {
+    fontSize: '6rem',
+    marginTop: '-20px',
+  },
+  actionBtn: {
+    padding: '12px 24px',
+    fontSize: '1.1rem',
+    fontWeight: 'bold',
+    border: 'none',
+    borderRadius: '30px',
+    cursor: 'pointer',
+    transition: 'transform 0.2s',
+  },
 }
