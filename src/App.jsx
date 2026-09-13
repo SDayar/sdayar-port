@@ -136,7 +136,7 @@ function App() {
 
   const handleCodeSubmit = (e) => {
     e.preventDefault()
-    if (inputCode.trim() === '270125') {
+    if (inputCode.trim() === '270825') {
       setIsUnlocked(true)
       setErrorMessage('')
     } else {
