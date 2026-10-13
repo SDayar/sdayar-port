@@ -12,7 +12,7 @@ function Home() {
       <div className="home-text">
         <h1>Dayar SAIFIDINE</h1>
         <p>
-          Electronics & Embedded Systems Engineering Student @ Universite Paris-Saclay (Polytech Paris-Saclay)
+          Etudiant ingénieur en Electronique et Informatique pour l'Embarqué @ <span style="color:red">Université Paris-Saclay ( Polytech Paris-Saclay ).</span>
         </p>
         <div className="home-buttons">
           <div className="home-button-left">
