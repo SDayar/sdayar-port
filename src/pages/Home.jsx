@@ -16,7 +16,7 @@ function Home() {
         </p>
         <div className="home-buttons">
           <div className="home-button-left">
-            <a href="fichiers/CV - MonMaster.pdf" className="primary-button" target="_blank">
+            <a href="fichiers/CV___Apprenti_Ingénieur_en_Electronique_et_Informatique_Embarquée.pdf" className="primary-button" target="_blank">
             <span className="dollar">$ </span><span className="command">wget CV_RESUME</span> 
             </a>
           </div>
