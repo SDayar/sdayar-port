@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 
 function Navbar() {
-  const [theme, setTheme] = useState("dark")
+  const [theme, setTheme] = useState("light")
   const [menuOpen, setMenuOpen] = useState(false)
   const [glitchActive, setGlitchActive] = useState(false)
 
