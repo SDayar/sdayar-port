@@ -40,6 +40,23 @@ export default function Education() {
 
       <div className="edu-timeline">
         <div className="edu-line"></div>
+          <div className="edu-item" ref={addToRefs}>
+          <div className="edu-dot">
+            <span className="dot-led"></span>
+          </div>
+          <div className="edu-content">
+            <div className="edu-header">
+              <h2>Cycle d'Ingénieur - Spécialité Electronique et Informatique pour l'Embarqué</h2>
+              <span className="edu-year">2026 – 2029</span>
+            </div>
+            <div className="edu-school">
+              <p>Université Paris-Saclay / Polytech Paris-Saclay</p>
+            </div>
+            <div className="edu-details">
+              <p> Conception matérielle (FPGA, SoC, cartes électroniques), systèmes embarqués temps réel et OS, IoT et télécommunications sans fil, IA embarquée et Edge AI, robotique et mécatronique, traitement du signal et vision industrielle, électronique de puissance et gestion d'énergie, génie logiciel embarqué et cybersécurité, instrumentation et capteurs MEMS, ainsi que sûreté de fonctionnement et gestion de projets critiques.</p>
+            </div>
+          </div>
+        </div>
 
         <div className="edu-item" ref={addToRefs}>
           <div className="edu-dot">
@@ -48,7 +65,10 @@ export default function Education() {
           <div className="edu-content">
             <div className="edu-header">
               <h2>Licence Informatique et Applications</h2>
-              <span className="edu-year">2023 – Présent</span>
+              <span className="edu-year">2023 – 2026</span>
+            </div>
+             <div className="edu-school">
+              <p>Université Paris-Cité</p>
             </div>
             <div className="edu-details">
               <p>Programmation avancée, Architecture des ordinateurs, Mathématiques et Calculs, Systèmes d'exploitation, C, Assembleur, Algorithmique avancée, Electronique, Réseaux, Programmation Unix, Projets de programmation et Génie logiciel.</p>
@@ -62,14 +82,14 @@ export default function Education() {
           </div>
           <div className="edu-content">
             <div className="edu-header">
-              <h2>Baccalauréat scientifique</h2>
+              <h2>Baccalauréat scientifique - série C</h2>
               <span className="edu-year">2021 – 2022</span>
+            </div>
+             <div className="edu-school">
+              <p>Ecole privée Muigni Baraka</p>
             </div>
             <div className="edu-details">
               <p>Bac scientifique, spécialité mathématiques et sciences appliquées.</p>
-              <div className="edu-stats">
-                <span className="stat">Mention: Très Bien</span>
-              </div>
             </div>
           </div>
         </div>
